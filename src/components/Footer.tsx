@@ -7,6 +7,7 @@ import {
   Phone,
   Mail,
 } from "lucide-react";
+import Image from "next/image";
 
 const footerLinks = {
   company: [
@@ -43,11 +44,16 @@ export const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
           {/* Brand */}
           <div className="lg:col-span-2">
-            <a href="#" className="inline-block mb-4">
-              <span className="text-2xl font-display font-bold">
-                Food<span className="text-primary">dy</span>
-              </span>
-            </a>
+            <a href="#" className="flex items-center gap-2 mb-4">
+                        <Image
+                          src="/logo_1.png"
+                          alt="Fooddy Logo"
+                          width={150}
+                          height={50}
+                          className="h-10 w-auto object-contain"
+                          priority
+                        />
+                      </a>
             <p className="text-white/60 mb-6 max-w-xs">
               Your favorite food delivery service. Order from the best
               restaurants in your area.

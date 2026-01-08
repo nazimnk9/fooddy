@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import Image from "next/image";
 import { Star, Eye, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -10,8 +11,53 @@ import dishBurger from "@/assets/dish-burger.jpg";
 import dishTiramisu from "@/assets/dish-tiramisu.jpg";
 import dishPepperoni from "@/assets/dish-pepperoni.jpg";
 import dishPadthai from "@/assets/dish-padthai.jpg";
+import Sweets from "@/assets/Sweets.jpeg";
+import Chicken_curry from "@/assets/Chicken_curry.jpeg";
+import Doi_Fuchka from "@/assets/Doi_Fuchka.jpeg";
+import Roast from "@/assets/Roast.jpeg";
+import Samosa from "@/assets/Samosa.jpeg";
 
 const dishes = [
+  {
+    name: "Rosogolla",
+    tags: ["Rosogolla"],
+    rating: 5,
+    description: "Sweet dessert",
+    price: 25,
+    image: Sweets,
+  },
+  {
+    name: "Chicken Curry",
+    tags: ["Chicken Curry"],
+    rating: 5,
+    description: "With spices",
+    price: 25,
+    image: Chicken_curry,
+  },
+  {
+    name: "Doi Fuchka",
+    tags: ["Doi Fuchka"],
+    rating: 5,
+    description: "Dessert with jaggery",
+    price: 25,
+    image: Doi_Fuchka,
+  },
+  {
+    name: "Roast",
+    tags: ["Roast"],
+    rating: 5,
+    description: "With spices",
+    price: 25,
+    image: Roast,
+  },
+  {
+    name: "Samosa",
+    tags: ["Samosa"],
+    rating: 5,
+    description: "With spices",
+    price: 25,
+    image: Samosa,
+  },
   {
     name: "Pizza Margherita",
     tags: ["pizza", "vegetarian"],
@@ -116,10 +162,10 @@ export const PopularDishes = () => {
             >
               {/* Image */}
               <div className="relative overflow-hidden">
-                <img
+                <Image
                   src={dish.image}
                   alt={dish.name}
-                  className="dish-card-image"
+                  className="dish-card-image object-fixed"
                 />
                 {/* Overlay Actions */}
                 <div className="absolute inset-0 bg-dark/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
@@ -157,11 +203,10 @@ export const PopularDishes = () => {
                   {[...Array(5)].map((_, i) => (
                     <Star
                       key={i}
-                      className={`w-3 h-3 ${
-                        i < dish.rating
-                          ? "fill-primary text-primary"
-                          : "text-muted"
-                      }`}
+                      className={`w-3 h-3 ${i < dish.rating
+                        ? "fill-primary text-primary"
+                        : "text-muted"
+                        }`}
                     />
                   ))}
                 </div>

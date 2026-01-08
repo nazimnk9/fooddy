@@ -1,10 +1,24 @@
+import Link from "next/link";
 import { motion } from "framer-motion";
+import Image from "next/image";
 import appMockup from "@/assets/app-mockup.png";
+import downloadBg from "@/assets/menu-hero.jpg";
 
 export const AppDownload = () => {
   return (
-    <section className="py-20 bg-dark text-white overflow-hidden">
-      <div className="container-fooddy">
+    <section className="relative py-20 text-white overflow-hidden">
+      {/* Background Image */}
+      <div className="absolute inset-0 z-0">
+        <Image
+          src={downloadBg}
+          alt="App Download Background"
+          fill
+          className="object-fixed"
+        />
+        <div className="absolute inset-0 bg-dark/80" />
+      </div>
+
+      <div className="container-fooddy relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Content */}
           <motion.div
@@ -56,7 +70,7 @@ export const AppDownload = () => {
             className="relative"
           >
             <div className="relative z-10 animate-float">
-              <img
+              <Image
                 src={appMockup}
                 alt="Fooddy App"
                 className="w-full max-w-md mx-auto drop-shadow-2xl"

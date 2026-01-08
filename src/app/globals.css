@@ -152,7 +152,7 @@
   }
 
   .dish-card-image {
-    @apply w-full aspect-square object-cover group-hover:scale-105 
+    @apply w-full aspect-square group-hover:scale-105 
            transition-transform duration-500;
   }
 
@@ -165,9 +165,85 @@
     @apply w-12 h-12 rounded-full bg-primary text-primary-foreground 
            flex items-center justify-center font-display font-bold text-xl;
   }
+
+  .category-tab {
+    @apply px-4 py-2 text-sm font-medium transition-all duration-200;
+    @apply text-muted-foreground hover:text-primary;
+    @apply border border-transparent;
+  }
+
+  .category-tab-active {
+    @apply bg-primary text-primary-foreground rounded hover:text-white;
+  }
+
+  .food-card {
+    @apply bg-card rounded-lg overflow-hidden transition-all duration-300 shadow-xl;
+    @apply hover:shadow-2xl;
+  }
+
+  .food-card-image {
+    @apply relative overflow-hidden aspect-[4/3];
+  }
+
+  .food-card-overlay {
+    @apply absolute inset-0 bg-black/0 transition-all duration-300;
+    @apply group-hover:bg-black/40;
+  }
+
+  .food-card-actions {
+    @apply absolute inset-0 flex items-center justify-center gap-3;
+    @apply opacity-0 transition-all duration-300;
+    @apply group-hover:opacity-100;
+  }
+
+  .food-card-action-btn {
+    @apply w-10 h-10 rounded-full bg-white text-foreground;
+    @apply flex items-center justify-center;
+    @apply hover:bg-primary hover:text-white transition-colors;
+    @apply transform translate-y-4 group-hover:translate-y-0 transition-transform;
+  }
+
+  .food-tag {
+    @apply text-xs uppercase tracking-wider text-muted-foreground;
+  }
+
+  .hero-banner {
+    @apply relative h-[350px] md:h-[400px] flex items-center justify-center;
+    @apply bg-cover bg-center bg-no-repeat;
+  }
+
+  .hero-banner-overlay {
+    @apply absolute inset-0 bg-black/40;
+  }
+
+  .breadcrumb-link {
+    @apply text-white/80 hover:text-white transition-colors;
+  }
+
+  .breadcrumb-active {
+    @apply text-primary;
+  }
+
+  .star-rating {
+    @apply flex items-center gap-0.5 text-primary;
+  }
 }
 
 @layer utilities {
+  .animate-fade-up {
+    animation: fadeUp 0.5s ease-out forwards;
+  }
+
+  @keyframes fadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
   .text-gradient-gold {
     @apply bg-clip-text text-transparent;
     background-image: var(--gradient-gold);

@@ -1,3 +1,5 @@
+"use client";
+
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { Categories } from "@/components/Categories";
@@ -13,27 +15,25 @@ import { Gallery } from "@/components/Gallery";
 import { Newsletter } from "@/components/Newsletter";
 import { Footer } from "@/components/Footer";
 
-const Index = () => {
-  return (
-    <div className="min-h-screen bg-background">
-      <Header />
-      <main>
-        <Hero />
-        <Categories />
-        <HowToOrder />
-        <AppDownload />
-        <PopularDishes />
-        <DealCountdown />
-        <Restaurants />
-        <Testimonials />
-        <Features />
-        <Blog />
-        <Gallery />
-        <Newsletter />
-      </main>
-      <Footer />
-    </div>
-  );
-};
-
-export default Index;
+export default function Home() {
+    return (
+        <div className="min-h-screen bg-background">
+            <Header />
+            <main>
+                <Hero />
+                <Categories />
+                <HowToOrder />
+                <AppDownload />
+                <PopularDishes />
+                <DealCountdown />
+                <Restaurants />
+                <Testimonials />
+                <Features />
+                <Blog />
+                <Gallery />
+                <Newsletter />
+            </main>
+            <Footer />
+        </div>
+    );
+}

@@ -1,11 +1,13 @@
 import { useState } from "react";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ShoppingCart, Search, User } from "lucide-react";
+import { Menu, X, ShoppingCart, Search, User, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const navLinks = [
-  { name: "Home", href: "#" },
-  { name: "Menu", href: "#menu" },
+  { name: "Home", href: "/" },
+  { name: "Menu", href: "/menu" },
   { name: "About", href: "#about" },
   { name: "Restaurants", href: "#restaurants" },
   { name: "Contact", href: "#contact" },
@@ -13,16 +15,48 @@ const navLinks = [
 
 export const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
+  const isHomePage = pathname === "/";
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
+      {/* Top Header - Home Page Only */}
+      {/* {isHomePage && ( */}
+        <div className="bg-primary py-2 px-4 hidden md:block">
+          <div className="container-fooddy flex justify-between items-center text-primary-foreground">
+            <div className="flex items-center gap-2 text-sm font-medium">
+              <span className="opacity-80">Call us for Ordering</span>
+              <div className="flex items-center gap-1 bg-white/20 px-3 py-1 rounded-full">
+                <Phone className="w-3 h-3" />
+                <span>+123 456 7890</span>
+              </div>
+            </div>
+            <div>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-primary-foreground hover:bg-white/20 h-auto py-1 px-4 text-sm"
+              >
+                Login
+              </Button>
+            </div>
+          </div>
+        </div>
+      {/* )} */}
+
       <div className="container-fooddy">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
+          {/* Logo */}
           <a href="#" className="flex items-center gap-2">
-            <span className="text-2xl font-display font-bold text-foreground">
-              Food<span className="text-primary">dy</span>
-            </span>
+            <Image
+              src="/logo_1.png"
+              alt="Fooddy Logo"
+              width={150}
+              height={50}
+              className="h-10 w-auto object-contain"
+              priority
+            />
           </a>
 
           {/* Desktop Navigation */}

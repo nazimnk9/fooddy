@@ -127,7 +127,7 @@ export const Restaurants = () => {
                   <img
                     src={restaurant.image}
                     alt={restaurant.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    className="w-full h-full object-fixed group-hover:scale-105 transition-transform duration-500"
                   />
                   <div className="absolute top-3 right-3 bg-background rounded-full px-3 py-1 flex items-center gap-1 shadow">
                     <Star className="w-4 h-4 fill-primary text-primary" />

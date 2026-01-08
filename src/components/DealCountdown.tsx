@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import dishPepperoni from "@/assets/dish-pepperoni.jpg";
@@ -94,10 +95,10 @@ export const DealCountdown = () => {
             transition={{ duration: 0.6 }}
             className="relative"
           >
-            <img
+            <Image
               src={dishPepperoni}
               alt="Deal of the day"
-              className="w-full max-w-lg mx-auto rounded-2xl shadow-2xl"
+              className="w-full max-w-lg mx-auto rounded-2xl shadow-2xl object-fixed"
             />
             <div className="absolute -top-4 -right-4 w-24 h-24 bg-primary-foreground rounded-full flex flex-col items-center justify-center shadow-lg">
               <span className="text-2xl font-bold text-primary">50%</span>

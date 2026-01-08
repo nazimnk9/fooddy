@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import sushiImg from "@/assets/sushi-category.jpg";
 import pizzaImg from "@/assets/pizza-category.jpg";
@@ -48,10 +49,10 @@ export const Categories = () => {
               transition={{ delay: index * 0.1 }}
               className="category-card aspect-[4/5] hover-lift group"
             >
-              <img
+              <Image
                 src={category.image}
                 alt={category.name}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                className="w-full h-full object-fixed transition-transform duration-500 group-hover:scale-110"
               />
               <div className="category-card-overlay" />
               <div className="absolute inset-0 p-6 flex flex-col justify-end">
