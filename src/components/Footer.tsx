@@ -8,6 +8,7 @@ import {
   Mail,
 } from "lucide-react";
 import Image from "next/image";
+import downloadBg from "@/assets/Roast.jpeg";
 
 const footerLinks = {
   company: [
@@ -39,8 +40,17 @@ const socialLinks = [
 
 export const Footer = () => {
   return (
-    <footer className="bg-dark text-white" id="contact">
-      <div className="container-fooddy py-16">
+    <footer className="relative text-white" id="contact">
+      <div className="absolute inset-0 z-0">
+        <Image
+          src={downloadBg}
+          alt="App Download Background"
+          fill
+          className="object-fixed"
+        />
+        <div className="absolute inset-0 bg-dark/80" />
+      </div>
+      <div className="container-fooddy relative z-10 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
           {/* Brand */}
           <div className="lg:col-span-2">

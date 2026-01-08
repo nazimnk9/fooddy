@@ -7,6 +7,8 @@ import {
   Clock,
   ThumbsUp,
 } from "lucide-react";
+import Image from "next/image";
+import downloadBg from "@/assets/Doi_Fuchka.jpeg";
 
 const features = [
   {
@@ -43,8 +45,17 @@ const features = [
 
 export const Features = () => {
   return (
-    <section className="py-20 bg-dark text-white" id="about">
-      <div className="container-fooddy">
+    <section className="relative py-20 text-white overflow-hidden" id="about">
+      <div className="absolute inset-0 z-0">
+        <Image
+          src={downloadBg}
+          alt="App Download Background"
+          fill
+          className="object-fixed"
+        />
+        <div className="absolute inset-0 bg-dark/80" />
+      </div>
+      <div className="container-fooddy relative z-10">
         {/* Section Header */}
         <div className="text-center mb-12">
           <motion.p
