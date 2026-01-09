@@ -6,11 +6,25 @@ import pizzaImg from "@/assets/pizza-category.jpg";
 import burgerImg from "@/assets/burger-category.jpg";
 import dessertImg from "@/assets/dessert-category.jpg";
 
+import antipasti from "@/assets/antipasti.png";
+import drinks from "@/assets/drinks1.jpg";
+import kacchi from "@/assets/kacchi.jpg";
+import naan from "@/assets/naan.jpg";
+import dessert from "@/assets/dessert.jpg";
+import colazione from "@/assets/colazione.jpeg";
+
+import chicken from "@/assets/chicken.jpg";
+import curry from "@/assets/curry.jpg";
+
 const categories = [
-  { name: "Sushi", count: 50, description: "More Than 50 Kinds of Sushi", image: sushiImg },
-  { name: "Pizza", count: 7, description: "Choose Your Favorite Pizza", image: pizzaImg },
-  { name: "Burgers", count: 7, description: "From Vegetarian to Three-Meat", image: burgerImg },
-  { name: "Desserts", count: 5, description: "Find Desserts for Every Taste", image: dessertImg },
+  { name: "ANTIPASTI", count: 6, description: "Samosa, Singara, Paratha, Halim, Fuchka", image: antipasti },
+  { name: "DRINKS", count: 7, description: "The favourites drinks items", image: drinks },
+  { name: "PIATTI PRINCIPALI A BASE DI RISO", count: 4, description: "From Vegetarian to Three-Meat", image: kacchi },
+  { name: "DESSERT", count: 5, description: "Find Desserts for Every Taste", image: dessert },
+  { name: "NAAN", count: 3, description: "Find Desserts for Every Taste", image: naan },
+  { name: "COLAZIONE", count: 2, description: "Find Desserts for Every Taste", image: colazione },
+  { name: "SECONDI", count: 2, description: "Find Desserts for Every Taste", image: chicken },
+  { name: "CURRY E RISO", count: 10, description: "Find Desserts for Every Taste", image: curry },
 ];
 
 export const Categories = () => {
@@ -25,7 +39,7 @@ export const Categories = () => {
             viewport={{ once: true }}
             className="section-subtitle mb-4"
           >
-            Welcome to The Biggest Network of Food Ordering & Delivery
+            Welcome to Dawat - Restaurant & Grills
           </motion.p>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -34,7 +48,7 @@ export const Categories = () => {
             transition={{ delay: 0.1 }}
             className="section-title"
           >
-            More Than <span className="text-primary italic">20,000 dishes</span> to order!
+            You will get <span className="text-primary italic">More than you expect</span> , order now!
           </motion.h2>
         </div>
 

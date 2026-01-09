@@ -9,7 +9,7 @@ const navLinks = [
   { name: "Home", href: "/" },
   { name: "Menu", href: "/menu" },
   { name: "About", href: "#about" },
-  { name: "Restaurants", href: "#restaurants" },
+  // { name: "Restaurants", href: "#restaurants" },
   { name: "Contact", href: "#contact" },
 ];
 
@@ -28,7 +28,7 @@ export const Header = () => {
               <span className="opacity-80">Call us for Ordering</span>
               <div className="flex items-center gap-1 bg-white/20 px-3 py-1 rounded-full">
                 <Phone className="w-3 h-3" />
-                <span>+123 456 7890</span>
+                <span>344 4335555</span>
               </div>
             </div>
             <div>
@@ -44,7 +44,7 @@ export const Header = () => {
         </div>
       {/* )} */}
 
-      <div className="container-fooddy">
+      <div className="container-fooddy py-2">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           {/* Logo */}
@@ -54,7 +54,7 @@ export const Header = () => {
               alt="Fooddy Logo"
               width={150}
               height={50}
-              className="h-10 w-auto object-contain"
+              className="h-13 w-auto object-contain"
               priority
             />
           </a>
@@ -74,9 +74,9 @@ export const Header = () => {
 
           {/* Right Actions */}
           <div className="flex items-center gap-4">
-            <button className="p-2 text-muted-foreground hover:text-primary transition-colors">
+            {/* <button className="p-2 text-muted-foreground hover:text-primary transition-colors">
               <Search className="w-5 h-5" />
-            </button>
+            </button> */}
             <button className="p-2 text-muted-foreground hover:text-primary transition-colors">
               <User className="w-5 h-5" />
             </button>

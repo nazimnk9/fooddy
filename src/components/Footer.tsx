@@ -60,26 +60,26 @@ export const Footer = () => {
                           alt="Fooddy Logo"
                           width={150}
                           height={50}
-                          className="h-10 w-auto object-contain"
+                          className="h-35 w-auto object-contain"
                           priority
                         />
                       </a>
             <p className="text-white/60 mb-6 max-w-xs">
-              Your favorite food delivery service. Order from the best
-              restaurants in your area.
+              Dawat - Restaurant & Grill, your favorite Restaurant and food delivery station. Order delicious and
+              fresh foods from us!
             </p>
             <div className="space-y-3">
               <div className="flex items-center gap-3 text-white/60">
                 <MapPin className="w-5 h-5 text-primary" />
-                <span>123 Food Street, Tasty City, TC 12345</span>
+                <span>Piazza dei Mirti 19, Rome, Italy</span>
               </div>
               <div className="flex items-center gap-3 text-white/60">
                 <Phone className="w-5 h-5 text-primary" />
-                <span>+1 (234) 567-8900</span>
+                <span>344 4335555</span>
               </div>
               <div className="flex items-center gap-3 text-white/60">
                 <Mail className="w-5 h-5 text-primary" />
-                <span>hello@fooddy.com</span>
+                <span>dawatristoranteroma@gmail.com</span>
               </div>
             </div>
           </div>
@@ -141,7 +141,7 @@ export const Footer = () => {
       <div className="border-t border-white/10">
         <div className="container-fooddy py-6 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-white/40 text-sm">
-            © 2024 Fooddy. All rights reserved.
+            © 2026 Dawat - Restaurant & Grill. All rights reserved.
           </p>
           <div className="flex items-center gap-4">
             {socialLinks.map((social, index) => (

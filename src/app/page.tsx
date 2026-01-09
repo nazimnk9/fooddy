@@ -23,14 +23,14 @@ export default function Home() {
                 <Hero />
                 <Categories />
                 <HowToOrder />
-                <AppDownload />
+                {/* <AppDownload /> */}
                 <PopularDishes />
-                <DealCountdown />
-                <Restaurants />
-                <Testimonials />
+                {/* <DealCountdown /> */}
+                {/* <Restaurants />
+                <Testimonials /> */}
                 <Features />
                 <Blog />
-                <Gallery />
+                {/* <Gallery /> */}
                 <Newsletter />
             </main>
             <Footer />

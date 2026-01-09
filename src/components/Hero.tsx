@@ -161,7 +161,7 @@ export const Hero = () => {
 
 
         {/* Feature Badges - Kept Constant */}
-        <motion.div
+        {/* <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.6 }}
@@ -176,7 +176,7 @@ export const Hero = () => {
               <span className="text-white text-sm font-medium">{feature.text}</span>
             </div>
           ))}
-        </motion.div>
+        </motion.div> */}
       </div>
     </section>
   );

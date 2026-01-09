@@ -2,8 +2,9 @@ import { motion } from "framer-motion";
 import { MapPin, Store, ClipboardList, Truck } from "lucide-react";
 
 const steps = [
-  { icon: MapPin, title: "Choose your location", step: 1 },
-  { icon: Store, title: "Choose restaurant", step: 2 },
+  { icon: Store, title: "Add Menu dishes into the cart", step: 1 },
+  { icon: MapPin, title: "Write your location (Within 5 km radious of our Restaurant location)", step: 2 },
+  
   { icon: ClipboardList, title: "Make your order", step: 3 },
   { icon: Truck, title: "Food is on the way", step: 4 },
 ];
