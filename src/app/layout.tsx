@@ -3,8 +3,8 @@ import "./globals.css";
 import { Providers } from "@/components/Providers";
 
 export const metadata: Metadata = {
-    title: "Fooddy - Food Delivery App",
-    description: "Order food delivery from your favorite restaurants",
+    title: "Dawat - Restaurant & Grill",
+    description: "Order food delivery from Dawat - Restaurant & Grill",
 };
 
 export default function RootLayout({
