@@ -14,7 +14,7 @@ const features = [
   {
     icon: Truck,
     title: "Free Delivery",
-    description: "Free delivery on orders over $50",
+    description: "Free delivery within 5 km radius distance of our Restaurant",
   },
   {
     icon: Shield,
@@ -23,8 +23,8 @@ const features = [
   },
   {
     icon: CreditCard,
-    title: "Secure Payment",
-    description: "100% secure payment methods",
+    title: "Book now, Pay Later",
+    description: "You can book now, cash on hand payment",
   },
   {
     icon: Headphones,
