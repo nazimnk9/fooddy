@@ -69,7 +69,7 @@ export const Hero = () => {
   return (
     <section className="relative min-h-screen flex items-center pt-20 overflow-hidden">
       {/* Background Image Slider */}
-      <AnimatePresence mode="wait">
+      <AnimatePresence mode="popLayout">
         <motion.div
           key={currentSlide}
           initial={{ opacity: 0, scale: 1.1 }}
@@ -90,8 +90,8 @@ export const Hero = () => {
 
       {/* Content */}
       <div className="container-fooddy relative z-10 py-20">
-        <div className="max-w-2xl">
-          <AnimatePresence mode="wait">
+        <div className="max-w-2xl mr-20">
+          <AnimatePresence mode="popLayout">
             <div key={currentSlide}>
               <motion.h1
                 initial={{ opacity: 0, y: 30 }}

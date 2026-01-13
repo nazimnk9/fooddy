@@ -22,30 +22,30 @@ export const Header = () => {
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
       {/* Top Header - Home Page Only */}
       {/* {isHomePage && ( */}
-        <div className="bg-primary py-2 px-4 hidden md:block">
-          <div className="container-fooddy flex justify-between items-center text-primary-foreground">
-            <div className="flex items-center gap-2 text-sm font-medium">
-              <span className="opacity-80">Call us for Ordering</span>
-              <div className="flex items-center gap-1 bg-white/20 px-3 py-1 rounded-full">
-                <Phone className="w-3 h-3" />
-                <span>344 4335555</span>
-              </div>
-            </div>
-            <div>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-primary-foreground hover:bg-white/20 h-auto py-1 px-4 text-sm"
-              >
-                Login
-              </Button>
+      <div className="bg-primary py-2 px-4 hidden md:block">
+        <div className="container-fooddy flex justify-between items-center text-primary-foreground">
+          <div className="flex items-center gap-2 text-sm font-medium">
+            <span className="opacity-80">Call us for Ordering</span>
+            <div className="flex items-center gap-1 bg-white/20 px-3 py-1 rounded-full">
+              <Phone className="w-3 h-3" />
+              <span>344 4335555</span>
             </div>
           </div>
+          <div>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-primary-foreground hover:bg-white/20 h-auto py-1 px-4 text-sm"
+            >
+              Login
+            </Button>
+          </div>
         </div>
+      </div>
       {/* )} */}
 
       <div className="container-fooddy py-2">
-        <div className="flex items-center justify-between h-20">
+        <div className="flex items-center justify-between h-42">
           {/* Logo */}
           {/* Logo */}
           <a href="#" className="flex items-center gap-2">
@@ -54,7 +54,7 @@ export const Header = () => {
               alt="Fooddy Logo"
               width={150}
               height={50}
-              className="h-13 w-auto object-contain"
+              className="h-20 w-auto object-contain"
               priority
             />
           </a>
