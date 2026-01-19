@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 import { Star, Eye, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -19,6 +20,7 @@ import Samosa from "@/assets/Samosa.jpeg";
 
 const dishes = [
   {
+    id: 101,
     name: "Rosogolla",
     tags: ["Rosogolla"],
     rating: 5,
@@ -27,6 +29,7 @@ const dishes = [
     image: Sweets,
   },
   {
+    id: 102,
     name: "Chicken Curry",
     tags: ["Chicken Curry"],
     rating: 5,
@@ -35,6 +38,7 @@ const dishes = [
     image: Chicken_curry,
   },
   {
+    id: 103,
     name: "Doi Fuchka",
     tags: ["Doi Fuchka"],
     rating: 5,
@@ -43,6 +47,7 @@ const dishes = [
     image: Doi_Fuchka,
   },
   {
+    id: 104,
     name: "Roast",
     tags: ["Roast"],
     rating: 5,
@@ -51,6 +56,7 @@ const dishes = [
     image: Roast,
   },
   {
+    id: 105,
     name: "Samosa",
     tags: ["Samosa"],
     rating: 5,
@@ -59,6 +65,7 @@ const dishes = [
     image: Samosa,
   },
   {
+    id: 1,
     name: "Pizza Margherita",
     tags: ["pizza", "vegetarian"],
     rating: 5,
@@ -67,6 +74,7 @@ const dishes = [
     image: dishPizza,
   },
   {
+    id: 5,
     name: "Ravioli with Spinach",
     tags: ["pasta", "vegetarian"],
     rating: 5,
@@ -75,6 +83,7 @@ const dishes = [
     image: dishRavioli,
   },
   {
+    id: 3,
     name: "Three-Meat Lasagna",
     tags: ["meat"],
     rating: 4,
@@ -83,6 +92,7 @@ const dishes = [
     image: dishLasagna,
   },
   {
+    id: 106,
     name: "California Roll",
     tags: ["sushi"],
     rating: 5,
@@ -91,6 +101,7 @@ const dishes = [
     image: dishSushi,
   },
   {
+    id: 107,
     name: "Classic Cheeseburger",
     tags: ["burger"],
     rating: 4,
@@ -99,6 +110,7 @@ const dishes = [
     image: dishBurger,
   },
   {
+    id: 9,
     name: "Tiramisu",
     tags: ["dessert"],
     rating: 5,
@@ -107,6 +119,7 @@ const dishes = [
     image: dishTiramisu,
   },
   {
+    id: 108,
     name: "Pepperoni Pizza",
     tags: ["pizza", "meat"],
     rating: 5,
@@ -115,6 +128,7 @@ const dishes = [
     image: dishPepperoni,
   },
   {
+    id: 109,
     name: "Pad Thai",
     tags: ["asian", "noodles"],
     rating: 4,
@@ -169,9 +183,12 @@ export const PopularDishes = () => {
                 />
                 {/* Overlay Actions */}
                 <div className="absolute inset-0 bg-dark/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-                  <button className="w-10 h-10 rounded-full bg-white flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-colors">
+                  <Link
+                    href={`/product/${dish.id}`}
+                    className="w-10 h-10 rounded-full bg-white flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-colors"
+                  >
                     <Eye className="w-4 h-4" />
-                  </button>
+                  </Link>
                   <button className="w-10 h-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center hover:bg-primary/90 transition-colors">
                     <ShoppingCart className="w-4 h-4" />
                   </button>

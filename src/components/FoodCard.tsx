@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 import { Star, ShoppingCart, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { StaticImageData } from "next/image";
@@ -47,9 +48,12 @@ export const FoodCard = ({ item, index }: FoodCardProps) => {
                 />
                 {/* Overlay Actions */}
                 <div className="absolute inset-0 bg-dark/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-                    <button className="w-10 h-10 rounded-full bg-white flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-colors">
+                    <Link
+                        href={`/product/${item.id}`}
+                        className="w-10 h-10 rounded-full bg-white flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-colors"
+                    >
                         <Eye className="w-4 h-4" />
-                    </button>
+                    </Link>
                     <button className="w-10 h-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center hover:bg-primary/90 transition-colors">
                         <ShoppingCart className="w-4 h-4" />
                     </button>
