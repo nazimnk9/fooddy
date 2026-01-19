@@ -115,9 +115,11 @@ export function CartSheetContent() {
                                 CART
                             </Button>
                         </Link>
-                        <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-bold">
-                            CHECKOUT
-                        </Button>
+                        <Link href="/checkout" className="w-full">
+                            <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-bold">
+                                CHECKOUT
+                            </Button>
+                        </Link>
                     </div>
 
                     <div className="text-center">
