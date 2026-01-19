@@ -356,7 +356,7 @@ export default function CheckoutPage() {
                                     value="check"
                                     checked={paymentMethod === "check"}
                                     onChange={(e) => setPaymentMethod(e.target.value)}
-                                    className="mt-1 accent-primary"
+                                    className="mt-[7px] accent-primary"
                                 />
                                 <div>
                                     <Label htmlFor="payment-check" className="font-bold text-foreground cursor-pointer">Check payments</Label>
@@ -375,7 +375,7 @@ export default function CheckoutPage() {
                                     value="cash"
                                     checked={paymentMethod === "cash"}
                                     onChange={(e) => setPaymentMethod(e.target.value)}
-                                    className="mt-1 accent-primary"
+                                    className="accent-primary"
                                 />
                                 <Label htmlFor="payment-cash" className="font-normal text-foreground cursor-pointer">Cash on delivery</Label>
                                 {paymentMethod === "cash" && (
