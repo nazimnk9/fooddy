@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { Plus, Minus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -109,9 +110,11 @@ export function CartSheetContent() {
 
                     {/* Buttons */}
                     <div className="grid grid-cols-2 gap-4">
-                        <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-bold">
-                            CART
-                        </Button>
+                        <Link href="/cart" className="w-full">
+                            <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-bold">
+                                CART
+                            </Button>
+                        </Link>
                         <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-bold">
                             CHECKOUT
                         </Button>
