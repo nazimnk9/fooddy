@@ -4,7 +4,7 @@ import { MapPin, Store, ClipboardList, Truck } from "lucide-react";
 const steps = [
   { icon: Store, title: "Add Menu dishes into the cart", step: 1 },
   { icon: MapPin, title: "Write your location (Within 5 km radious of our Restaurant location)", step: 2 },
-  
+
   { icon: ClipboardList, title: "Make your order", step: 3 },
   { icon: Truck, title: "Food is on the way", step: 4 },
 ];
@@ -46,7 +46,7 @@ export const HowToOrder = () => {
               className="text-center group relative md:mb-0 mb-8 last:mb-0"
             >
               <div className="relative inline-block mb-6">
-                <div className="w-40 h-40 rounded-full mb-4 bg-background flex items-center justify-center mx-auto shadow-md group-hover:shadow-lg transition-shadow">
+                <div className="w-20 h-20 md:w-40 md:h-40 rounded-full mb-4 bg-background flex items-center justify-center mx-auto shadow-md group-hover:shadow-lg transition-shadow">
                   <step.icon className="w-full h-full text-primary p-3" />
                 </div>
                 <div className="step-number mx-auto group-hover:scale-110 transition-transform">
