@@ -5,15 +5,23 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Clock, Store, Smartphone, Truck, ChevronRight, ChevronLeft } from "lucide-react";
 
-// Import images
+// Import desktop images
 import heroImage from "@/assets/hero-food.jpg";
 import heroSweets from "@/assets/Sweets.jpeg";
 import heroChicken from "@/assets/Chicken_curry.jpeg";
 import heroRoast from "@/assets/Roast.jpeg";
 
+// Import mobile images
+import heroPizzaMobile from "@/assets/pizza.jpeg";
+import heroBurgerMobile from "@/assets/burger_2.jpeg";
+import heroRiceMobile from "@/assets/rice_2.jpeg";
+import heroPRiceMobile from "@/assets/p_rice.jpeg";
+import heroKhechuriMobile from "@/assets/khechuri.jpeg";
+
 const slides = [
   {
     image: heroImage,
+    mobileImage: heroPizzaMobile,
     title1: "Order Food Delivery",
     titleHighlighted: "From Your Favorite",
     title2: "Restaurants!",
@@ -22,6 +30,7 @@ const slides = [
   },
   {
     image: heroSweets,
+    mobileImage: heroBurgerMobile,
     title1: "Sweeten Your Day",
     titleHighlighted: "With Delicious",
     title2: "Desserts!",
@@ -30,6 +39,7 @@ const slides = [
   },
   {
     image: heroChicken,
+    mobileImage: heroRiceMobile,
     title1: "Spicy & Savory",
     titleHighlighted: "Authentic",
     title2: "Chicken Curry!",
@@ -38,6 +48,7 @@ const slides = [
   },
   {
     image: heroRoast,
+    mobileImage: heroPRiceMobile,
     title1: "Celebration Special",
     titleHighlighted: "Premium",
     title2: "Roast!",
@@ -78,10 +89,18 @@ export const Hero = () => {
           transition={{ duration: 1.5 }}
           className="absolute inset-0 z-0"
         >
+          {/* Desktop Image */}
           <Image
             src={slides[currentSlide].image}
             alt="Hero Background"
-            className="w-full h-full object-fixed"
+            className="hidden md:block w-full h-full object-fixed"
+            priority
+          />
+          {/* Mobile Image */}
+          <Image
+            src={slides[currentSlide].mobileImage}
+            alt="Hero Background Mobile"
+            className="block md:hidden w-full h-full object-fixed"
             priority
           />
           <div className="absolute inset-0 bg-dark/70" />

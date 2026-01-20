@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import downloadBg from "@/assets/Roast.jpeg";
+import downloadBgMobile from "@/assets/khechuri.jpeg";
 
 const footerLinks = {
   company: [
@@ -42,11 +43,19 @@ export const Footer = () => {
   return (
     <footer className="relative text-white" id="contact">
       <div className="absolute inset-0 z-0">
+        {/* Desktop Image */}
         <Image
           src={downloadBg}
           alt="App Download Background"
           fill
-          className="object-fixed"
+          className="hidden md:block object-fixed"
+        />
+        {/* Mobile Image */}
+        <Image
+          src={downloadBgMobile}
+          alt="App Download Background Mobile"
+          fill
+          className="block md:hidden object-fixed"
         />
         <div className="absolute inset-0 bg-dark/80" />
       </div>
@@ -55,15 +64,15 @@ export const Footer = () => {
           {/* Brand */}
           <div className="lg:col-span-2">
             <a href="#" className="flex items-center gap-2 mb-4">
-                        <Image
-                          src="/logo_1.png"
-                          alt="Fooddy Logo"
-                          width={150}
-                          height={50}
-                          className="h-35 w-auto object-contain"
-                          priority
-                        />
-                      </a>
+              <Image
+                src="/logo_1.png"
+                alt="Fooddy Logo"
+                width={150}
+                height={50}
+                className="h-35 w-auto object-contain"
+                priority
+              />
+            </a>
             <p className="text-white/60 mb-6 max-w-xs">
               Dawat - Restaurant & Grill, your favorite Restaurant and food delivery station. Order delicious and
               fresh foods from us!

@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import downloadBg from "@/assets/Doi_Fuchka.jpeg";
+import downloadBgMobile from "@/assets/burger_2.jpeg";
 
 const features = [
   {
@@ -47,11 +48,19 @@ export const Features = () => {
   return (
     <section className="relative py-20 text-white overflow-hidden" id="about">
       <div className="absolute inset-0 z-0">
+        {/* Desktop Image */}
         <Image
           src={downloadBg}
           alt="App Download Background"
           fill
-          className="object-fixed"
+          className="hidden md:block object-fixed"
+        />
+        {/* Mobile Image */}
+        <Image
+          src={downloadBgMobile}
+          alt="App Download Background Mobile"
+          fill
+          className="block md:hidden object-fixed"
         />
         <div className="absolute inset-0 bg-dark/80" />
       </div>
