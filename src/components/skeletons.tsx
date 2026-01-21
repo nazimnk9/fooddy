@@ -136,3 +136,13 @@ export function ProductDetailSkeleton() {
         </div>
     );
 }
+
+export function CategoryTabsSkeleton() {
+    return (
+        <div className="flex flex-wrap items-center justify-center gap-2 md:gap-4">
+            {Array.from({ length: 6 }).map((_, i) => (
+                <Skeleton key={i} className="h-10 w-24 rounded-full" />
+            ))}
+        </div>
+    );
+}

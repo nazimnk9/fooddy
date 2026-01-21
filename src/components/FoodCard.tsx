@@ -1,9 +1,8 @@
 import { motion } from "framer-motion";
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
 import { Star, ShoppingCart, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { StaticImageData } from "next/image";
 
 export interface FoodItem {
     id: number;
@@ -40,10 +39,11 @@ export const FoodCard = ({ item, index }: FoodCardProps) => {
             className="dish-card group"
         >
             {/* Image */}
-            <div className="relative overflow-hidden">
+            <div className="relative overflow-hidden aspect-[4/3]">
                 <Image
                     src={item.image}
                     alt={item.name}
+                    fill
                     className="dish-card-image object-fixed"
                 />
                 {/* Overlay Actions */}
@@ -64,13 +64,13 @@ export const FoodCard = ({ item, index }: FoodCardProps) => {
             <div className="p-4">
                 {/* Tags */}
                 <div className="flex flex-wrap gap-1 mb-2">
-                    {item.tags.map((tag) => (
+                    {item.tags.map((tag, idx) => (
                         <span
-                            key={tag}
-                            className="text-xs text-muted-foreground"
+                            key={idx}
+                            className="text-xs text-muted-foreground uppercase"
                         >
                             {tag}
-                            {item.tags.indexOf(tag) < item.tags.length - 1 && ","}
+                            {idx < item.tags.length - 1 && ","}
                         </span>
                     ))}
                 </div>

@@ -1,139 +1,71 @@
 "use client";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Header } from "@/components/Header";
 import { MenuHero } from "@/components/MenuHero";
 import { CategoryTabs } from "@/components/CategoryTabs";
 import { FoodCard, FoodItem } from "@/components/FoodCard";
 import { Footer } from "@/components/Footer";
+import { getCategories, getProducts, Category } from "@/services/menuService";
+import { ProductCardSkeleton, CategoryTabsSkeleton } from "@/components/skeletons";
 
-// Import food images
-import pizzaMargherita from "@/assets/food/pizza-margherita.jpg";
-import tagliatelle from "@/assets/food/tagliatelle.jpg";
-import lasagna from "@/assets/food/lasagna.jpg";
-import linguine from "@/assets/food/linguine.jpg";
-import sushi from "@/assets/food/sushi.jpg";
-import salad from "@/assets/food/salad.jpg";
-import chinese from "@/assets/food/chinese.jpg";
-import tiramisu from "@/assets/food/tiramisu.jpg";
-import ravioli from "@/assets/food/ravioli.jpg";
-
-const categories = [
-    "All",
-    "Pizza",
-    "Pasta",
-    "Sushi",
-    "Vegetarian",
-    "Salads",
-    "Chinese",
-    "Italian",
-    "Desserts",
-];
-
-const foodItems: FoodItem[] = [
-    {
-        id: 1,
-        name: "Pizza Margherita",
-        description: "With basil, mozzarella, tomatoes",
-        price: 25.0,
-        image: pizzaMargherita,
-        tags: ["pizza", "vegetarian"],
-        rating: 5,
-        category: "Pizza",
-    },
-    {
-        id: 2,
-        name: "Veggie Tagliatelle Bolognese",
-        description: "With spinach, mushrooms and garlic",
-        price: 27.0,
-        image: tagliatelle,
-        tags: ["pasta", "vegetarian"],
-        category: "Pasta",
-    },
-    {
-        id: 3,
-        name: "Three-Meat Special Lasagna",
-        description: "With special garlic cream sauce, ricotta cheese and tomatoes",
-        price: 30.0,
-        image: lasagna,
-        tags: ["meat", "italian"],
-        rating: 4,
-        category: "Italian",
-    },
-    {
-        id: 4,
-        name: "Linguine with Two-Cheese Sauce",
-        description: "With mozzarella and parmesan",
-        price: 26.0,
-        image: linguine,
-        tags: ["pasta", "vegetarian"],
-        category: "Pasta",
-    },
-    {
-        id: 5,
-        name: "Ravioli with Spinach and Ricotta",
-        description: "With spinach, basil, garlic and ricotta cheese",
-        price: 28.0,
-        image: ravioli,
-        tags: ["pasta", "vegetarian"],
-        rating: 5,
-        category: "Pasta",
-    },
-    {
-        id: 6,
-        name: "Salmon Sushi Platter",
-        description: "Fresh salmon nigiri and maki rolls with wasabi",
-        price: 35.0,
-        image: sushi,
-        tags: ["sushi", "seafood"],
-        rating: 5,
-        category: "Sushi",
-    },
-    {
-        id: 7,
-        name: "Garden Fresh Salad",
-        description: "With avocado, cherry tomatoes and feta cheese",
-        price: 18.0,
-        image: salad,
-        tags: ["salads", "vegetarian"],
-        rating: 4,
-        category: "Salads",
-    },
-    {
-        id: 8,
-        name: "Shrimp Fried Rice",
-        description: "Traditional Chinese fried rice with vegetables and shrimp",
-        price: 24.0,
-        image: chinese,
-        tags: ["chinese", "seafood"],
-        category: "Chinese",
-    },
-    {
-        id: 9,
-        name: "Tiramisu",
-        description: "Classic Italian dessert with coffee and mascarpone",
-        price: 12.0,
-        image: tiramisu,
-        tags: ["desserts", "italian"],
-        rating: 5,
-        category: "Desserts",
-    },
-];
+import pizzaMargherita from "@/assets/food/pizza-margherita.jpg"; // Fallback image
 
 const MenuPage = () => {
-    const [activeCategory, setActiveCategory] = useState("All");
+    const [categories, setCategories] = useState<Category[]>([]);
+    const [activeCategory, setActiveCategory] = useState<number | "All">("All");
+    const [products, setProducts] = useState<FoodItem[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [loadingCategories, setLoadingCategories] = useState(true);
 
-    const filteredItems = useMemo(() => {
-        if (activeCategory === "All") {
-            return foodItems;
-        }
-        return foodItems.filter((item) => {
-            const categoryLower = activeCategory.toLowerCase();
-            return (
-                item.category.toLowerCase() === categoryLower ||
-                item.tags.some((tag) => tag.toLowerCase() === categoryLower)
-            );
-        });
+    // Fetch Categories
+    useEffect(() => {
+        const fetchCategories = async () => {
+            setLoadingCategories(true);
+            try {
+                const data = await getCategories();
+                setCategories(data.results);
+            } catch (error) {
+                console.error("Failed to fetch categories:", error);
+            } finally {
+                setLoadingCategories(false);
+            }
+        };
+        fetchCategories();
+    }, []);
+
+    // Fetch Products based on active category
+    useEffect(() => {
+        const fetchMenuProducts = async () => {
+            setLoading(true);
+            try {
+                let query = "is_popular=true";
+                if (activeCategory !== "All") {
+                    query += `&category__id=${activeCategory}`;
+                }
+
+                const data = await getProducts(query);
+
+                const mappedProducts: FoodItem[] = data.results.map((product) => ({
+                    id: product.id,
+                    name: product.title,
+                    description: product.description,
+                    price: parseFloat(product.price),
+                    image: product.images.length > 0 ? product.images[0].image : pizzaMargherita,
+                    tags: product.tags.map(t => t.title),
+                    rating: 5, // Default rating as API doesn't provide it
+                    category: product.category.length > 0 ? product.category[0].title : "",
+                }));
+
+                setProducts(mappedProducts);
+            } catch (error) {
+                console.error("Failed to fetch products:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchMenuProducts();
     }, [activeCategory]);
 
     return (
@@ -154,31 +86,43 @@ const MenuPage = () => {
 
                     {/* Category Tabs */}
                     <div className="mb-12">
-                        <CategoryTabs
-                            categories={categories}
-                            activeCategory={activeCategory}
-                            onCategoryChange={setActiveCategory}
-                        />
+                        {loadingCategories ? (
+                            <CategoryTabsSkeleton />
+                        ) : (
+                            <CategoryTabs
+                                categories={categories}
+                                activeCategory={activeCategory}
+                                onCategoryChange={setActiveCategory}
+                            />
+                        )}
                     </div>
 
                     {/* Food Grid */}
                     <AnimatePresence mode="wait">
-                        <motion.div
-                            key={activeCategory}
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            transition={{ duration: 0.3 }}
-                            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
-                        >
-                            {filteredItems.map((item, index) => (
-                                <FoodCard key={item.id} item={item} index={index} />
-                            ))}
-                        </motion.div>
+                        {loading ? (
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                                {Array.from({ length: 8 }).map((_, i) => (
+                                    <div key={i}><ProductCardSkeleton viewMode="grid" /></div>
+                                ))}
+                            </div>
+                        ) : (
+                            <motion.div
+                                key={activeCategory}
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.3 }}
+                                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+                            >
+                                {products.map((item, index) => (
+                                    <FoodCard key={item.id} item={item} index={index} />
+                                ))}
+                            </motion.div>
+                        )}
                     </AnimatePresence>
 
                     {/* Empty State */}
-                    {filteredItems.length === 0 && (
+                    {!loading && products.length === 0 && (
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
