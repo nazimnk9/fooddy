@@ -84,7 +84,7 @@ export default function CartPage() {
                                                     src={pizzaMargherita}
                                                     alt="Pizza Margherita"
                                                     fill
-                                                    className="object-cover"
+                                                    className="object-fixed"
                                                 />
                                             </div>
                                             <span className="font-semibold text-foreground">Pizza Margherita</span>

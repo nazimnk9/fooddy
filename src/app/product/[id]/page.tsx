@@ -94,7 +94,7 @@ export default function ProductPage() {
                                 src={productImage}
                                 alt={product.title}
                                 fill
-                                className="object-cover"
+                                className="object-fixed"
                                 priority
                             />
                             <div className="absolute top-4 right-4 bg-white p-2 rounded-full shadow-md">

@@ -87,7 +87,7 @@ export const Testimonials = () => {
                 <img
                   src={testimonial.avatar}
                   alt={testimonial.name}
-                  className="w-12 h-12 rounded-full object-cover"
+                  className="w-12 h-12 rounded-full object-fixed"
                 />
                 <div>
                   <p className="font-semibold text-foreground">

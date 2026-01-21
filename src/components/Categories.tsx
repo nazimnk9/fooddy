@@ -96,7 +96,7 @@ export const Categories = () => {
                     alt={category.name}
                     width={500}
                     height={600}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    className="w-full h-full object-fixed transition-transform duration-500 group-hover:scale-110"
                   />
                   <div className="category-card-overlay" />
                   <div className="absolute inset-0 p-6 flex flex-col justify-end">

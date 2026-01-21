@@ -56,7 +56,7 @@ export function CartSheetContent() {
                                         src={item.image}
                                         alt={item.name}
                                         fill
-                                        className="object-cover"
+                                        className="object-fixed"
                                     />
                                 </div>
 
