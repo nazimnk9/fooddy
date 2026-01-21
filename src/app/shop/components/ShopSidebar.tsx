@@ -89,7 +89,9 @@ export function ShopSidebar() {
                 <h3 className="text-2xl font-display font-medium text-foreground mb-6">Tags</h3>
                 <div className="flex flex-wrap gap-2">
                     {loading ? <p className="text-sm">Loading...</p> : tags.map(tag => (
-                        <span key={tag.id} className="bg-white px-4 py-2 rounded-full text-xs font-bold text-muted-foreground/80 hover:text-primary cursor-pointer transition-colors shadow-sm">{tag.title}</span>
+                        <Link key={tag.id} href={`/shop/${tag.id}?type=tag`} className="bg-white px-4 py-2 rounded-full text-xs font-bold text-muted-foreground/80 hover:text-primary cursor-pointer transition-colors shadow-sm">
+                            {tag.title}
+                        </Link>
                     ))}
                 </div>
             </div>

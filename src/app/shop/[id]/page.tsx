@@ -16,7 +16,7 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import { getProducts, Product as ApiProduct } from "@/services/menuService";
+import { getProducts, getCategories, getTags, Product as ApiProduct } from "@/services/menuService";
 import sushiCategoryImg from "@/assets/sushi-category.jpg";
 
 import { ProductCardSkeleton } from "@/components/skeletons";
@@ -29,6 +29,12 @@ export default function ShopCategoryPage() {
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
     const [products, setProducts] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
+    const [displayTitle, setDisplayTitle] = useState("");
+
+    // Check if we are filtering by tag based on query param ?type=tag
+    const type = searchParams.get('type');
+    const isTag = type === 'tag';
+
     const categoryId = params.id;
 
     useEffect(() => {
@@ -40,13 +46,34 @@ export default function ShopCategoryPage() {
     }, [viewParam]);
 
     useEffect(() => {
-        const fetchProducts = async () => {
+        const fetchData = async () => {
             if (!categoryId) return;
+
             setLoading(true);
             try {
-                const data = await getProducts(`category__id=${categoryId}`);
+                // Fetch Products
+                let query = "";
+                if (isTag) {
+                    query = `tags__id=${categoryId}`;
+                } else {
+                    query = `category__id=${categoryId}`;
+                }
+
+                const productsData = await getProducts(query);
+
+                // Fetch Title Info
+                if (isTag) {
+                    const tagsData = await getTags();
+                    const tag = tagsData.results.find((t: any) => t.id.toString() === categoryId);
+                    setDisplayTitle(tag ? tag.title : `Tag ${categoryId}`);
+                } else {
+                    const categoriesData = await getCategories();
+                    const category = categoriesData.results.find((c: any) => c.id.toString() === categoryId);
+                    setDisplayTitle(category ? category.title : `Category ${categoryId}`);
+                }
+
                 // Map API data to ProductCard props
-                const mappedProducts = data.results.map((p: ApiProduct) => ({
+                const mappedProducts = productsData.results.map((p: ApiProduct) => ({
                     id: p.id.toString(),
                     name: p.title,
                     description: p.description,
@@ -56,14 +83,14 @@ export default function ShopCategoryPage() {
                 }));
                 setProducts(mappedProducts);
             } catch (error) {
-                console.error("Error fetching products:", error);
+                console.error("Error fetching data:", error);
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchProducts();
-    }, [categoryId]);
+        fetchData();
+    }, [categoryId, isTag]);
 
     const handleViewChange = (mode: 'grid' | 'list') => {
         setViewMode(mode);
@@ -97,7 +124,7 @@ export default function ShopCategoryPage() {
                         </Link>
                         <span className="text-white/50">|</span>
                         <span className="breadcrumb-active uppercase tracking-wider">
-                            Category {categoryId}
+                            {displayTitle}
                         </span>
                     </nav>
                 </div>

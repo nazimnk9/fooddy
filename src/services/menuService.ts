@@ -55,24 +55,35 @@ export interface TagResponse {
 }
 
 
+// Simple in-memory cache
+let cachedCategories: Promise<CategoryResponse> | null = null;
+let cachedTags: Promise<TagResponse> | null = null;
+
 export const getCategories = async (): Promise<CategoryResponse> => {
-    try {
-        const response = await fetch(`${BASE_URL}/menu/category/`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
+    if (cachedCategories) return cachedCategories;
 
-        if (!response.ok) {
-            throw new Error(`Error fetching categories: ${response.statusText}`);
+    cachedCategories = (async () => {
+        try {
+            const response = await fetch(`${BASE_URL}/menu/category/`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error(`Error fetching categories: ${response.statusText}`);
+            }
+
+            return await response.json();
+        } catch (error) {
+            cachedCategories = null; // Reset cache on error
+            console.error("Failed to fetch categories:", error);
+            throw error;
         }
+    })();
 
-        return await response.json();
-    } catch (error) {
-        console.error("Failed to fetch categories:", error);
-        throw error;
-    }
+    return cachedCategories;
 };
 
 export const getProducts = async (queryParams?: string): Promise<ProductResponse> => {
@@ -97,21 +108,28 @@ export const getProducts = async (queryParams?: string): Promise<ProductResponse
 };
 
 export const getTags = async (): Promise<TagResponse> => {
-    try {
-        const response = await fetch(`${BASE_URL}/menu/tags/`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
+    if (cachedTags) return cachedTags;
 
-        if (!response.ok) {
-            throw new Error(`Error fetching tags: ${response.statusText}`);
+    cachedTags = (async () => {
+        try {
+            const response = await fetch(`${BASE_URL}/menu/tags/`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error(`Error fetching tags: ${response.statusText}`);
+            }
+
+            return await response.json();
+        } catch (error) {
+            cachedTags = null; // Reset cache on error
+            console.error("Failed to fetch tags:", error);
+            throw error;
         }
+    })();
 
-        return await response.json();
-    } catch (error) {
-        console.error("Failed to fetch tags:", error);
-        throw error;
-    }
+    return cachedTags;
 };
