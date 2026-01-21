@@ -133,3 +133,23 @@ export const getTags = async (): Promise<TagResponse> => {
 
     return cachedTags;
 };
+
+export const getProductById = async (id: string): Promise<Product> => {
+    try {
+        const response = await fetch(`${BASE_URL}/menu/products/${id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error fetching product: ${response.statusText}`);
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error(`Failed to fetch product ${id}:`, error);
+        throw error;
+    }
+};

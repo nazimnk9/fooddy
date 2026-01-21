@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image, { StaticImageData } from "next/image";
 import { Button } from "@/components/ui/button";
-import { Star, ShoppingCart } from "lucide-react";
+import { Star, Eye, ShoppingCart } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface ProductCardProps {
@@ -33,6 +33,18 @@ export function ProductCard({ product, viewMode }: ProductCardProps) {
                     fill
                     className="object-cover transition-transform duration-500 group-hover:scale-110"
                 />
+                {/* Overlay Actions */}
+                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                    <Link
+                        href={`/product/${product.id}`}
+                        className="w-10 h-10 rounded-full bg-white flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-colors"
+                    >
+                        <Eye className="w-4 h-4 text-black" />
+                    </Link>
+                    <button className="w-10 h-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center hover:bg-primary/90 transition-colors">
+                        <ShoppingCart className="w-4 h-4" />
+                    </button>
+                </div>
             </div>
 
             {/* Content */}

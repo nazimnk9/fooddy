@@ -1,258 +1,66 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
-import { Star, ShoppingCart, Calendar, ChevronUp, ChevronDown } from "lucide-react";
+import { Star, ShoppingCart, ChevronUp, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { cn } from "@/lib/utils";
-
-// Import food images (duplicated from menu page)
-import pizzaMargherita from "@/assets/food/pizza-margherita.jpg";
-import tagliatelle from "@/assets/food/tagliatelle.jpg";
-import lasagna from "@/assets/food/lasagna.jpg";
-import linguine from "@/assets/food/linguine.jpg";
-import sushi from "@/assets/food/sushi.jpg";
-import salad from "@/assets/food/salad.jpg";
-import chinese from "@/assets/food/chinese.jpg";
-import tiramisu from "@/assets/food/tiramisu.jpg";
-import ravioli from "@/assets/food/ravioli.jpg";
-
-// Additional imports from PopularDishes
-import dishPizza from "@/assets/dish-pizza.jpg";
-import dishRavioli from "@/assets/dish-ravioli.jpg";
-import dishLasagna from "@/assets/dish-lasagna.jpg";
-import dishSushi from "@/assets/dish-sushi.jpg";
-import dishBurger from "@/assets/dish-burger.jpg";
-import dishTiramisu from "@/assets/dish-tiramisu.jpg";
-import dishPepperoni from "@/assets/dish-pepperoni.jpg";
-import dishPadthai from "@/assets/dish-padthai.jpg";
-import Sweets from "@/assets/Sweets.jpeg";
-import Chicken_curry from "@/assets/Chicken_curry.jpeg";
-import Doi_Fuchka from "@/assets/Doi_Fuchka.jpeg";
-import Roast from "@/assets/Roast.jpeg";
-import Samosa from "@/assets/Samosa.jpeg";
-
-const foodItems = [
-    // Original Menu Items
-    {
-        id: 1,
-        name: "Pizza Margherita",
-        description: "With basil, mozzarella, tomatoes",
-        fullDescription: "Lorem ipsum dolor sit amet...",
-        price: 25.0,
-        image: pizzaMargherita,
-        tags: ["pizza", "vegetarian"],
-        rating: 5,
-        category: "Pizza",
-    },
-    {
-        id: 2,
-        name: "Veggie Tagliatelle Bolognese",
-        description: "With spinach, mushrooms and garlic",
-        fullDescription: "Lorem ipsum dolor sit amet...",
-        price: 27.0,
-        image: tagliatelle,
-        tags: ["pasta", "vegetarian"],
-        category: "Pasta",
-    },
-    {
-        id: 3,
-        name: "Three-Meat Special Lasagna",
-        description: "With special garlic cream sauce, ricotta cheese and tomatoes",
-        fullDescription: "Lorem ipsum dolor sit amet...",
-        price: 30.0,
-        image: lasagna,
-        tags: ["meat", "italian"],
-        rating: 4,
-        category: "Italian",
-    },
-    {
-        id: 4,
-        name: "Linguine with Two-Cheese Sauce",
-        description: "With mozzarella and parmesan",
-        fullDescription: "Lorem ipsum dolor sit amet...",
-        price: 26.0,
-        image: linguine,
-        tags: ["pasta", "vegetarian"],
-        category: "Pasta",
-    },
-    {
-        id: 5,
-        name: "Ravioli with Spinach and Ricotta",
-        description: "With spinach, basil, garlic and ricotta cheese",
-        fullDescription: "Lorem ipsum dolor sit amet...",
-        price: 28.0,
-        image: ravioli,
-        tags: ["pasta", "vegetarian"],
-        rating: 5,
-        category: "Pasta",
-    },
-    {
-        id: 6,
-        name: "Salmon Sushi Platter",
-        description: "Fresh salmon nigiri and maki rolls with wasabi",
-        fullDescription: "Lorem ipsum dolor sit amet...",
-        price: 35.0,
-        image: sushi,
-        tags: ["sushi", "seafood"],
-        rating: 5,
-        category: "Sushi",
-    },
-    {
-        id: 7,
-        name: "Garden Fresh Salad",
-        description: "With avocado, cherry tomatoes and feta cheese",
-        fullDescription: "Lorem ipsum dolor sit amet...",
-        price: 18.0,
-        image: salad,
-        tags: ["salads", "vegetarian"],
-        rating: 4,
-        category: "Salads",
-    },
-    {
-        id: 8,
-        name: "Shrimp Fried Rice",
-        description: "Traditional Chinese fried rice with vegetables and shrimp",
-        fullDescription: "Lorem ipsum dolor sit amet...",
-        price: 24.0,
-        image: chinese,
-        tags: ["chinese", "seafood"],
-        category: "Chinese",
-    },
-    {
-        id: 9,
-        name: "Tiramisu",
-        description: "Classic Italian dessert with coffee and mascarpone",
-        fullDescription: "Lorem ipsum dolor sit amet...",
-        price: 12.0,
-        image: tiramisu,
-        tags: ["desserts", "italian"],
-        rating: 5,
-        category: "Desserts",
-    },
-
-    // Additional Items from PopularDishes
-    {
-        id: 101,
-        name: "Rosogolla",
-        description: "Sweet dessert",
-        fullDescription: "Authentic sweet dessert...",
-        price: 25.0,
-        image: Sweets,
-        tags: ["Rosogolla"],
-        rating: 5,
-        category: "Desserts",
-    },
-    {
-        id: 102,
-        name: "Chicken Curry",
-        description: "With spices",
-        fullDescription: "Spicy and savory chicken curry...",
-        price: 25.0,
-        image: Chicken_curry,
-        tags: ["Chicken Curry"],
-        rating: 5,
-        category: "Curry",
-    },
-    {
-        id: 103,
-        name: "Doi Fuchka",
-        description: "Dessert with jaggery",
-        fullDescription: "Traditional street food dessert...",
-        price: 25.0,
-        image: Doi_Fuchka,
-        tags: ["Doi Fuchka"],
-        rating: 5,
-        category: "Desserts",
-    },
-    {
-        id: 104,
-        name: "Roast",
-        description: "With spices",
-        fullDescription: "Premium celebration roast...",
-        price: 25.0,
-        image: Roast,
-        tags: ["Roast"],
-        rating: 5,
-        category: "Main",
-    },
-    {
-        id: 105,
-        name: "Samosa",
-        description: "With spices",
-        fullDescription: "Crispy fried pastry with savory filling...",
-        price: 25.0,
-        image: Samosa,
-        tags: ["Samosa"],
-        rating: 5,
-        category: "Snacks",
-    },
-    {
-        id: 106,
-        name: "California Roll",
-        description: "Crab, avocado, cucumber",
-        fullDescription: "Fresh sushi roll with crab and avocado...",
-        price: 22.0,
-        image: dishSushi,
-        tags: ["sushi"],
-        rating: 5,
-        category: "Sushi",
-    },
-    {
-        id: 107,
-        name: "Classic Cheeseburger",
-        description: "Beef patty, cheese, bacon",
-        fullDescription: "Juicy beef patty with melted cheese...",
-        price: 18.0,
-        image: dishBurger,
-        tags: ["burger"],
-        rating: 4,
-        category: "Burger",
-    },
-    {
-        id: 108,
-        name: "Pepperoni Pizza",
-        description: "Classic pepperoni, mozzarella",
-        fullDescription: "Spicy pepperoni with gooey mozzarella...",
-        price: 24.0,
-        image: dishPepperoni,
-        tags: ["pizza", "meat"],
-        rating: 5,
-        category: "Pizza",
-    },
-    {
-        id: 109,
-        name: "Pad Thai",
-        description: "Shrimp, peanuts, lime",
-        fullDescription: "Classic Thai stir-fried noodles...",
-        price: 20.0,
-        image: dishPadthai,
-        tags: ["asian", "noodles"],
-        rating: 4,
-        category: "Asian",
-    },
-];
+import { getProductById, Product } from "@/services/menuService";
+import { ProductDetailSkeleton } from "@/components/skeletons";
+import dishPizza from "@/assets/dish-pizza.jpg"; // Fallback image
 
 export default function ProductPage() {
     const params = useParams();
-    const id = Number(params.id);
-    const item = foodItems.find((i) => i.id === id);
+    const id = params.id as string;
+    const [product, setProduct] = useState<Product | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
     const [quantity, setQuantity] = useState(1);
     const [activeTab, setActiveTab] = useState<"description" | "reviews">("description");
 
-    if (!item) {
+    useEffect(() => {
+        const fetchProduct = async () => {
+            if (!id) return;
+            setLoading(true);
+            try {
+                const data = await getProductById(id);
+                setProduct(data);
+            } catch (err: any) {
+                console.error("Error fetching product:", err);
+                setError(err.message || "Failed to load product");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchProduct();
+    }, [id]);
+
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-background flex flex-col">
+                <Header />
+                <div className="flex-1 py-24">
+                    <ProductDetailSkeleton />
+                </div>
+                <Footer />
+            </div>
+        );
+    }
+
+    if (error || !product) {
         return (
             <div className="min-h-screen bg-background flex flex-col">
                 <Header />
                 <div className="flex-1 container-fooddy py-32 text-center">
                     <h1 className="text-2xl font-bold">Product not found</h1>
-                    <p className="text-muted-foreground mt-4">The product with ID {id} does not exist.</p>
+                    <p className="text-muted-foreground mt-4">{error || `The product with ID ${id} does not exist.`}</p>
                     <div className="mt-8">
                         <Button asChild>
-                            <a href="/menu">Back to Menu</a>
+                            <a href="/shop">Back to Shop</a>
                         </Button>
                     </div>
                 </div>
@@ -271,6 +79,8 @@ export default function ProductPage() {
         ));
     };
 
+    const productImage = product.images.length > 0 ? product.images[0].image : dishPizza;
+
     return (
         <div className="min-h-screen bg-background flex flex-col">
             <Header />
@@ -281,15 +91,15 @@ export default function ProductPage() {
                         {/* Left Column - Image */}
                         <div className="relative aspect-square rounded-3xl overflow-hidden bg-muted">
                             <Image
-                                src={item.image}
-                                alt={item.name}
+                                src={productImage}
+                                alt={product.title}
                                 fill
                                 className="object-cover"
                                 priority
                             />
                             <div className="absolute top-4 right-4 bg-white p-2 rounded-full shadow-md">
                                 <span className="sr-only">Zoom</span>
-                                {/* Mock zoom icon/functionality if needed, image showed search icon */}
+                                {/* Mock zoom icon/functionality if needed */}
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5 text-gray-500"><circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" /></svg>
                             </div>
                         </div>
@@ -297,20 +107,20 @@ export default function ProductPage() {
                         {/* Right Column - Details */}
                         <div className="flex flex-col">
                             <h1 className="text-3xl md:text-4xl font-display font-semibold text-foreground mb-4">
-                                {item.name}
+                                {product.title}
                             </h1>
 
                             <div className="flex items-center justify-between mb-6">
                                 <span className="text-2xl font-bold text-primary">
-                                    ${item.price.toFixed(2)}
+                                    ${parseFloat(product.price).toFixed(2)}
                                 </span>
                                 <div className="flex items-center gap-1">
-                                    {renderStars(item.rating)}
+                                    {renderStars(5)} {/* API doesn't have rating, defaulting to 5 */}
                                 </div>
                             </div>
 
                             <p className="text-muted-foreground mb-8">
-                                {item.description}
+                                {product.description}
                             </p>
 
                             {/* Delivery Date Mock */}
@@ -321,7 +131,6 @@ export default function ProductPage() {
                                         type="date"
                                         className="w-full px-4 py-2 rounded-full border border-border bg-white text-sm focus:outline-none focus:border-primary"
                                     />
-                                    {/* <Calendar className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" /> */}
                                 </div>
                             </div>
 
@@ -357,15 +166,15 @@ export default function ProductPage() {
                             <div className="space-y-2 text-sm text-muted-foreground border-t border-border/50 pt-6">
                                 <p>
                                     <span className="font-semibold text-foreground">Categories: </span>
-                                    {item.category}, {item.tags.join(", ")}
+                                    {product.category.map(c => c.title).join(", ")}
                                 </p>
                                 <p>
                                     <span className="font-semibold text-foreground">Tags: </span>
-                                    {item.tags.join(", ")}
+                                    {product.tags.map(t => t.title).join(", ")}
                                 </p>
                                 <p>
                                     <span className="font-semibold text-foreground">Product ID: </span>
-                                    {210 + item.id}
+                                    {product.id}
                                 </p>
                             </div>
                         </div>
@@ -401,10 +210,8 @@ export default function ProductPage() {
                         <div className="text-muted-foreground leading-relaxed">
                             {activeTab === "description" ? (
                                 <div className="space-y-4">
-                                    <p>{item.fullDescription || "Lorem ipsum dolor sit amet, sed felis donec nulla turpis pharetra, sit neque dapibus ultricies bibendum suscipit tristique, ullamcorper massa in, ut blandit id, justo urna at scelerisque."}</p>
-                                    <p>Non pellentesque, sit lectus gravida diam sociosqu dictumst nec, congue eius cras molestie molestie tellus volutpat, non molestie scelerisque a tempore neque faucibus.</p>
-                                    <p>Vel rutrum elit vitae, urna vestibulum odio lorem vitae arcu volutpat, interdum nec lectus et platea. Mauris quam volutpat sem, a erat wisi a quam.</p>
-                                    <p>Id libero dictumst integer phasellus sit, tellus scelerisque viverra, fusce a, et eget amet. Risus in neque lacus odio, vitae felis ac enim.</p>
+                                    <p>{product.description}</p>
+                                    {/* <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p> */}
                                 </div>
                             ) : (
                                 <div>

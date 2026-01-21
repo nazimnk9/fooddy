@@ -79,3 +79,60 @@ export function SidebarSkeleton() {
         </div>
     )
 }
+
+export function ProductDetailSkeleton() {
+    return (
+        <div className="container-fooddy py-32">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-20">
+                {/* Left Column - Image */}
+                <div className="relative aspect-square rounded-3xl overflow-hidden bg-muted">
+                    <Skeleton className="w-full h-full" />
+                </div>
+
+                {/* Right Column - Details */}
+                <div className="flex flex-col space-y-6">
+                    {/* Title */}
+                    <Skeleton className="h-10 w-3/4" />
+
+                    {/* Price & Rating */}
+                    <div className="flex items-center justify-between">
+                        <Skeleton className="h-8 w-24" />
+                        <div className="flex gap-1">
+                            <Skeleton className="h-4 w-4 rounded-full" />
+                            <Skeleton className="h-4 w-4 rounded-full" />
+                            <Skeleton className="h-4 w-4 rounded-full" />
+                            <Skeleton className="h-4 w-4 rounded-full" />
+                            <Skeleton className="h-4 w-4 rounded-full" />
+                        </div>
+                    </div>
+
+                    {/* Description */}
+                    <div className="space-y-2">
+                        <Skeleton className="h-4 w-full" />
+                        <Skeleton className="h-4 w-full" />
+                        <Skeleton className="h-4 w-2/3" />
+                    </div>
+
+                    {/* Delivery Date */}
+                    <div className="space-y-2">
+                        <Skeleton className="h-4 w-24" />
+                        <Skeleton className="h-10 w-48 rounded-full" />
+                    </div>
+
+                    {/* Actions */}
+                    <div className="flex items-center gap-4">
+                        <Skeleton className="h-12 w-32 rounded-full" />
+                        <Skeleton className="h-12 w-40 rounded-full" />
+                    </div>
+
+                    {/* Meta Info */}
+                    <div className="space-y-3 border-t border-border/50 pt-6">
+                        <Skeleton className="h-4 w-1/2" />
+                        <Skeleton className="h-4 w-1/2" />
+                        <Skeleton className="h-4 w-1/3" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
