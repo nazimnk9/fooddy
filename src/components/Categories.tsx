@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import sushiImg from "@/assets/sushi-category.jpg";
@@ -55,28 +56,29 @@ export const Categories = () => {
         {/* Categories Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
           {categories.map((category, index) => (
-            <motion.div
-              key={category.name}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-              className="category-card aspect-[4/5] hover-lift group"
-            >
-              <Image
-                src={category.image}
-                alt={category.name}
-                className="w-full h-full object-fixed transition-transform duration-500 group-hover:scale-110"
-              />
-              <div className="category-card-overlay" />
-              <div className="absolute inset-0 p-6 flex flex-col justify-end">
-                <h3 className="text-2xl font-display font-bold text-white mb-1">
-                  {category.name}
-                  <span className="text-sm font-sans font-normal ml-2">({category.count})</span>
-                </h3>
-                <p className="text-white/80 text-sm">{category.description}</p>
-              </div>
-            </motion.div>
+            <Link href="/shop" key={category.name} className="block w-full h-full">
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className="category-card aspect-[4/5] hover-lift group cursor-pointer"
+              >
+                <Image
+                  src={category.image}
+                  alt={category.name}
+                  className="w-full h-full object-fixed transition-transform duration-500 group-hover:scale-110"
+                />
+                <div className="category-card-overlay" />
+                <div className="absolute inset-0 p-6 flex flex-col justify-end">
+                  <h3 className="text-2xl font-display font-bold text-white mb-1">
+                    {category.name}
+                    <span className="text-sm font-sans font-normal ml-2">({category.count})</span>
+                  </h3>
+                  <p className="text-white/80 text-sm">{category.description}</p>
+                </div>
+              </motion.div>
+            </Link>
           ))}
         </div>
 
