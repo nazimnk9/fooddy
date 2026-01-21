@@ -1,144 +1,53 @@
+"use client";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { Star, Eye, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { getProducts } from "@/services/menuService";
+import { ProductCardSkeleton } from "@/components/skeletons";
 
-import dishPizza from "@/assets/dish-pizza.jpg";
-import dishRavioli from "@/assets/dish-ravioli.jpg";
-import dishLasagna from "@/assets/dish-lasagna.jpg";
-import dishSushi from "@/assets/dish-sushi.jpg";
-import dishBurger from "@/assets/dish-burger.jpg";
-import dishTiramisu from "@/assets/dish-tiramisu.jpg";
-import dishPepperoni from "@/assets/dish-pepperoni.jpg";
-import dishPadthai from "@/assets/dish-padthai.jpg";
-import Sweets from "@/assets/Sweets.jpeg";
-import Chicken_curry from "@/assets/Chicken_curry.jpeg";
-import Doi_Fuchka from "@/assets/Doi_Fuchka.jpeg";
-import Roast from "@/assets/Roast.jpeg";
-import Samosa from "@/assets/Samosa.jpeg";
+import dishPizza from "@/assets/dish-pizza.jpg"; // Fallback
 
-const dishes = [
-  {
-    id: 101,
-    name: "Rosogolla",
-    tags: ["Rosogolla"],
-    rating: 5,
-    description: "Sweet dessert",
-    price: 25,
-    image: Sweets,
-  },
-  {
-    id: 102,
-    name: "Chicken Curry",
-    tags: ["Chicken Curry"],
-    rating: 5,
-    description: "With spices",
-    price: 25,
-    image: Chicken_curry,
-  },
-  {
-    id: 103,
-    name: "Doi Fuchka",
-    tags: ["Doi Fuchka"],
-    rating: 5,
-    description: "Dessert with jaggery",
-    price: 25,
-    image: Doi_Fuchka,
-  },
-  {
-    id: 104,
-    name: "Roast",
-    tags: ["Roast"],
-    rating: 5,
-    description: "With spices",
-    price: 25,
-    image: Roast,
-  },
-  {
-    id: 105,
-    name: "Samosa",
-    tags: ["Samosa"],
-    rating: 5,
-    description: "With spices",
-    price: 25,
-    image: Samosa,
-  },
-  {
-    id: 1,
-    name: "Pizza Margherita",
-    tags: ["pizza", "vegetarian"],
-    rating: 5,
-    description: "With basil, mozzarella, tomatoes",
-    price: 25,
-    image: dishPizza,
-  },
-  {
-    id: 5,
-    name: "Ravioli with Spinach",
-    tags: ["pasta", "vegetarian"],
-    rating: 5,
-    description: "With spinach, basil, ricotta cheese",
-    price: 25,
-    image: dishRavioli,
-  },
-  {
-    id: 3,
-    name: "Three-Meat Lasagna",
-    tags: ["meat"],
-    rating: 4,
-    description: "Beef, pork, and bacon layers",
-    price: 28,
-    image: dishLasagna,
-  },
-  {
-    id: 106,
-    name: "California Roll",
-    tags: ["sushi"],
-    rating: 5,
-    description: "Crab, avocado, cucumber",
-    price: 22,
-    image: dishSushi,
-  },
-  {
-    id: 107,
-    name: "Classic Cheeseburger",
-    tags: ["burger"],
-    rating: 4,
-    description: "Beef patty, cheese, bacon",
-    price: 18,
-    image: dishBurger,
-  },
-  {
-    id: 9,
-    name: "Tiramisu",
-    tags: ["dessert"],
-    rating: 5,
-    description: "Coffee-soaked ladyfingers",
-    price: 12,
-    image: dishTiramisu,
-  },
-  {
-    id: 108,
-    name: "Pepperoni Pizza",
-    tags: ["pizza", "meat"],
-    rating: 5,
-    description: "Classic pepperoni, mozzarella",
-    price: 24,
-    image: dishPepperoni,
-  },
-  {
-    id: 109,
-    name: "Pad Thai",
-    tags: ["asian", "noodles"],
-    rating: 4,
-    description: "Shrimp, peanuts, lime",
-    price: 20,
-    image: dishPadthai,
-  },
-];
+interface PopularProduct {
+  id: number;
+  name: string;
+  tags: string[];
+  rating: number;
+  description: string;
+  price: number;
+  image: string | any;
+}
 
 export const PopularDishes = () => {
+  const [products, setProducts] = useState<PopularProduct[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchPopularDishes = async () => {
+      try {
+        const data = await getProducts("is_popular=true");
+        const mappedProducts = data.results.map((item: any) => ({
+          id: item.id,
+          name: item.title,
+          tags: item.tags.map((t: any) => t.title),
+          rating: 5, // Default mock rating
+          description: item.description,
+          price: parseFloat(item.price),
+          image: item.images.length > 0 ? item.images[0].image : dishPizza,
+        }));
+        setProducts(mappedProducts);
+      } catch (error) {
+        console.error("Failed to fetch popular dishes:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPopularDishes();
+  }, []);
+
   return (
     <section className="py-20 bg-background">
       <div className="container-fooddy">
@@ -165,86 +74,93 @@ export const PopularDishes = () => {
 
         {/* Dishes Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {dishes.map((dish, index) => (
-            <motion.div
-              key={dish.name}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-              className="dish-card group"
-            >
-              {/* Image */}
-              <div className="relative overflow-hidden">
-                <Image
-                  src={dish.image}
-                  alt={dish.name}
-                  className="dish-card-image object-fixed"
-                />
-                {/* Overlay Actions */}
-                <div className="absolute inset-0 bg-dark/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-                  <Link
-                    href={`/product/${dish.id}`}
-                    className="w-10 h-10 rounded-full bg-white flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-colors"
-                  >
-                    <Eye className="w-4 h-4" />
-                  </Link>
-                  <button className="w-10 h-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center hover:bg-primary/90 transition-colors">
-                    <ShoppingCart className="w-4 h-4" />
-                  </button>
-                </div>
+          {loading
+            ? Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="space-y-4">
+                <ProductCardSkeleton viewMode="grid" />
               </div>
-
-              {/* Content */}
-              <div className="p-4">
-                {/* Tags */}
-                <div className="flex flex-wrap gap-1 mb-2">
-                  {dish.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="text-xs text-muted-foreground"
+            ))
+            : products.map((dish, index) => (
+              <motion.div
+                key={dish.id}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className="dish-card group"
+              >
+                {/* Image */}
+                <div className="relative overflow-hidden aspect-[4/3]">
+                  <Image
+                    src={dish.image}
+                    alt={dish.name}
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                  {/* Overlay Actions */}
+                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                    <Link
+                      href={`/product/${dish.id}`}
+                      className="w-10 h-10 rounded-full bg-white flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-colors"
                     >
-                      {tag}
-                      {dish.tags.indexOf(tag) < dish.tags.length - 1 && ","}
+                      <Eye className="w-4 h-4 text-black" />
+                    </Link>
+                    <button className="w-10 h-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center hover:bg-primary/90 transition-colors">
+                      <ShoppingCart className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Content */}
+                <div className="p-4">
+                  {/* Tags */}
+                  <div className="flex flex-wrap gap-1 mb-2">
+                    {dish.tags.slice(0, 3).map((tag, idx) => (
+                      <span
+                        key={idx}
+                        className="text-xs text-muted-foreground uppercase"
+                      >
+                        {tag}
+                        {idx < Math.min(dish.tags.length, 3) - 1 && ","}
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* Title */}
+                  <h3 className="font-display font-semibold text-foreground mb-2 line-clamp-1">
+                    {dish.name}
+                  </h3>
+
+                  {/* Rating */}
+                  <div className="flex items-center gap-1 mb-2">
+                    {[...Array(5)].map((_, i) => (
+                      <Star
+                        key={i}
+                        className={`w-3 h-3 ${i < dish.rating
+                            ? "fill-primary text-primary"
+                            : "text-muted"
+                          }`}
+                      />
+                    ))}
+                  </div>
+
+                  {/* Description */}
+                  <p className="text-sm text-muted-foreground mb-3 line-clamp-1">
+                    {dish.description}
+                  </p>
+
+                  {/* Price & Order */}
+                  <div className="flex items-center justify-between">
+                    <span className="text-lg font-bold text-foreground">
+                      ${dish.price.toFixed(2)}
                     </span>
-                  ))}
+                    <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90">
+                      Order
+                    </Button>
+                  </div>
                 </div>
-
-                {/* Title */}
-                <h3 className="font-display font-semibold text-foreground mb-2 line-clamp-1">
-                  {dish.name}
-                </h3>
-
-                {/* Rating */}
-                <div className="flex items-center gap-1 mb-2">
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className={`w-3 h-3 ${i < dish.rating
-                        ? "fill-primary text-primary"
-                        : "text-muted"
-                        }`}
-                    />
-                  ))}
-                </div>
-
-                {/* Description */}
-                <p className="text-sm text-muted-foreground mb-3 line-clamp-1">
-                  {dish.description}
-                </p>
-
-                {/* Price & Order */}
-                <div className="flex items-center justify-between">
-                  <span className="text-lg font-bold text-foreground">
-                    ${dish.price}.00
-                  </span>
-                  <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90">
-                    Order
-                  </Button>
-                </div>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            ))}
         </div>
       </div>
     </section>

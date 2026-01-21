@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams, useParams } from "next/navigation";
 import { Header } from "@/components/Header";
@@ -21,7 +21,7 @@ import sushiCategoryImg from "@/assets/sushi-category.jpg";
 
 import { ProductCardSkeleton } from "@/components/skeletons";
 
-export default function ShopCategoryPage() {
+function ShopCategoryContent() {
     const router = useRouter();
     const params = useParams();
     const searchParams = useSearchParams();
@@ -198,5 +198,13 @@ export default function ShopCategoryPage() {
 
             <Footer />
         </div>
+    );
+}
+
+export default function ShopCategoryPage() {
+    return (
+        <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+            <ShopCategoryContent />
+        </Suspense>
     );
 }
