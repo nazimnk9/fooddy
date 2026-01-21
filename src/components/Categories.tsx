@@ -1,34 +1,57 @@
+"use client"
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import sushiImg from "@/assets/sushi-category.jpg";
-import pizzaImg from "@/assets/pizza-category.jpg";
-import burgerImg from "@/assets/burger-category.jpg";
-import dessertImg from "@/assets/dessert-category.jpg";
+import { getCategories } from "@/services/menuService";
+import placeholderImg from "@/assets/sushi-category.jpg"; // Fallback image
 
-import antipasti from "@/assets/antipasti.png";
-import drinks from "@/assets/drinks1.jpg";
-import kacchi from "@/assets/kacchi.jpg";
-import naan from "@/assets/naan.jpg";
-import dessert from "@/assets/dessert.jpg";
-import colazione from "@/assets/colazione.jpeg";
+interface CategoryItem {
+  id: number;
+  name: string;
+  count: number;
+  description: string;
+  image: any; // string (url) or StaticImageData
+}
 
-import chicken from "@/assets/chicken.jpg";
-import curry from "@/assets/curry.jpg";
+// Keep static imports for fallback/placeholders if needed, or remove if unused. 
+// For now, removing unused imports to clean up, or keeping them if we map specific IDs to them (overkill).
+// I will just use the API data.
 
-const categories = [
-  { name: "ANTIPASTI", count: 6, description: "Samosa, Singara, Paratha, Halim, Fuchka", image: antipasti },
-  { name: "DRINKS", count: 7, description: "The favourites drinks items", image: drinks },
-  { name: "PIATTI PRINCIPALI A BASE DI RISO", count: 4, description: "From Vegetarian to Three-Meat", image: kacchi },
-  { name: "DESSERT", count: 5, description: "Find Desserts for Every Taste", image: dessert },
-  { name: "NAAN", count: 3, description: "Find Desserts for Every Taste", image: naan },
-  { name: "COLAZIONE", count: 2, description: "Find Desserts for Every Taste", image: colazione },
-  { name: "SECONDI", count: 2, description: "Find Desserts for Every Taste", image: chicken },
-  { name: "CURRY E RISO", count: 10, description: "Find Desserts for Every Taste", image: curry },
-];
+import { CategoryCardSkeleton } from "@/components/skeletons";
 
 export const Categories = () => {
+  const [categories, setCategories] = useState<CategoryItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const data = await getCategories();
+        // Transform API data to match UI requirements
+        const mappedCategories = data.results.map((cat: any) => ({
+          id: cat.id,
+          name: cat.title,
+          count: Math.floor(Math.random() * 20) + 1, // Mock count as API doesn't provide it
+          description: "Find your favorite food here", // Mock description
+          image: cat.image ? cat.image : placeholderImg,
+        }));
+        setCategories(mappedCategories);
+      } catch (error: any) {
+        console.error("Error loading categories", error);
+        setError(error.message || "Failed to load categories");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
+  if (error) return <div className="py-20 text-center text-red-500">Error: {error}</div>;
+
   return (
     <section className="py-20 bg-background" id="menu">
       <div className="container-fooddy">
@@ -55,31 +78,37 @@ export const Categories = () => {
 
         {/* Categories Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-          {categories.map((category, index) => (
-            <Link href="/shop" key={category.name} className="block w-full h-full">
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="category-card aspect-[4/5] hover-lift group cursor-pointer"
-              >
-                <Image
-                  src={category.image}
-                  alt={category.name}
-                  className="w-full h-full object-fixed transition-transform duration-500 group-hover:scale-110"
-                />
-                <div className="category-card-overlay" />
-                <div className="absolute inset-0 p-6 flex flex-col justify-end">
-                  <h3 className="text-2xl font-display font-bold text-white mb-1">
-                    {category.name}
-                    <span className="text-sm font-sans font-normal ml-2">({category.count})</span>
-                  </h3>
-                  <p className="text-white/80 text-sm">{category.description}</p>
-                </div>
-              </motion.div>
-            </Link>
-          ))}
+          {loading
+            ? Array.from({ length: 8 }).map((_, i) => (
+              <CategoryCardSkeleton key={i} />
+            ))
+            : categories.map((category, index) => (
+              <Link href={`/shop/${category.id}`} key={category.name} className="block w-full h-full">
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 }}
+                  className="category-card aspect-[4/5] hover-lift group cursor-pointer"
+                >
+                  <Image
+                    src={category.image}
+                    alt={category.name}
+                    width={500}
+                    height={600}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                  <div className="category-card-overlay" />
+                  <div className="absolute inset-0 p-6 flex flex-col justify-end">
+                    <h3 className="text-2xl font-display font-bold text-white mb-1">
+                      {category.name}
+                      <span className="text-sm font-sans font-normal ml-2">({category.count})</span>
+                    </h3>
+                    <p className="text-white/80 text-sm">{category.description}</p>
+                  </div>
+                </motion.div>
+              </Link>
+            ))}
         </div>
 
         {/* More Categories Button */}
