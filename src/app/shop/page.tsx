@@ -50,7 +50,9 @@ const products = [
     }
 ];
 
-export default function ShopPage() {
+import { Suspense } from "react";
+
+function ShopPageContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const viewParam = searchParams.get('view');
@@ -157,5 +159,13 @@ export default function ShopPage() {
 
             <Footer />
         </div>
+    );
+}
+
+export default function ShopPage() {
+    return (
+        <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+            <ShopPageContent />
+        </Suspense>
     );
 }
