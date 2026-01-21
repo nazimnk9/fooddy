@@ -80,9 +80,9 @@ export const PopularDishes = () => {
                 <ProductCardSkeleton viewMode="grid" />
               </div>
             ))
-            : products.map((dish, index) => (
+            : products.map((product, index) => (
               <motion.div
-                key={dish.id}
+                key={product.id}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -92,15 +92,15 @@ export const PopularDishes = () => {
                 {/* Image */}
                 <div className="relative overflow-hidden aspect-[4/3]">
                   <Image
-                    src={dish.image}
-                    alt={dish.name}
+                    src={product.image}
+                    alt={product.name}
                     fill
                     className="object-cover transition-transform duration-500 group-hover:scale-110"
                   />
                   {/* Overlay Actions */}
                   <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
                     <Link
-                      href={`/product/${dish.id}`}
+                      href={`/product/${product.id}`}
                       className="w-10 h-10 rounded-full bg-white flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-colors"
                     >
                       <Eye className="w-4 h-4 text-black" />
@@ -115,20 +115,20 @@ export const PopularDishes = () => {
                 <div className="p-4">
                   {/* Tags */}
                   <div className="flex flex-wrap gap-1 mb-2">
-                    {dish.tags.slice(0, 3).map((tag, idx) => (
+                    {product.tags.slice(0, 3).map((tag, idx) => (
                       <span
                         key={idx}
                         className="text-xs text-muted-foreground uppercase"
                       >
                         {tag}
-                        {idx < Math.min(dish.tags.length, 3) - 1 && ","}
+                        {idx < Math.min(product.tags.length, 3) - 1 && ","}
                       </span>
                     ))}
                   </div>
 
                   {/* Title */}
                   <h3 className="font-display font-semibold text-foreground mb-2 line-clamp-1">
-                    {dish.name}
+                    {product.name}
                   </h3>
 
                   {/* Rating */}
@@ -136,7 +136,7 @@ export const PopularDishes = () => {
                     {[...Array(5)].map((_, i) => (
                       <Star
                         key={i}
-                        className={`w-3 h-3 ${i < dish.rating
+                        className={`w-3 h-3 ${i < product.rating
                             ? "fill-primary text-primary"
                             : "text-muted"
                           }`}
@@ -146,13 +146,13 @@ export const PopularDishes = () => {
 
                   {/* Description */}
                   <p className="text-sm text-muted-foreground mb-3 line-clamp-1">
-                    {dish.description}
+                    {product.description}
                   </p>
 
                   {/* Price & Order */}
                   <div className="flex items-center justify-between">
                     <span className="text-lg font-bold text-foreground">
-                      ${dish.price.toFixed(2)}
+                      ${product.price.toFixed(2)}
                     </span>
                     <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90">
                       Order
