@@ -12,6 +12,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { CartSheetContent } from "./CartSidebar";
+import { AuthModal } from "./AuthModal";
 
 const navLinks = [
   { name: "Home", href: "/" },
@@ -53,13 +54,15 @@ export const Header = () => {
               </div>
             </div>
             <div>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-primary-foreground hover:bg-white/20 h-auto py-1 px-4 text-sm"
-              >
-                Login
-              </Button>
+              <AuthModal>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-primary-foreground hover:bg-white/20 h-auto py-1 px-4 text-sm"
+                >
+                  Login
+                </Button>
+              </AuthModal>
             </div>
           </div>
         </div>
