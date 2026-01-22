@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import { Dialog, DialogContent, DialogTrigger, DialogClose, DialogPortal } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -7,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Lock, User, X, Eye, EyeOff } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { setCookie } from "@/utils/cookieUtils";
+import { loginUser, registerUser } from "@/services/authService";
 
 interface AuthModalProps {
     children: React.ReactNode;
@@ -17,7 +17,67 @@ export function AuthModal({ children }: AuthModalProps) {
     const [showLoginPassword, setShowLoginPassword] = useState(false);
     const [showRegisterPassword, setShowRegisterPassword] = useState(false);
 
+    // Login State
+    const [loginEmail, setLoginEmail] = useState("");
+    const [loginPassword, setLoginPassword] = useState("");
+
+    // Register State
+    const [registerData, setRegisterData] = useState({
+        first_name: "",
+        last_name: "",
+        email: "",
+        phone: "",
+        password: ""
+    });
+
     const [isOpen, setIsOpen] = useState(false);
+    const [loading, setLoading] = useState(false);
+
+    const handleLogin = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setLoading(true);
+
+        try {
+            const data = await loginUser({ email: loginEmail, password: loginPassword });
+
+            if (data.access) setCookie("access_token", data.access, 1);
+            if (data.refresh) setCookie("refresh_token", data.refresh, 7);
+
+            // Force reload or event dispatch to update header (simplified for now by closing)
+            // In a perfect world we use context, but for "do not change previous operation" we keep it simple
+            setIsOpen(false);
+            window.location.reload(); // Refresh to update header state
+        } catch (error) {
+            console.error("Login error:", error);
+            alert("Login failed. Please check your credentials.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleRegister = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setLoading(true);
+
+        try {
+            const data = await registerUser(registerData);
+
+            if (data.access) setCookie("access_token", data.access, 1);
+            if (data.refresh) setCookie("refresh_token", data.refresh, 7);
+
+            setIsOpen(false);
+            window.location.reload(); // Refresh to update header state
+        } catch (error) {
+            console.error("Register error:", error);
+            alert("Registration failed. Please try again.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleRegisterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setRegisterData({ ...registerData, [e.target.name]: e.target.value });
+    };
 
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen} modal={false}>
@@ -72,7 +132,7 @@ export function AuthModal({ children }: AuthModalProps) {
                     {/* Content Area */}
                     <div className="p-6">
                         {activeTab === "login" ? (
-                            <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+                            <form className="space-y-4" onSubmit={handleLogin}>
                                 <div className="space-y-4">
                                     <div className="relative">
                                         <Input
@@ -80,6 +140,8 @@ export function AuthModal({ children }: AuthModalProps) {
                                             placeholder="Login *"
                                             className="rounded-full px-4 py-6 border-gray-200 focus-visible:ring-primary/20 bg-white"
                                             required
+                                            value={loginEmail}
+                                            onChange={(e) => setLoginEmail(e.target.value)}
                                         />
                                     </div>
                                     <div className="relative">
@@ -88,6 +150,8 @@ export function AuthModal({ children }: AuthModalProps) {
                                             placeholder="Password *"
                                             className="rounded-full px-4 py-6 border-gray-200 focus-visible:ring-primary/20 bg-white pr-10"
                                             required
+                                            value={loginPassword}
+                                            onChange={(e) => setLoginPassword(e.target.value)}
                                         />
                                         <button
                                             type="button"
@@ -117,13 +181,14 @@ export function AuthModal({ children }: AuthModalProps) {
 
                                 <Button
                                     type="submit"
+                                    disabled={loading}
                                     className="w-auto min-w-[120px] rounded-full bg-primary hover:bg-primary/90 text-white font-bold text-base py-6"
                                 >
-                                    Login
+                                    {loading ? "Loading..." : "Login"}
                                 </Button>
                             </form>
                         ) : (
-                            <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+                            <form className="space-y-4" onSubmit={handleRegister}>
                                 <div className="grid gap-3">
                                     <div className="grid grid-cols-2 gap-3">
                                         <Input
@@ -131,12 +196,16 @@ export function AuthModal({ children }: AuthModalProps) {
                                             placeholder="First Name"
                                             className="rounded-full px-4 py-5 border-gray-200 focus-visible:ring-primary/20"
                                             required
+                                            value={registerData.first_name}
+                                            onChange={handleRegisterChange}
                                         />
                                         <Input
                                             name="last_name"
                                             placeholder="Last Name"
                                             className="rounded-full px-4 py-5 border-gray-200 focus-visible:ring-primary/20"
                                             required
+                                            value={registerData.last_name}
+                                            onChange={handleRegisterChange}
                                         />
                                     </div>
                                     <Input
@@ -145,6 +214,8 @@ export function AuthModal({ children }: AuthModalProps) {
                                         placeholder="Email"
                                         className="rounded-full px-4 py-5 border-gray-200 focus-visible:ring-primary/20"
                                         required
+                                        value={registerData.email}
+                                        onChange={handleRegisterChange}
                                     />
                                     <Input
                                         type="tel"
@@ -152,6 +223,8 @@ export function AuthModal({ children }: AuthModalProps) {
                                         placeholder="Phone"
                                         className="rounded-full px-4 py-5 border-gray-200 focus-visible:ring-primary/20"
                                         required
+                                        value={registerData.phone}
+                                        onChange={handleRegisterChange}
                                     />
                                     <div className="relative">
                                         <Input
@@ -160,6 +233,8 @@ export function AuthModal({ children }: AuthModalProps) {
                                             placeholder="Password"
                                             className="rounded-full px-4 py-5 border-gray-200 focus-visible:ring-primary/20 pr-10"
                                             required
+                                            value={registerData.password}
+                                            onChange={handleRegisterChange}
                                         />
                                         <button
                                             type="button"
@@ -177,9 +252,10 @@ export function AuthModal({ children }: AuthModalProps) {
 
                                 <Button
                                     type="submit"
+                                    disabled={loading}
                                     className="w-auto min-w-[120px] rounded-full bg-primary hover:bg-primary/90 text-white font-bold text-base py-6 mt-2"
                                 >
-                                    Register
+                                    {loading ? "Loading..." : "Register"}
                                 </Button>
                             </form>
                         )}

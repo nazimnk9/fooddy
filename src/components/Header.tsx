@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/sheet";
 import { CartSheetContent } from "./CartSidebar";
 import { AuthModal } from "./AuthModal";
+import { getCookie } from "@/utils/cookieUtils";
 
 const navLinks = [
   { name: "Home", href: "/" },
@@ -25,8 +26,14 @@ const navLinks = [
 export const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const pathname = usePathname();
   const isHomePage = pathname === "/";
+
+  useEffect(() => {
+    const token = getCookie("access_token");
+    setIsLoggedIn(!!token);
+  }, []);
 
   return (
     <>
@@ -54,15 +61,17 @@ export const Header = () => {
               </div>
             </div>
             <div>
-              <AuthModal>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="text-primary-foreground hover:bg-white/20 h-auto py-1 px-4 text-sm"
-                >
-                  Login
-                </Button>
-              </AuthModal>
+              {!isLoggedIn && (
+                <AuthModal>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-primary-foreground hover:bg-white/20 h-auto py-1 px-4 text-sm"
+                  >
+                    Login
+                  </Button>
+                </AuthModal>
+              )}
             </div>
           </div>
         </div>
