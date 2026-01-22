@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Dialog, DialogContent, DialogTrigger, DialogClose } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTrigger, DialogClose, DialogPortal } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -17,9 +17,19 @@ export function AuthModal({ children }: AuthModalProps) {
     const [showLoginPassword, setShowLoginPassword] = useState(false);
     const [showRegisterPassword, setShowRegisterPassword] = useState(false);
 
+    const [isOpen, setIsOpen] = useState(false);
+
     return (
-        <Dialog modal={false}>
+        <Dialog open={isOpen} onOpenChange={setIsOpen} modal={false}>
             <DialogTrigger asChild>{children}</DialogTrigger>
+            {isOpen && (
+                <DialogPortal>
+                    <div
+                        className="fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
+                        onClick={() => setIsOpen(false)}
+                    />
+                </DialogPortal>
+            )}
             <DialogContent className="p-0 gap-0 max-w-[400px] border-none bg-transparent shadow-none [&>button]:hidden sm:rounded-lg overflow-hidden">
                 {/* Modal Container */}
                 <div className="bg-white rounded-lg overflow-hidden w-full flex flex-col">
