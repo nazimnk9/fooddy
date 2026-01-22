@@ -4,19 +4,17 @@ import { Button } from "@/components/ui/button";
 import { Star, Eye, ShoppingCart } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+import { Product } from "@/services/menuService";
+
 interface ProductCardProps {
-    product: {
-        id: string;
-        name: string;
-        description: string;
-        price: number;
-        rating: number; // 0-5
-        image: StaticImageData | string;
-    };
+    product: Product;
     viewMode: 'grid' | 'list';
 }
 
 export function ProductCard({ product, viewMode }: ProductCardProps) {
+    const productPrice = parseFloat(product.price);
+    const productImage = product.images?.[0]?.image || "";
+
     return (
         <div className={cn(
             "group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300",
@@ -27,12 +25,14 @@ export function ProductCard({ product, viewMode }: ProductCardProps) {
                 "relative overflow-hidden shrink-0",
                 viewMode === 'list' ? "w-full md:w-[300px] aspect-[4/3] rounded-lg" : "w-full aspect-[4/3]"
             )}>
-                <Image
-                    src={product.image}
-                    alt={product.name}
-                    fill
-                    className="object-fixed transition-transform duration-500 group-hover:scale-110"
-                />
+                {productImage && (
+                    <Image
+                        src={productImage}
+                        alt={product.title}
+                        fill
+                        className="object-fixed transition-transform duration-500 group-hover:scale-110"
+                    />
+                )}
                 {/* Overlay Actions */}
                 <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
                     <Link
@@ -55,13 +55,13 @@ export function ProductCard({ product, viewMode }: ProductCardProps) {
                 <h3 className={cn("font-display font-bold text-foreground mb-2 group-hover:text-primary transition-colors",
                     viewMode === 'list' ? "text-2xl" : "text-xl"
                 )}>
-                    {product.name}
+                    {product.title}
                 </h3>
 
-                {/* Rating */}
+                {/* Rating - Placeholder as API doesn't provide it yet */}
                 <div className="flex gap-0.5 mb-3 text-amber-400">
                     {[...Array(5)].map((_, i) => (
-                        <Star key={i} className={cn("w-3 h-3 fill-current", i < product.rating ? "text-amber-400" : "text-gray-200")} />
+                        <Star key={i} className={cn("w-3 h-3 fill-current", i < 4 ? "text-amber-400" : "text-gray-200")} />
                     ))}
                 </div>
 
@@ -70,7 +70,7 @@ export function ProductCard({ product, viewMode }: ProductCardProps) {
                 </p>
 
                 <div className="text-primary font-bold text-lg mb-4">
-                    ${product.price.toFixed(2)}
+                    ${productPrice.toFixed(2)}
                 </div>
 
                 <div className="flex gap-3">

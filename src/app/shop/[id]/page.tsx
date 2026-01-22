@@ -72,16 +72,7 @@ function ShopCategoryContent() {
                     setDisplayTitle(category ? category.title : `Category ${categoryId}`);
                 }
 
-                // Map API data to ProductCard props
-                const mappedProducts = productsData.results.map((p: ApiProduct) => ({
-                    id: p.id.toString(),
-                    name: p.title,
-                    description: p.description,
-                    price: parseFloat(p.price),
-                    rating: 5, // Default rating
-                    image: p.images.length > 0 ? p.images[0].image : sushiCategoryImg, // Fallback image
-                }));
-                setProducts(mappedProducts);
+                setProducts(productsData.results);
             } catch (error) {
                 console.error("Error fetching data:", error);
             } finally {

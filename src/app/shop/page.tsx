@@ -7,7 +7,8 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ShopSidebar } from "./components/ShopSidebar";
 import { ProductCard } from "./components/ProductCard";
-import { LayoutGrid, List as ListIcon } from "lucide-react";
+import { LayoutGrid, List as ListIcon, Loader2 } from "lucide-react";
+import { getProducts, Product } from "@/services/menuService";
 import {
     Select,
     SelectContent,
@@ -16,39 +17,12 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
+import { ProductCardSkeleton } from "@/components/skeletons";
 
-// Mock Data
+// Assets
 import sushiCategoryImg from "@/assets/sushi-category.jpg";
-import sushi1 from "@/assets/food/sushi.jpg";
-import lobster from "@/assets/food/chinese.jpg";
-import salmon from "@/assets/food/salad.jpg";
 
-const products = [
-    {
-        id: "1",
-        name: "California Roll with Black Sesame",
-        description: "With cream cheese, salmon and black sesame",
-        price: 27.00,
-        rating: 3,
-        image: sushi1,
-    },
-    {
-        id: "2",
-        name: "Grilled Lobster",
-        description: "With butter, garlic and lemon",
-        price: 35.00,
-        rating: 0,
-        image: lobster,
-    },
-    {
-        id: "3",
-        name: "Salmon Sashimi Bowl",
-        description: "With cream cheese, salmon and black sesame",
-        price: 27.00,
-        rating: 0,
-        image: salmon,
-    }
-];
+// Mock data removed as we are now using the API
 
 import { Suspense } from "react";
 
@@ -57,6 +31,26 @@ function ShopPageContent() {
     const searchParams = useSearchParams();
     const viewParam = searchParams.get('view');
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+    const [products, setProducts] = useState<Product[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchProducts = async () => {
+            setLoading(true);
+            try {
+                // When clicking "Shop" from Header, searchParams might be empty or just contain 'view'.
+                // The user requested no query params specifically for the API call in this case.
+                const response = await getProducts();
+                setProducts(response.results);
+            } catch (error) {
+                console.error("Error fetching products:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchProducts();
+    }, []); // Only fetch on mount to satisfy "do not pass any query params" when coming from Header
 
     useEffect(() => {
         if (viewParam === 'list') {
@@ -85,20 +79,20 @@ function ShopPageContent() {
                 <div className="hero-banner-overlay" />
                 <div className="relative z-10 text-center">
                     <h1 className="text-5xl md:text-7xl font-display font-normal text-white mb-2 mt-8 tracking-wide">
-                        SUSHI
+                        Shop
                     </h1>
-                    <p className="text-sm font-bold uppercase tracking-widest text-primary mb-6">More Than 50 Kinds of Sushi</p>
+                    <p className="text-sm font-bold uppercase tracking-widest text-primary mb-6">Discovery Great Food</p>
                     <nav className="flex items-center justify-center gap-3 text-sm">
                         <Link href="/" className="breadcrumb-link uppercase tracking-wider">
                             Home
                         </Link>
                         <span className="text-white/50">|</span>
-                        <Link href="/shop" className="breadcrumb-link uppercase tracking-wider">
+                        {/* <Link href="/shop" className="breadcrumb-link uppercase tracking-wider">
                             Shop
-                        </Link>
-                        <span className="text-white/50">|</span>
+                        </Link> */}
+                        {/* <span className="text-white/50">|</span> */}
                         <span className="breadcrumb-active uppercase tracking-wider">
-                            Sushi
+                            Shop
                         </span>
                     </nav>
                 </div>
@@ -145,14 +139,27 @@ function ShopPageContent() {
                         </div>
 
                         {/* Products Grid/List */}
-                        <div className={cn(
-                            "grid gap-8",
-                            viewMode === 'grid' ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-2" : "grid-cols-1"
-                        )}>
-                            {products.map(product => (
-                                <ProductCard key={product.id} product={product} viewMode={viewMode} />
-                            ))}
-                        </div>
+                        {loading ? (
+                            <div className={cn(
+                                "grid gap-8",
+                                viewMode === 'grid' ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-2" : "grid-cols-1"
+                            )}>
+                                {Array.from({ length: 6 }).map((_, i) => (
+                                    <ProductCardSkeleton key={i} viewMode={viewMode} />
+                                ))}
+                            </div>
+                        ) : products.length > 0 ? (
+                            <div className={cn(
+                                "grid gap-8",
+                                viewMode === 'grid' ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-2" : "grid-cols-1"
+                            )}>
+                                {products.map(product => (
+                                    <ProductCard key={product.id} product={product} viewMode={viewMode} />
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="text-center py-20 text-muted-foreground">No products found in this category.</div>
+                        )}
                     </div>
                 </div>
             </main>

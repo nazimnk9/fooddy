@@ -24,6 +24,7 @@ import { getCookie, deleteCookie } from "@/utils/cookieUtils";
 const navLinks = [
   { name: "Home", href: "/" },
   { name: "Menu", href: "/menu" },
+  { name: "Shop", href: "/shop" },
   { name: "About", href: "#about" },
   // { name: "Restaurants", href: "#restaurants" },
   { name: "Contact", href: "#contact" },
