@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Dialog, DialogContent, DialogTrigger, DialogClose, DialogPortal } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTrigger, DialogClose, DialogPortal, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -9,10 +9,12 @@ import { setCookie } from "@/utils/cookieUtils";
 import { loginUser, registerUser } from "@/services/authService";
 
 interface AuthModalProps {
-    children: React.ReactNode;
+    children?: React.ReactNode;
+    open?: boolean;
+    onOpenChange?: (open: boolean) => void;
 }
 
-export function AuthModal({ children }: AuthModalProps) {
+export function AuthModal({ children, open, onOpenChange }: AuthModalProps) {
     const [activeTab, setActiveTab] = useState<"login" | "register">("login");
     const [showLoginPassword, setShowLoginPassword] = useState(false);
     const [showRegisterPassword, setShowRegisterPassword] = useState(false);
@@ -30,8 +32,20 @@ export function AuthModal({ children }: AuthModalProps) {
         password: ""
     });
 
-    const [isOpen, setIsOpen] = useState(false);
+    const [internalIsOpen, setInternalIsOpen] = useState(false);
     const [loading, setLoading] = useState(false);
+
+    // Use controlled state if provided, otherwise internal
+    const isControlled = open !== undefined;
+    const finalOpen = isControlled ? open : internalIsOpen;
+    const finalSetOpen = isControlled ? onOpenChange : setInternalIsOpen;
+
+    // Helper to safely call the state setter
+    const setIsOpen = (value: boolean) => {
+        if (finalSetOpen) {
+            finalSetOpen(value);
+        }
+    };
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -80,17 +94,18 @@ export function AuthModal({ children }: AuthModalProps) {
     };
 
     return (
-        <Dialog open={isOpen} onOpenChange={setIsOpen} modal={false}>
-            <DialogTrigger asChild>{children}</DialogTrigger>
-            {isOpen && (
+        <Dialog open={finalOpen} onOpenChange={setIsOpen} modal={false}>
+            {children && <DialogTrigger asChild>{children}</DialogTrigger>}
+            {finalOpen && (
                 <DialogPortal>
                     <div
-                        className="fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
+                        className="fixed inset-0 z-1000 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
                         onClick={() => setIsOpen(false)}
                     />
                 </DialogPortal>
             )}
             <DialogContent className="p-0 gap-0 max-w-[400px] border-none bg-transparent shadow-none [&>button]:hidden sm:rounded-lg overflow-hidden">
+                <DialogTitle className="sr-only">Authentication</DialogTitle>
                 {/* Modal Container */}
                 <div className="bg-white rounded-lg overflow-hidden w-full flex flex-col">
                     {/* Header & Tabs */}

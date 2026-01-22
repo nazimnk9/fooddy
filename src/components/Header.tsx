@@ -11,9 +11,15 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { CartSheetContent } from "./CartSidebar";
 import { AuthModal } from "./AuthModal";
-import { getCookie } from "@/utils/cookieUtils";
+import { getCookie, deleteCookie } from "@/utils/cookieUtils";
 
 const navLinks = [
   { name: "Home", href: "/" },
@@ -27,6 +33,7 @@ export const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [authModalOpen, setAuthModalOpen] = useState(false);
   const pathname = usePathname();
   const isHomePage = pathname === "/";
 
@@ -37,6 +44,7 @@ export const Header = () => {
 
   return (
     <>
+      <AuthModal open={authModalOpen} onOpenChange={setAuthModalOpen} />
       <AnimatePresence>
         {isCartOpen && (
           <motion.div
@@ -62,15 +70,14 @@ export const Header = () => {
             </div>
             <div>
               {!isLoggedIn && (
-                <AuthModal>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="text-primary-foreground hover:bg-white/20 h-auto py-1 px-4 text-sm"
-                  >
-                    Login
-                  </Button>
-                </AuthModal>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-primary-foreground hover:bg-white/20 h-auto py-1 px-4 text-sm"
+                  onClick={() => setAuthModalOpen(true)}
+                >
+                  Login
+                </Button>
               )}
             </div>
           </div>
@@ -110,9 +117,39 @@ export const Header = () => {
               {/* <button className="p-2 text-muted-foreground hover:text-primary transition-colors">
               <Search className="w-5 h-5" />
             </button> */}
-              <button className="p-2 text-muted-foreground hover:text-primary transition-colors">
-                <User className="w-5 h-5" />
-              </button>
+              <DropdownMenu modal={false}>
+                <DropdownMenuTrigger asChild>
+                  <button className="p-2 text-muted-foreground hover:text-primary transition-colors outline-none">
+                    <User className="w-5 h-5" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  {!isLoggedIn ? (
+                    <DropdownMenuItem
+                      className="cursor-pointer"
+                      onClick={() => setAuthModalOpen(true)}
+                    >
+                      Login
+                    </DropdownMenuItem>
+                  ) : (
+                    <>
+                      <DropdownMenuItem className="cursor-pointer">
+                        Profile
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        className="cursor-pointer text-red-500 focus:text-red-500"
+                        onClick={() => {
+                          deleteCookie("access_token");
+                          deleteCookie("refresh_token");
+                          window.location.reload();
+                        }}
+                      >
+                        Logout
+                      </DropdownMenuItem>
+                    </>
+                  )}
+                </DropdownMenuContent>
+              </DropdownMenu>
 
               <Sheet modal={false} open={isCartOpen} onOpenChange={setIsCartOpen}>
                 <SheetTrigger asChild>
