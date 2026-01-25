@@ -20,6 +20,7 @@ import {
 import { CartSheetContent } from "./CartSidebar";
 import { AuthModal } from "./AuthModal";
 import { getCookie, deleteCookie } from "@/utils/cookieUtils";
+import { useCart } from "@/context/CartContext";
 
 const navLinks = [
   { name: "Home", href: "/" },
@@ -32,7 +33,7 @@ const navLinks = [
 
 export const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isCartOpen, setIsCartOpen] = useState(false);
+  const { isCartOpen, openCart, closeCart, cartCount } = useCart();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const pathname = usePathname();
@@ -53,7 +54,7 @@ export const Header = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-40 bg-black/90 backdrop-blur-[2px]"
-            onClick={() => setIsCartOpen(false)}
+            onClick={closeCart}
           />
         )}
       </AnimatePresence>
@@ -152,12 +153,15 @@ export const Header = () => {
                 </DropdownMenuContent>
               </DropdownMenu>
 
-              <Sheet modal={false} open={isCartOpen} onOpenChange={setIsCartOpen}>
+              <Sheet modal={false} open={isCartOpen} onOpenChange={isCartOpen ? closeCart : openCart}>
                 <SheetTrigger asChild>
-                  <button className="relative p-2 text-muted-foreground hover:text-primary transition-colors">
+                  <button
+                    onClick={openCart}
+                    className="relative p-2 text-muted-foreground hover:text-primary transition-colors"
+                  >
                     <ShoppingCart className="w-5 h-5" />
                     <span className="absolute -top-1 -right-1 w-5 h-5 bg-primary text-primary-foreground text-xs rounded-full flex items-center justify-center font-semibold">
-                      0
+                      {cartCount}
                     </span>
                   </button>
                 </SheetTrigger>

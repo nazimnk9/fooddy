@@ -9,6 +9,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { cn } from "@/lib/utils";
 import { getProductById, Product } from "@/services/menuService";
+import { useCart } from "@/context/CartContext";
 import { ProductDetailSkeleton } from "@/components/skeletons";
 import dishPizza from "@/assets/dish-pizza.jpg"; // Fallback image
 
@@ -20,6 +21,7 @@ export default function ProductPage() {
     const [error, setError] = useState<string | null>(null);
     const [quantity, setQuantity] = useState(1);
     const [activeTab, setActiveTab] = useState<"description" | "reviews">("description");
+    const { addToCart } = useCart();
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -156,7 +158,10 @@ export default function ProductPage() {
                                 </div>
 
                                 {/* Order Button */}
-                                <Button className="h-12 px-8 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 font-bold uppercase tracking-wide gap-2">
+                                <Button
+                                    onClick={() => addToCart(product, quantity)}
+                                    className="h-12 px-8 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 font-bold uppercase tracking-wide gap-2"
+                                >
                                     <ShoppingCart className="w-5 h-5" />
                                     Order
                                 </Button>

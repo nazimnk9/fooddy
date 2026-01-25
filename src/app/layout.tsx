@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Providers } from "@/components/Providers";
+import { CartProvider } from "@/context/CartContext";
 
 export const metadata: Metadata = {
     title: "Dawat - Restaurant & Grill",
@@ -15,7 +16,11 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body>
-                <Providers>{children}</Providers>
+                <Providers>
+                    <CartProvider>
+                        {children}
+                    </CartProvider>
+                </Providers>
             </body>
         </html>
     );

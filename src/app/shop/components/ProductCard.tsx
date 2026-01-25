@@ -3,6 +3,7 @@ import Image, { StaticImageData } from "next/image";
 import { Button } from "@/components/ui/button";
 import { Star, Eye, ShoppingCart } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useCart } from "@/context/CartContext";
 
 import { Product } from "@/services/menuService";
 
@@ -14,6 +15,8 @@ interface ProductCardProps {
 export function ProductCard({ product, viewMode }: ProductCardProps) {
     const productPrice = parseFloat(product.price);
     const productImage = product.images?.[0]?.image || "";
+
+    const { addToCart } = useCart();
 
     return (
         <div className={cn(
@@ -41,7 +44,10 @@ export function ProductCard({ product, viewMode }: ProductCardProps) {
                     >
                         <Eye className="w-4 h-4 text-black" />
                     </Link>
-                    <button className="w-10 h-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center hover:bg-primary/90 transition-colors">
+                    <button
+                        onClick={() => addToCart(product)}
+                        className="w-10 h-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center hover:bg-primary/90 transition-colors"
+                    >
                         <ShoppingCart className="w-4 h-4" />
                     </button>
                 </div>
@@ -74,7 +80,10 @@ export function ProductCard({ product, viewMode }: ProductCardProps) {
                 </div>
 
                 <div className="flex gap-3">
-                    <Button className="rounded-full font-bold px-6 uppercase flex items-center gap-2">
+                    <Button
+                        onClick={() => addToCart(product)}
+                        className="rounded-full font-bold px-6 uppercase flex items-center gap-2"
+                    >
                         <ShoppingCart className="w-4 h-4" />
                         Order
                     </Button>

@@ -99,7 +99,7 @@ export function AuthModal({ children, open, onOpenChange }: AuthModalProps) {
             {finalOpen && (
                 <DialogPortal>
                     <div
-                        className="fixed inset-0 z-1000 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
+                        className="fixed inset-0 z-60 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
                         onClick={() => setIsOpen(false)}
                     />
                 </DialogPortal>
@@ -114,7 +114,7 @@ export function AuthModal({ children, open, onOpenChange }: AuthModalProps) {
                         <button
                             onClick={() => setActiveTab("login")}
                             className={cn(
-                                "flex-1 flex items-center justify-center gap-2 text-sm font-semibold transition-colors",
+                                "flex-1 flex items-center justify-center gap-2 text-sm font-semibold transition-colors outline-none focus:outline-none border-none ring-0 focus:ring-0",
                                 activeTab === "login"
                                     ? "bg-white text-primary"
                                     : "bg-gray-100 text-gray-400 hover:bg-gray-50"
@@ -128,7 +128,7 @@ export function AuthModal({ children, open, onOpenChange }: AuthModalProps) {
                         <button
                             onClick={() => setActiveTab("register")}
                             className={cn(
-                                "flex-1 flex items-center justify-center gap-2 text-sm font-semibold transition-colors",
+                                "flex-1 flex items-center justify-center gap-2 text-sm font-semibold transition-colors outline-none focus:outline-none border-none ring-0 focus:ring-0",
                                 activeTab === "register"
                                     ? "bg-white text-primary"
                                     : "bg-gray-100 text-gray-400 hover:bg-gray-50"
@@ -197,7 +197,7 @@ export function AuthModal({ children, open, onOpenChange }: AuthModalProps) {
                                 <Button
                                     type="submit"
                                     disabled={loading}
-                                    className="w-auto min-w-[120px] rounded-full bg-primary hover:bg-primary/90 text-white font-bold text-base py-6"
+                                    className="w-auto min-w-[120px] rounded-full bg-primary hover:bg-primary/90 text-white font-bold text-base py-6 border-none shadow-none outline-none focus-visible:ring-0"
                                 >
                                     {loading ? "Loading..." : "Login"}
                                 </Button>
@@ -268,7 +268,7 @@ export function AuthModal({ children, open, onOpenChange }: AuthModalProps) {
                                 <Button
                                     type="submit"
                                     disabled={loading}
-                                    className="w-auto min-w-[120px] rounded-full bg-primary hover:bg-primary/90 text-white font-bold text-base py-6 mt-2"
+                                    className="w-auto min-w-[120px] rounded-full bg-primary hover:bg-primary/90 text-white font-bold text-base py-6 mt-2 border-none shadow-none outline-none focus-visible:ring-0"
                                 >
                                     {loading ? "Loading..." : "Register"}
                                 </Button>
