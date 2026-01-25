@@ -3,11 +3,13 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { X, AlertCircle, Truck } from "lucide-react";
+import { X, AlertCircle, Truck, Plus, Minus } from "lucide-react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useCart, UICartItem } from "@/context/CartContext";
+import { useEffect } from "react";
 
 // Image imports
 import pizzaMargherita from "@/assets/food/pizza-margherita.jpg";
@@ -16,11 +18,37 @@ import heroBg from "@/assets/hero-bg.jpg"; // Using a generic hero bg or falling
 // Actually, I can use the pizza image as a background since the reference image has a pizza-like background.
 
 export default function CartPage() {
-    const [quantity, setQuantity] = useState(2);
+    const { cartItems, removeFromCart, updateQuantity, updateMultipleQuantities, isLoading } = useCart();
     const [couponCode, setCouponCode] = useState("");
+    const [localQuantities, setLocalQuantities] = useState<Record<number, number>>({});
 
-    const price = 25.00;
-    const subtotal = price * quantity;
+    // Sync local state when cartItems changes (e.g., initial load or item removal)
+    useEffect(() => {
+        const initial: Record<number, number> = {};
+        cartItems.forEach(item => {
+            initial[item.id] = item.quantity;
+        });
+        setLocalQuantities(initial);
+    }, [cartItems]);
+
+    const handleQuantityChange = (id: number, val: number) => {
+        setLocalQuantities(prev => ({ ...prev, [id]: Math.max(1, val) }));
+    };
+
+    const handleUpdateCart = () => {
+        const updates = Object.entries(localQuantities).map(([id, quantity]) => ({
+            itemId: parseInt(id),
+            quantity
+        }));
+        updateMultipleQuantities(updates);
+    };
+
+    const subtotal = cartItems.reduce((acc: number, item) => {
+        const price = parseFloat(item.product.price);
+        const qty = localQuantities[item.id] ?? item.quantity;
+        return acc + (price * qty);
+    }, 0);
+
     const shipping = 0; // Free shipping
 
     return (
@@ -42,7 +70,7 @@ export default function CartPage() {
                             Home
                         </Link>
                         <span className="text-white/50">|</span>
-                        <Link href="/menu" className="breadcrumb-link uppercase tracking-wider">
+                        <Link href="/shop" className="breadcrumb-link uppercase tracking-wider">
                             Shop
                         </Link>
                         <span className="text-white/50">|</span>
@@ -56,10 +84,12 @@ export default function CartPage() {
             <main className="flex-1 py-16">
                 <div className="container-fooddy">
                     {/* Notification Bar */}
-                    <div className="bg-muted/30 border-t-2 border-muted flex items-center gap-2 p-4 mb-8 text-sm text-muted-foreground">
-                        <AlertCircle className="w-4 h-4" />
-                        <span>"Ravioli with Spinach and Ricotta cheese" removed. <button className="text-primary hover:underline">Undo?</button></span>
-                    </div>
+                    {/* {notificationRemoved && (
+                        <div className="bg-muted/30 border-t-2 border-muted flex items-center gap-2 p-4 mb-8 text-sm text-muted-foreground">
+                            <AlertCircle className="w-4 h-4" />
+                            <span>"Product" removed. <button className="text-primary hover:underline">Undo?</button></span>
+                        </div>
+                    )} */}
 
                     {/* Cart Table */}
                     <div className="mb-12 overflow-x-auto">
@@ -73,44 +103,74 @@ export default function CartPage() {
                                 </tr>
                             </thead>
                             <tbody className="bg-muted/10">
-                                <tr className="border-b border-border">
-                                    <td className="py-6 px-6">
-                                        <div className="flex items-center gap-6">
-                                            <button className="text-muted-foreground hover:text-destructive transition-colors bg-white hover:bg-white p-1 rounded">
-                                                <X className="w-4 h-4 bg-gray-600 text-white rounded-sm hover:bg-destructive" />
-                                            </button>
-                                            <div className="relative w-20 h-20 rounded overflow-hidden flex-shrink-0">
-                                                <Image
-                                                    src={pizzaMargherita}
-                                                    alt="Pizza Margherita"
-                                                    fill
-                                                    className="object-fixed"
-                                                />
-                                            </div>
-                                            <span className="font-semibold text-foreground">Pizza Margherita</span>
-                                        </div>
-                                    </td>
-                                    <td className="py-6 px-6 text-center text-primary font-bold">
-                                        ${price.toFixed(2)}
-                                    </td>
-                                    <td className="py-6 px-6 text-center">
-                                        <div className="inline-flex items-center bg-white border border-border rounded-full px-4 h-10 w-24">
-                                            <input
-                                                type="number"
-                                                value={quantity}
-                                                onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
-                                                className="w-full text-center bg-transparent focus:outline-none font-semibold text-foreground text-sm"
-                                                min="1"
-                                            />
-                                            <div className="flex flex-col gap-0.5 ml-1 border-l pl-2 border-muted">
-                                                {/* Custom arrows could go here, relying on default input controls for now or simple styling */}
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td className="py-6 px-6 text-right text-primary font-bold">
-                                        ${subtotal.toFixed(2)}
-                                    </td>
-                                </tr>
+                                {cartItems.length === 0 ? (
+                                    <tr>
+                                        <td colSpan={4} className="py-20 text-center text-muted-foreground">
+                                            Your cart is empty. <Link href="/shop" className="text-primary hover:underline">Go shopping</Link>
+                                        </td>
+                                    </tr>
+                                ) : (
+                                    cartItems.map((item) => (
+                                        <tr key={item.id} className="border-b border-border">
+                                            <td className="py-6 px-6">
+                                                <div className="flex items-center gap-6">
+                                                    <button
+                                                        onClick={() => removeFromCart(item.id)}
+                                                        className="text-muted-foreground hover:text-destructive transition-colors bg-white hover:bg-white p-1 rounded"
+                                                        disabled={isLoading}
+                                                    >
+                                                        <X className="w-4 h-4 bg-gray-600 text-white rounded-sm hover:bg-destructive" />
+                                                    </button>
+                                                    <div className="relative w-20 h-20 rounded overflow-hidden flex-shrink-0">
+                                                        {item.product.images?.[0]?.image && (
+                                                            <Image
+                                                                src={item.product.images[0].image}
+                                                                alt={item.product.title}
+                                                                fill
+                                                                className="object-fixed"
+                                                            />
+                                                        )}
+                                                    </div>
+                                                    <span className="font-semibold text-foreground">{item.product.title}</span>
+                                                </div>
+                                            </td>
+                                            <td className="py-6 px-6 text-center text-primary font-bold">
+                                                ${parseFloat(item.product.price).toFixed(2)}
+                                            </td>
+                                            <td className="py-6 px-6 text-center">
+                                                <div className="inline-flex items-center bg-white border border-border rounded-full px-4 h-16 w-24">
+                                                    <input
+                                                        type="number"
+                                                        value={localQuantities[item.id] || ""}
+                                                        onChange={(e) => handleQuantityChange(item.id, parseInt(e.target.value) || 1)}
+                                                        className="w-full text-center bg-transparent focus:outline-none font-semibold text-foreground text-sm"
+                                                        min="1"
+                                                        disabled={isLoading}
+                                                    />
+                                                    <div className="flex flex-col gap-4 ml-1 border-l pl-2 border-muted">
+                                                        <button
+                                                            onClick={() => updateQuantity(item.id, (localQuantities[item.id] || item.quantity) + 1)}
+                                                            className="text-muted-foreground hover:text-primary transition-colors"
+                                                            disabled={isLoading}
+                                                        >
+                                                            <Plus className="w-3 h-3" />
+                                                        </button>
+                                                        <button
+                                                            onClick={() => updateQuantity(item.id, (localQuantities[item.id] || item.quantity) - 1)}
+                                                            className="text-muted-foreground hover:text-primary transition-colors"
+                                                            disabled={isLoading || (localQuantities[item.id] || item.quantity) <= 1}
+                                                        >
+                                                            <Minus className="w-3 h-3" />
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td className="py-6 px-6 text-right text-primary font-bold">
+                                                ${(parseFloat(item.product.price) * (localQuantities[item.id] || item.quantity)).toFixed(2)}
+                                            </td>
+                                        </tr>
+                                    ))
+                                )}
                             </tbody>
                         </table>
                     </div>
@@ -128,7 +188,12 @@ export default function CartPage() {
                                 Apply Coupon
                             </Button>
                         </div>
-                        <Button variant="secondary" className="h-12 px-8 rounded-full font-bold uppercase tracking-wide bg-muted-foreground/20 text-muted-foreground hover:bg-muted-foreground/30">
+                        <Button
+                            variant="outline"
+                            className="h-12 px-8 rounded-full font-bold uppercase tracking-wide"
+                            onClick={handleUpdateCart}
+                            disabled={isLoading}
+                        >
                             Update Cart
                         </Button>
                     </div>
@@ -174,9 +239,11 @@ export default function CartPage() {
                                 </div>
                             </div>
 
-                            <Button className="w-full h-14 mt-6 rounded-full font-bold text-lg uppercase tracking-wide shadow-lg hover:shadow-xl transition-shadow">
-                                Proceed to Checkout
-                            </Button>
+                            <Link href="/checkout" className="w-full">
+                                <Button className="w-full h-14 mt-6 rounded-full font-bold text-lg uppercase tracking-wide shadow-lg hover:shadow-xl transition-shadow">
+                                    Proceed to Checkout
+                                </Button>
+                            </Link>
                         </div>
                     </div>
                 </div>

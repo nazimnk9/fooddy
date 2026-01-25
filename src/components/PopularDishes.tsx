@@ -7,7 +7,7 @@ import { Star, Eye, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getProducts } from "@/services/menuService";
 import { ProductCardSkeleton } from "@/components/skeletons";
-
+import { useCart } from "@/context/CartContext";
 import dishPizza from "@/assets/dish-pizza.jpg"; // Fallback
 
 interface PopularProduct {
@@ -23,6 +23,7 @@ interface PopularProduct {
 export const PopularDishes = () => {
   const [products, setProducts] = useState<PopularProduct[]>([]);
   const [loading, setLoading] = useState(true);
+  const { addToCart } = useCart();
 
   useEffect(() => {
     const fetchPopularDishes = async () => {
@@ -47,6 +48,21 @@ export const PopularDishes = () => {
 
     fetchPopularDishes();
   }, []);
+
+  const handleAddToCart = (product: PopularProduct) => {
+    // Map PopularProduct to Product shape expected by CartContext
+    const productMapping: any = {
+      id: product.id,
+      title: product.name,
+      price: product.price.toString(),
+      description: product.description,
+      images: [{ id: product.id, image: typeof product.image === 'string' ? product.image : (product.image as any).src }],
+      category: [], // We don't have category id here, but context handles it
+      tags: product.tags.map((tag, idx) => ({ id: idx, title: tag })),
+      is_popular: true
+    };
+    addToCart(productMapping);
+  };
 
   return (
     <section className="py-20 bg-background">
@@ -105,7 +121,10 @@ export const PopularDishes = () => {
                     >
                       <Eye className="w-4 h-4 text-black" />
                     </Link>
-                    <button className="w-10 h-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center hover:bg-primary/90 transition-colors">
+                    <button
+                      onClick={() => handleAddToCart(product)}
+                      className="w-10 h-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center hover:bg-primary/90 transition-colors"
+                    >
                       <ShoppingCart className="w-4 h-4" />
                     </button>
                   </div>
@@ -154,7 +173,11 @@ export const PopularDishes = () => {
                     <span className="text-lg font-bold text-foreground">
                       ${product.price.toFixed(2)}
                     </span>
-                    <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90">
+                    <Button
+                      size="sm"
+                      className="bg-primary text-primary-foreground hover:bg-primary/90"
+                      onClick={() => handleAddToCart(product)}
+                    >
                       Order
                     </Button>
                   </div>

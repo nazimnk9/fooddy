@@ -3,7 +3,7 @@ import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
 import { Star, ShoppingCart, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
+import { useCart } from "@/context/CartContext";
 export interface FoodItem {
     id: number;
     name: string;
@@ -21,6 +21,23 @@ interface FoodCardProps {
 }
 
 export const FoodCard = ({ item, index }: FoodCardProps) => {
+    const { addToCart } = useCart();
+
+    const handleAddToCart = () => {
+        // Map FoodItem to Product shape expected by CartContext
+        const productMapping: any = {
+            id: item.id,
+            title: item.name,
+            price: item.price.toString(),
+            description: item.description,
+            images: [{ id: item.id, image: typeof item.image === 'string' ? item.image : (item.image as any).src }],
+            category: [{ id: 0, title: item.category, image: null }],
+            tags: item.tags.map((tag, idx) => ({ id: idx, title: tag })),
+            is_popular: true
+        };
+        addToCart(productMapping);
+    };
+
     const renderStars = (rating: number) => {
         return Array.from({ length: 5 }, (_, i) => (
             <Star
@@ -54,7 +71,10 @@ export const FoodCard = ({ item, index }: FoodCardProps) => {
                     >
                         <Eye className="w-4 h-4" />
                     </Link>
-                    <button className="w-10 h-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center hover:bg-primary/90 transition-colors">
+                    <button
+                        onClick={handleAddToCart}
+                        className="w-10 h-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center hover:bg-primary/90 transition-colors"
+                    >
                         <ShoppingCart className="w-4 h-4" />
                     </button>
                 </div>
@@ -97,7 +117,11 @@ export const FoodCard = ({ item, index }: FoodCardProps) => {
                     <span className="text-lg font-bold text-foreground">
                         ${item.price.toFixed(2)}
                     </span>
-                    <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90">
+                    <Button
+                        size="sm"
+                        className="bg-primary text-primary-foreground hover:bg-primary/90"
+                        onClick={handleAddToCart}
+                    >
                         Order
                     </Button>
                 </div>

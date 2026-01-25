@@ -21,6 +21,7 @@ interface CartContextType {
     cartItems: UICartItem[];
     addToCart: (product: Product, quantity?: number) => Promise<void>;
     updateQuantity: (itemId: number, quantity: number) => Promise<void>;
+    updateMultipleQuantities: (updates: { itemId: number, quantity: number }[]) => Promise<void>;
     removeFromCart: (itemId: number) => Promise<void>;
     isCartOpen: boolean;
     openCart: () => void;
@@ -127,6 +128,37 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         setIsLoading(false);
     };
 
+    const updateMultipleQuantities = async (updates: { itemId: number, quantity: number }[]) => {
+        if (updates.length === 0) return;
+
+        setIsLoading(true);
+        if (isLoggedIn) {
+            try {
+                // User requirement: "patch data in patch api ... then show updated data"
+                // We perform individual patches and then one refetch for efficiency
+                await Promise.all(updates.map(u => apiUpdateCartItem(u.itemId, u.quantity)));
+                const updatedCart = await getCart();
+                setCartItems(updatedCart.results);
+            } catch (error) {
+                console.error("Failed to update multiple quantities (API):", error);
+            }
+        } else {
+            // Local Storage Logic
+            const currentCart = [...cartItems] as LocalCartItem[];
+            updates.forEach(update => {
+                const itemIndex = currentCart.findIndex(item => item.id === update.itemId);
+                if (itemIndex > -1) {
+                    currentCart[itemIndex].quantity = update.quantity;
+                    const price = parseFloat(currentCart[itemIndex].product.price);
+                    currentCart[itemIndex].total_price = (price * update.quantity).toFixed(2);
+                }
+            });
+            setCartItems(currentCart);
+            localStorage.setItem("fooddy_cart", JSON.stringify(currentCart));
+        }
+        setIsLoading(false);
+    };
+
     const addToCart = async (product: Product, quantity: number = 1) => {
         setIsLoading(true);
         if (isLoggedIn) {
@@ -200,6 +232,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
             cartItems,
             addToCart,
             updateQuantity,
+            updateMultipleQuantities,
             removeFromCart,
             isCartOpen,
             openCart,
