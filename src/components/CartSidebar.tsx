@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 import { useCart, UICartItem } from "@/context/CartContext";
 
 export function CartSheetContent() {
-    const { cartItems, removeFromCart, updateQuantity, isLoading } = useCart();
+    const { cartItems, removeFromCart, updateQuantity, isLoading, closeCart } = useCart();
 
     const subtotal = cartItems.reduce((acc: number, item: UICartItem) => {
         const price = parseFloat(item.product.price);
@@ -94,12 +94,12 @@ export function CartSheetContent() {
 
                     {/* Buttons */}
                     <div className="grid grid-cols-2 gap-4">
-                        <Link href="/cart" className="w-full">
+                        <Link href="/cart" className="w-full" onClick={closeCart}>
                             <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-bold">
                                 CART
                             </Button>
                         </Link>
-                        <Link href="/checkout" className="w-full">
+                        <Link href="/checkout" className="w-full" onClick={closeCart}>
                             <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-bold">
                                 CHECKOUT
                             </Button>
@@ -107,9 +107,11 @@ export function CartSheetContent() {
                     </div>
 
                     <div className="text-center">
-                        <Button variant="link" className="text-white/80 hover:text-white text-xs uppercase tracking-wider font-semibold">
-                            continue shopping
-                        </Button>
+                        <Link href="/shop" onClick={closeCart}>
+                            <Button variant="link" className="text-white/80 hover:text-white text-xs uppercase tracking-wider font-semibold">
+                                continue shopping
+                            </Button>
+                        </Link>
                     </div>
                 </div>
             </div>
