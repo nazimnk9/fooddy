@@ -10,8 +10,8 @@ import { cn } from "@/lib/utils";
 
 import { useCart, UICartItem } from "@/context/CartContext";
 
-export function CartSheetContent() {
-    const { cartItems, removeFromCart, updateQuantity, isLoading, closeCart } = useCart();
+export function CartSheetContent({ onAuthRequired }: { onAuthRequired?: () => void }) {
+    const { cartItems, removeFromCart, updateQuantity, isLoading, closeCart, isLoggedIn } = useCart();
 
     const subtotal = cartItems.reduce((acc: number, item: UICartItem) => {
         const price = parseFloat(item.product.price);
@@ -99,7 +99,18 @@ export function CartSheetContent() {
                                 CART
                             </Button>
                         </Link>
-                        <Link href="/checkout" className="w-full" onClick={closeCart}>
+                        <Link
+                            href={isLoggedIn ? "/checkout" : "#"}
+                            className="w-full"
+                            onClick={(e) => {
+                                if (!isLoggedIn) {
+                                    e.preventDefault();
+                                    onAuthRequired?.();
+                                } else {
+                                    closeCart();
+                                }
+                            }}
+                        >
                             <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-bold">
                                 CHECKOUT
                             </Button>

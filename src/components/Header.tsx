@@ -169,7 +169,7 @@ export const Header = () => {
                   <SheetHeader className="px-1">
                     <SheetTitle className="text-left text-white">Shopping Cart</SheetTitle>
                   </SheetHeader>
-                  <CartSheetContent />
+                  <CartSheetContent onAuthRequired={() => setAuthModalOpen(true)} />
                 </SheetContent>
               </Sheet>
 

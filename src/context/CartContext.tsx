@@ -28,6 +28,7 @@ interface CartContextType {
     closeCart: () => void;
     isLoading: boolean;
     cartCount: number;
+    isLoggedIn: boolean;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -238,7 +239,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
             openCart,
             closeCart,
             isLoading,
-            cartCount
+            cartCount,
+            isLoggedIn
         }}>
             {children}
         </CartContext.Provider>

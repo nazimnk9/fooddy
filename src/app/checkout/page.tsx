@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Folder, FileText, Check, Eye, EyeOff } from "lucide-react";
+import { Folder, FileText, Check, Eye, EyeOff, Pencil, Trash2 } from "lucide-react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -18,8 +18,19 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Label } from "@/components/ui/label";
+import { getCookie } from "@/utils/cookieUtils";
+import { BASE_URL } from "@/services/authService";
 
 import pizzaMargherita from "@/assets/food/pizza-margherita.jpg";
+
+interface Address {
+    id: number;
+    street: string;
+    city: string;
+    state: string;
+    zip_code: string;
+    user: number;
+}
 
 export default function CheckoutPage() {
     const [showLogin, setShowLogin] = useState(false);
@@ -28,6 +39,36 @@ export default function CheckoutPage() {
     const [createAccount, setCreateAccount] = useState(false);
     const [shipDifferent, setShipDifferent] = useState(false);
     const [paymentMethod, setPaymentMethod] = useState("check");
+    const [addresses, setAddresses] = useState<Address[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchAddresses = async () => {
+            const token = getCookie("access_token");
+            if (!token) {
+                setLoading(false);
+                return;
+            }
+
+            try {
+                const response = await fetch(`${BASE_URL}/orders/address/`, {
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                    },
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    setAddresses(data.results || []);
+                }
+            } catch (error) {
+                console.error("Error fetching addresses:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchAddresses();
+    }, []);
 
     return (
         <div className="min-h-screen bg-background flex flex-col">
@@ -131,7 +172,112 @@ export default function CheckoutPage() {
                             <h2 className="text-2xl font-display font-semibold mb-6">Billing details</h2>
 
                             <div className="space-y-6">
-                                <div className="grid grid-cols-2 gap-6">
+                                {loading ? (
+                                    <p className="text-muted-foreground">Loading addresses...</p>
+                                ) : addresses.length === 0 ? (
+                                    <p className="text-muted-foreground italic text-center py-4 bg-muted/5 rounded-xl border border-dashed border-border">No address found</p>
+                                ) : (
+                                    <div className="grid gap-4">
+                                        {addresses.map((address) => (
+                                            <div key={address.id} className="p-4 rounded-xl border border-border bg-white flex justify-between items-center group hover:border-primary transition-colors">
+                                                <div>
+                                                    <p className="font-medium text-foreground">{address.street}</p>
+                                                    <p className="text-sm text-muted-foreground">{address.city}, {address.state} {address.zip_code}</p>
+                                                </div>
+                                                <div className="flex items-center gap-2 opacity-100 group-hover:opacity-100 transition-opacity">
+                                                    <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-secondary">
+                                                        <Pencil className="h-4 w-4" />
+                                                    </Button>
+                                                    <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-destructive">
+                                                        <Trash2 className="h-4 w-4" />
+                                                    </Button>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* Right Column - Order Summary */}
+                        <div>
+                            <div className="flex items-center justify-between mb-6">
+                                {/* This space reserved for alignment if needed, or 'Ship to different address' could go here inside a header */}
+                            </div>
+
+                            <div className="flex items-center gap-2 mb-8">
+                                <Checkbox
+                                    id="ship-different"
+                                    checked={shipDifferent}
+                                    onCheckedChange={(checked) => setShipDifferent(checked as boolean)}
+                                />
+                                <Label htmlFor="ship-different" className="font-bold cursor-pointer select-none uppercase">Create New Address</Label>
+                            </div>
+
+                            {shipDifferent && (
+                                // <div className="mb-8 animate-fade-in space-y-6">
+                                //     <div className="grid grid-cols-2 gap-6">
+                                //         <div className="space-y-2">
+                                //             <Label htmlFor="ship-firstName">First name <span className="text-destructive">*</span></Label>
+                                //             <Input id="ship-firstName" className="bg-white rounded-full" required />
+                                //         </div>
+                                //         <div className="space-y-2">
+                                //             <Label htmlFor="ship-lastName">Last name <span className="text-destructive">*</span></Label>
+                                //             <Input id="ship-lastName" className="bg-white rounded-full" required />
+                                //         </div>
+                                //     </div>
+
+                                //     <div className="space-y-2">
+                                //         <Label htmlFor="ship-company">Company name (optional)</Label>
+                                //         <Input id="ship-company" className="bg-white rounded-full" />
+                                //     </div>
+
+                                //     <div className="space-y-2">
+                                //         <Label htmlFor="ship-country">Country / Region <span className="text-destructive">*</span></Label>
+                                //         <Select>
+                                //             <SelectTrigger className="bg-white rounded-full w-full">
+                                //                 <SelectValue placeholder="Select a country / region..." />
+                                //             </SelectTrigger>
+                                //             <SelectContent>
+                                //                 <SelectItem value="us">United States (US)</SelectItem>
+                                //                 <SelectItem value="uk">United Kingdom (UK)</SelectItem>
+                                //                 <SelectItem value="bd">Bangladesh</SelectItem>
+                                //             </SelectContent>
+                                //         </Select>
+                                //     </div>
+
+                                //     <div className="space-y-4">
+                                //         <Label htmlFor="ship-address">Street address <span className="text-destructive">*</span></Label>
+                                //         <Input id="ship-address" placeholder="House number and street name" className="bg-white rounded-full" required />
+                                //         <Input id="ship-address2" placeholder="Apartment, suite, unit, etc. (optional)" className="bg-white rounded-full" />
+                                //     </div>
+
+                                //     <div className="space-y-2">
+                                //         <Label htmlFor="ship-city">Town / City <span className="text-destructive">*</span></Label>
+                                //         <Input id="ship-city" className="bg-white rounded-full" required />
+                                //     </div>
+
+                                //     <div className="space-y-2">
+                                //         <Label htmlFor="ship-state">State <span className="text-destructive">*</span></Label>
+                                //         <Select>
+                                //             <SelectTrigger className="bg-white rounded-full w-full">
+                                //                 <SelectValue placeholder="Select an option..." />
+                                //             </SelectTrigger>
+                                //             <SelectContent>
+                                //                 <SelectItem value="ny">New York</SelectItem>
+                                //                 <SelectItem value="ca">California</SelectItem>
+                                //                 <SelectItem value="tx">Texas</SelectItem>
+                                //             </SelectContent>
+                                //         </Select>
+                                //     </div>
+
+                                //     <div className="space-y-2">
+                                //         <Label htmlFor="ship-zip">ZIP Code <span className="text-destructive">*</span></Label>
+                                //         <Input id="ship-zip" className="bg-white rounded-full" required />
+                                //     </div>
+                                // </div>
+                                <div className="space-y-6">
+                                    {/* <div className="grid grid-cols-2 gap-6">
                                     <div className="space-y-2">
                                         <Label htmlFor="firstName">First name <span className="text-destructive">*</span></Label>
                                         <Input id="firstName" className="bg-white rounded-full" required />
@@ -140,9 +286,9 @@ export default function CheckoutPage() {
                                         <Label htmlFor="lastName">Last name <span className="text-destructive">*</span></Label>
                                         <Input id="lastName" className="bg-white rounded-full" required />
                                     </div>
-                                </div>
+                                </div> */}
 
-                                <div className="space-y-2">
+                                    {/* <div className="space-y-2">
                                     <Label htmlFor="company">Company name (optional)</Label>
                                     <Input id="company" className="bg-white rounded-full" />
                                 </div>
@@ -159,20 +305,20 @@ export default function CheckoutPage() {
                                             <SelectItem value="bd">Bangladesh</SelectItem>
                                         </SelectContent>
                                     </Select>
-                                </div>
+                                </div> */}
 
-                                <div className="space-y-4">
-                                    <Label htmlFor="address">Street address <span className="text-destructive">*</span></Label>
-                                    <Input id="address" placeholder="House number and street name" className="bg-white rounded-full" required />
-                                    <Input id="address2" placeholder="Apartment, suite, unit, etc. (optional)" className="bg-white rounded-full" />
-                                </div>
+                                    <div className="space-y-4">
+                                        <Label htmlFor="address">Street address <span className="text-destructive">*</span></Label>
+                                        <Input id="address" placeholder="House number and street name" className="bg-white rounded-full" required />
+                                        <Input id="address2" placeholder="Apartment, suite, unit, etc. (optional)" className="bg-white rounded-full" />
+                                    </div>
 
-                                <div className="space-y-2">
-                                    <Label htmlFor="city">Town / City <span className="text-destructive">*</span></Label>
-                                    <Input id="city" className="bg-white rounded-full" required />
-                                </div>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="city">Town / City <span className="text-destructive">*</span></Label>
+                                        <Input id="city" className="bg-white rounded-full" required />
+                                    </div>
 
-                                <div className="space-y-2">
+                                    {/* <div className="space-y-2">
                                     <Label htmlFor="state">State <span className="text-destructive">*</span></Label>
                                     <Select>
                                         <SelectTrigger className="bg-white rounded-full w-full">
@@ -184,14 +330,25 @@ export default function CheckoutPage() {
                                             <SelectItem value="tx">Texas</SelectItem>
                                         </SelectContent>
                                     </Select>
-                                </div>
+                                </div> */}
 
-                                <div className="space-y-2">
-                                    <Label htmlFor="zip">ZIP Code <span className="text-destructive">*</span></Label>
-                                    <Input id="zip" className="bg-white rounded-full" required />
-                                </div>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="state">State <span className="text-destructive">*</span></Label>
+                                        <Input id="state" type="tel" className="bg-white rounded-full" required />
+                                    </div>
 
-                                <div className="space-y-2">
+                                    <div className="space-y-2">
+                                        <Label htmlFor="zip">ZIP Code <span className="text-destructive">*</span></Label>
+                                        <Input id="zip" className="bg-white rounded-full" required />
+                                    </div>
+
+                                    <div className="flex justify-end">
+                                        <Button className="px-8 h-12 rounded-full font-bold uppercase tracking-wide text-white shadow-gold hover:shadow-lg transition-all">
+                                            Save Address
+                                        </Button>
+                                    </div>
+
+                                    {/* <div className="space-y-2">
                                     <Label htmlFor="phone">Phone <span className="text-destructive">*</span></Label>
                                     <Input id="phone" type="tel" className="bg-white rounded-full" required />
                                 </div>
@@ -208,90 +365,11 @@ export default function CheckoutPage() {
                                         onCheckedChange={(checked) => setCreateAccount(checked as boolean)}
                                     />
                                     <Label htmlFor="create-account" className="font-normal cursor-pointer select-none">Create an account?</Label>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Right Column - Order Summary */}
-                        <div>
-                            <div className="flex items-center justify-between mb-6">
-                                {/* This space reserved for alignment if needed, or 'Ship to different address' could go here inside a header */}
-                            </div>
-
-                            <div className="flex items-center gap-2 mb-8">
-                                <Checkbox
-                                    id="ship-different"
-                                    checked={shipDifferent}
-                                    onCheckedChange={(checked) => setShipDifferent(checked as boolean)}
-                                />
-                                <Label htmlFor="ship-different" className="font-bold cursor-pointer select-none uppercase">Ship to a different address?</Label>
-                            </div>
-
-                            {shipDifferent && (
-                                <div className="mb-8 animate-fade-in space-y-6">
-                                    <div className="grid grid-cols-2 gap-6">
-                                        <div className="space-y-2">
-                                            <Label htmlFor="ship-firstName">First name <span className="text-destructive">*</span></Label>
-                                            <Input id="ship-firstName" className="bg-white rounded-full" required />
-                                        </div>
-                                        <div className="space-y-2">
-                                            <Label htmlFor="ship-lastName">Last name <span className="text-destructive">*</span></Label>
-                                            <Input id="ship-lastName" className="bg-white rounded-full" required />
-                                        </div>
-                                    </div>
-
-                                    <div className="space-y-2">
-                                        <Label htmlFor="ship-company">Company name (optional)</Label>
-                                        <Input id="ship-company" className="bg-white rounded-full" />
-                                    </div>
-
-                                    <div className="space-y-2">
-                                        <Label htmlFor="ship-country">Country / Region <span className="text-destructive">*</span></Label>
-                                        <Select>
-                                            <SelectTrigger className="bg-white rounded-full w-full">
-                                                <SelectValue placeholder="Select a country / region..." />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectItem value="us">United States (US)</SelectItem>
-                                                <SelectItem value="uk">United Kingdom (UK)</SelectItem>
-                                                <SelectItem value="bd">Bangladesh</SelectItem>
-                                            </SelectContent>
-                                        </Select>
-                                    </div>
-
-                                    <div className="space-y-4">
-                                        <Label htmlFor="ship-address">Street address <span className="text-destructive">*</span></Label>
-                                        <Input id="ship-address" placeholder="House number and street name" className="bg-white rounded-full" required />
-                                        <Input id="ship-address2" placeholder="Apartment, suite, unit, etc. (optional)" className="bg-white rounded-full" />
-                                    </div>
-
-                                    <div className="space-y-2">
-                                        <Label htmlFor="ship-city">Town / City <span className="text-destructive">*</span></Label>
-                                        <Input id="ship-city" className="bg-white rounded-full" required />
-                                    </div>
-
-                                    <div className="space-y-2">
-                                        <Label htmlFor="ship-state">State <span className="text-destructive">*</span></Label>
-                                        <Select>
-                                            <SelectTrigger className="bg-white rounded-full w-full">
-                                                <SelectValue placeholder="Select an option..." />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectItem value="ny">New York</SelectItem>
-                                                <SelectItem value="ca">California</SelectItem>
-                                                <SelectItem value="tx">Texas</SelectItem>
-                                            </SelectContent>
-                                        </Select>
-                                    </div>
-
-                                    <div className="space-y-2">
-                                        <Label htmlFor="ship-zip">ZIP Code <span className="text-destructive">*</span></Label>
-                                        <Input id="ship-zip" className="bg-white rounded-full" required />
-                                    </div>
+                                </div> */}
                                 </div>
                             )}
 
-                            <div className="mb-8">
+                            {/* <div className="mb-8">
                                 <div className="space-y-2">
                                     <Label htmlFor="order-notes" className="text-xs uppercase text-muted-foreground font-bold">Order notes (optional)</Label>
                                     <textarea
@@ -300,7 +378,7 @@ export default function CheckoutPage() {
                                         placeholder="Notes about your order, e.g. special notes for delivery."
                                     ></textarea>
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
                     </form>
                     <div className="mt-12 bg-white">
