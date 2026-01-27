@@ -39,6 +39,7 @@ import { getCookie } from "@/utils/cookieUtils";
 import { BASE_URL } from "@/services/authService";
 import { getAddresses, createAddress, updateAddress, deleteAddress, Address } from "@/services/addressService";
 import { getCart, CartItem } from "@/services/cartService";
+import { checkoutOnline, placeOrderCOD } from "@/services/checkoutService";
 
 import pizzaMargherita from "@/assets/food/pizza-margherita.jpg";
 
@@ -62,6 +63,8 @@ export default function CheckoutPage() {
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
+    const [placingOrder, setPlacingOrder] = useState(false);
+    const [selectedAddressId, setSelectedAddressId] = useState<number | null>(null);
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
     const [updatingAddress, setUpdatingAddress] = useState<Address | null>(null);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -159,6 +162,39 @@ export default function CheckoutPage() {
         setUpdateState(address.state);
         setUpdateZipCode(address.zip_code);
         setIsUpdateModalOpen(true);
+    };
+
+    const handlePlaceOrder = async () => {
+        if (!selectedAddressId) {
+            alert("Please select an address first");
+            return;
+        }
+
+        setPlacingOrder(true);
+        try {
+            if (paymentMethod === "check") {
+                // Online Payment
+                const response = await checkoutOnline({
+                    address_id: selectedAddressId,
+                    payment_type: "online"
+                });
+                if (response.checkout_url) {
+                    window.location.href = response.checkout_url;
+                }
+            } else {
+                // Cash on Delivery
+                await placeOrderCOD({
+                    address_id: selectedAddressId,
+                    payment_type: "cod"
+                });
+                window.location.href = "/order-success";
+            }
+        } catch (error) {
+            console.error("Error placing order:", error);
+            alert("Failed to place order. Please try again.");
+        } finally {
+            setPlacingOrder(false);
+        }
     };
 
     const handleDeleteAddress = async () => {
@@ -291,10 +327,23 @@ export default function CheckoutPage() {
                                 ) : (
                                     <div className="grid gap-4">
                                         {addresses.map((address) => (
-                                            <div key={address.id} className="p-4 rounded-xl border border-border bg-white flex justify-between items-center group hover:border-primary transition-colors">
-                                                <div>
-                                                    <p className="font-medium text-foreground">{address.street}</p>
-                                                    <p className="text-sm text-muted-foreground">{address.city}, {address.state} {address.zip_code}</p>
+                                            <div
+                                                key={address.id}
+                                                className={`p-4 rounded-xl border transition-colors flex justify-between items-center group cursor-pointer ${selectedAddressId === address.id
+                                                    ? "border-primary bg-primary/5 ring-1 ring-primary"
+                                                    : "border-border bg-white hover:border-primary/50"
+                                                    }`}
+                                                onClick={() => setSelectedAddressId(address.id)}
+                                            >
+                                                <div className="flex items-center gap-4">
+                                                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${selectedAddressId === address.id ? "border-primary bg-primary" : "border-muted-foreground/30"
+                                                        }`}>
+                                                        {selectedAddressId === address.id && <Check className="w-3 h-3 text-white" />}
+                                                    </div>
+                                                    <div>
+                                                        <p className="font-medium text-foreground">{address.street}</p>
+                                                        <p className="text-sm text-muted-foreground">{address.city}, {address.state} {address.zip_code}</p>
+                                                    </div>
                                                 </div>
                                                 <div className="flex items-center gap-2 opacity-100 group-hover:opacity-100 transition-opacity">
                                                     <Button
@@ -302,7 +351,10 @@ export default function CheckoutPage() {
                                                         variant="ghost"
                                                         size="icon"
                                                         className="h-8 w-8 text-muted-foreground hover:text-secondary"
-                                                        onClick={() => openUpdateModal(address)}
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            openUpdateModal(address);
+                                                        }}
                                                     >
                                                         <Pencil className="h-4 w-4" />
                                                     </Button>
@@ -311,7 +363,10 @@ export default function CheckoutPage() {
                                                         variant="ghost"
                                                         size="icon"
                                                         className="h-8 w-8 text-muted-foreground hover:text-destructive"
-                                                        onClick={() => openDeleteModal(address)}
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            openDeleteModal(address);
+                                                        }}
                                                     >
                                                         <Trash2 className="h-4 w-4" />
                                                     </Button>
@@ -629,8 +684,12 @@ export default function CheckoutPage() {
                         </p>
 
                         <div className="flex justify-end">
-                            <Button className="px-8 h-12 rounded-full font-bold uppercase tracking-wide text-white shadow-gold hover:shadow-lg transition-all">
-                                Place Order
+                            <Button
+                                onClick={handlePlaceOrder}
+                                disabled={placingOrder || !selectedAddressId}
+                                className="px-8 h-12 rounded-full font-bold uppercase tracking-wide text-white shadow-gold hover:shadow-lg transition-all"
+                            >
+                                {placingOrder ? "Placing Order..." : "Place Order"}
                             </Button>
                         </div>
                     </div>
