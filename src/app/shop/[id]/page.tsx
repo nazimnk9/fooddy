@@ -7,7 +7,8 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ShopSidebar } from "../components/ShopSidebar";
 import { ProductCard } from "../components/ProductCard";
-import { LayoutGrid, List as ListIcon } from "lucide-react";
+import { LayoutGrid, List as ListIcon, RotateCcw } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
     Select,
     SelectContent,
@@ -104,6 +105,26 @@ function ShopCategoryContent() {
         router.push(`?${params.toString()}`, { scroll: false });
     };
 
+    const handleReset = () => {
+        setSortBy("newest");
+        const params = new URLSearchParams(searchParams.toString());
+        params.delete('min_price');
+        params.delete('max_price');
+
+        // We MUST keep categoryId/tag context
+        // But the URL for [id] is /shop/[categoryId]
+        // So we only need to keep view and type=tag if applicable
+        const view = params.get('view');
+        const typeParam = params.get('type');
+
+        const newParams = new URLSearchParams();
+        if (view) newParams.set('view', view);
+        if (typeParam) newParams.set('type', typeParam);
+
+        const queryString = newParams.toString();
+        router.push(queryString ? `?${queryString}` : `/shop/${categoryId}`, { scroll: false });
+    };
+
     return (
         <div className="min-h-screen bg-background flex flex-col">
             <Header />
@@ -161,7 +182,16 @@ function ShopCategoryContent() {
                                 </button>
                             </div>
 
-                            <div className="flex items-center">
+                            <div className="flex items-center gap-4">
+                                <Button
+                                    onClick={handleReset}
+                                    variant="outline"
+                                    className="rounded-full border-muted-foreground/20 text-muted-foreground hover:text-white transition-colors flex items-center gap-2"
+                                >
+                                    <RotateCcw className="w-4 h-4" />
+                                    <span className="text-xs font-bold uppercase">Reset</span>
+                                </Button>
+
                                 <Select value={sortBy} onValueChange={setSortBy}>
                                     <SelectTrigger className="w-[180px] rounded-full border-muted-foreground/20">
                                         <SelectValue placeholder="Filter" />

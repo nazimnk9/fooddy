@@ -7,8 +7,9 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ShopSidebar } from "./components/ShopSidebar";
 import { ProductCard } from "./components/ProductCard";
-import { LayoutGrid, List as ListIcon, Loader2 } from "lucide-react";
+import { LayoutGrid, List as ListIcon, Loader2, RotateCcw } from "lucide-react";
 import { getProducts, Product } from "@/services/menuService";
+import { Button } from "@/components/ui/button";
 import {
     Select,
     SelectContent,
@@ -84,6 +85,17 @@ function ShopPageContent() {
         router.push(`?${params.toString()}`, { scroll: false });
     };
 
+    const handleReset = () => {
+        setSortBy("newest");
+        const params = new URLSearchParams(searchParams.toString());
+        params.delete('min_price');
+        params.delete('max_price');
+        // Keep the 'view' param if it exists
+        const view = params.get('view');
+        const newUrl = view ? `?view=${view}` : '/shop';
+        router.push(newUrl, { scroll: false });
+    };
+
     return (
         <div className="min-h-screen bg-background flex flex-col">
             <Header />
@@ -141,7 +153,16 @@ function ShopPageContent() {
                                 </button>
                             </div>
 
-                            <div className="flex items-center">
+                            <div className="flex items-center gap-4">
+                                <Button
+                                    onClick={handleReset}
+                                    variant="outline"
+                                    className="rounded-full border-muted-foreground/20 text-muted-foreground hover:text-white transition-colors flex items-center gap-2"
+                                >
+                                    <RotateCcw className="w-4 h-4" />
+                                    <span className="text-xs font-bold uppercase">Reset</span>
+                                </Button>
+
                                 <Select value={sortBy} onValueChange={setSortBy}>
                                     <SelectTrigger className="w-[180px] rounded-full border-muted-foreground/20">
                                         <SelectValue placeholder="Filter" />
