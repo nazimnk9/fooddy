@@ -20,17 +20,19 @@ import { Separator } from "@/components/ui/separator";
 import { Label } from "@/components/ui/label";
 import { getCookie } from "@/utils/cookieUtils";
 import { BASE_URL } from "@/services/authService";
+import { getAddresses, createAddress, Address } from "@/services/addressService";
+import { getCart, CartItem } from "@/services/cartService";
 
 import pizzaMargherita from "@/assets/food/pizza-margherita.jpg";
 
-interface Address {
-    id: number;
-    street: string;
-    city: string;
-    state: string;
-    zip_code: string;
-    user: number;
-}
+// interface Address {
+//     id: number;
+//     street: string;
+//     city: string;
+//     state: string;
+//     zip_code: string;
+//     user: number;
+// }
 
 export default function CheckoutPage() {
     const [showLogin, setShowLogin] = useState(false);
@@ -40,35 +42,66 @@ export default function CheckoutPage() {
     const [shipDifferent, setShipDifferent] = useState(false);
     const [paymentMethod, setPaymentMethod] = useState("check");
     const [addresses, setAddresses] = useState<Address[]>([]);
+    const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const [loading, setLoading] = useState(true);
+    const [saving, setSaving] = useState(false);
+
+    // Form state for new address
+    const [street, setStreet] = useState("");
+    const [city, setCity] = useState("");
+    const [state, setState] = useState("");
+    const [zipCode, setZipCode] = useState("");
+
+    const fetchAddresses = async () => {
+        try {
+            const data = await getAddresses();
+            setAddresses(data);
+        } catch (error) {
+            console.error("Error fetching addresses:", error);
+        }
+    };
+
+    const fetchCartData = async () => {
+        try {
+            const data = await getCart();
+            setCartItems(data.results || []);
+        } catch (error) {
+            console.error("Error fetching cart:", error);
+        }
+    };
 
     useEffect(() => {
-        const fetchAddresses = async () => {
-            const token = getCookie("access_token");
-            if (!token) {
-                setLoading(false);
-                return;
-            }
-
-            try {
-                const response = await fetch(`${BASE_URL}/orders/address/`, {
-                    headers: {
-                        "Authorization": `Bearer ${token}`,
-                    },
-                });
-                if (response.ok) {
-                    const data = await response.json();
-                    setAddresses(data.results || []);
-                }
-            } catch (error) {
-                console.error("Error fetching addresses:", error);
-            } finally {
-                setLoading(false);
-            }
+        const loadInitialData = async () => {
+            setLoading(true);
+            await Promise.all([fetchAddresses(), fetchCartData()]);
+            setLoading(false);
         };
-
-        fetchAddresses();
+        loadInitialData();
     }, []);
+
+    const handleSaveAddress = async (e: React.MouseEvent) => {
+        e.preventDefault();
+        setSaving(true);
+        try {
+            await createAddress({
+                street,
+                city,
+                state,
+                zip_code: zipCode
+            });
+            // Clear form and reload addresses
+            setStreet("");
+            setCity("");
+            setState("");
+            setZipCode("");
+            setShipDifferent(false);
+            await fetchAddresses();
+        } catch (error) {
+            console.error("Error saving address:", error);
+        } finally {
+            setSaving(false);
+        }
+    };
 
     return (
         <div className="min-h-screen bg-background flex flex-col">
@@ -309,13 +342,26 @@ export default function CheckoutPage() {
 
                                     <div className="space-y-4">
                                         <Label htmlFor="address">Street address <span className="text-destructive">*</span></Label>
-                                        <Input id="address" placeholder="House number and street name" className="bg-white rounded-full" required />
+                                        <Input
+                                            id="address"
+                                            placeholder="House number and street name"
+                                            className="bg-white rounded-full"
+                                            required
+                                            value={street}
+                                            onChange={(e) => setStreet(e.target.value)}
+                                        />
                                         <Input id="address2" placeholder="Apartment, suite, unit, etc. (optional)" className="bg-white rounded-full" />
                                     </div>
 
                                     <div className="space-y-2">
                                         <Label htmlFor="city">Town / City <span className="text-destructive">*</span></Label>
-                                        <Input id="city" className="bg-white rounded-full" required />
+                                        <Input
+                                            id="city"
+                                            className="bg-white rounded-full"
+                                            required
+                                            value={city}
+                                            onChange={(e) => setCity(e.target.value)}
+                                        />
                                     </div>
 
                                     {/* <div className="space-y-2">
@@ -334,17 +380,34 @@ export default function CheckoutPage() {
 
                                     <div className="space-y-2">
                                         <Label htmlFor="state">State <span className="text-destructive">*</span></Label>
-                                        <Input id="state" type="tel" className="bg-white rounded-full" required />
+                                        <Input
+                                            id="state"
+                                            type="text"
+                                            className="bg-white rounded-full"
+                                            required
+                                            value={state}
+                                            onChange={(e) => setState(e.target.value)}
+                                        />
                                     </div>
 
                                     <div className="space-y-2">
                                         <Label htmlFor="zip">ZIP Code <span className="text-destructive">*</span></Label>
-                                        <Input id="zip" className="bg-white rounded-full" required />
+                                        <Input
+                                            id="zip"
+                                            className="bg-white rounded-full"
+                                            required
+                                            value={zipCode}
+                                            onChange={(e) => setZipCode(e.target.value)}
+                                        />
                                     </div>
 
                                     <div className="flex justify-end">
-                                        <Button className="px-8 h-12 rounded-full font-bold uppercase tracking-wide text-white shadow-gold hover:shadow-lg transition-all">
-                                            Save Address
+                                        <Button
+                                            onClick={handleSaveAddress}
+                                            disabled={saving || !street || !city || !state || !zipCode}
+                                            className="px-8 h-12 rounded-full font-bold uppercase tracking-wide text-white shadow-gold hover:shadow-lg transition-all"
+                                        >
+                                            {saving ? "Saving..." : "Save Address"}
                                         </Button>
                                     </div>
 
@@ -392,18 +455,22 @@ export default function CheckoutPage() {
                             </div>
 
                             {/* Items */}
-                            <div className="border-b border-border/60">
-                                <div className="grid grid-cols-2 p-4 text-sm">
-                                    <span className="text-muted-foreground">Pizza Margherita <span className="text-foreground font-semibold">× 2</span></span>
-                                    <span className="text-right font-bold text-primary">$50.00</span>
+                            {cartItems.map((item) => (
+                                <div key={item.id} className="border-b border-border/60">
+                                    <div className="grid grid-cols-2 p-4 text-sm">
+                                        <span className="text-muted-foreground">{item.product.title} <span className="text-foreground font-semibold">× {item.quantity}</span></span>
+                                        <span className="text-right font-bold text-primary">${parseFloat(item.total_price).toFixed(2)}</span>
+                                    </div>
                                 </div>
-                            </div>
+                            ))}
 
                             {/* Subtotal */}
                             <div className="border-b border-border/60">
                                 <div className="grid grid-cols-2 p-4">
                                     <span className="font-bold text-foreground text-sm uppercase">Subtotal</span>
-                                    <span className="text-right font-bold text-primary">$50.00</span>
+                                    <span className="text-right font-bold text-primary">
+                                        ${cartItems.reduce((acc, item) => acc + parseFloat(item.total_price), 0).toFixed(2)}
+                                    </span>
                                 </div>
                             </div>
 
@@ -419,7 +486,9 @@ export default function CheckoutPage() {
                             <div>
                                 <div className="grid grid-cols-2 p-4">
                                     <span className="font-bold text-foreground text-sm uppercase">Total</span>
-                                    <span className="text-right font-bold text-primary text-xl">$50.00</span>
+                                    <span className="text-right font-bold text-primary text-xl">
+                                        ${cartItems.reduce((acc, item) => acc + parseFloat(item.total_price), 0).toFixed(2)}
+                                    </span>
                                 </div>
                             </div>
                         </div>
