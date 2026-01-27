@@ -87,7 +87,7 @@ export function ShopSidebar() {
                                     </div>
                                     <div className="flex-1 min-w-0">
                                         <div className="flex justify-between items-start gap-2">
-                                            <h4 className="text-[18px] font-display font-medium text-[#444] leading-tight group-hover:text-primary transition-colors">
+                                            <h4 className="text-[18px] font-display font-medium text-[#444] leading-tight transition-colors">
                                                 {item.product.title}
                                             </h4>
                                             <button
