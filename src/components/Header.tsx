@@ -90,7 +90,7 @@ export const Header = () => {
           <div className="flex items-center justify-between h-42">
             {/* Logo */}
             {/* Logo */}
-            <a href="#" className="flex items-center gap-2">
+            <a href="/" className="flex items-center gap-2">
               <Image
                 src="/logo_1.png"
                 alt="Fooddy Logo"
