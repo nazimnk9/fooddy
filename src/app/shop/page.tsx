@@ -33,14 +33,31 @@ function ShopPageContent() {
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
+    const [sortBy, setSortBy] = useState("newest");
+
+    const getOrderingValue = (value: string) => {
+        switch (value) {
+            case "newest": return "-created_at";
+            case "oldest": return "created_at";
+            case "price-low": return "price";
+            case "price-high": return "-price";
+            default: return "-created_at";
+        }
+    };
 
     useEffect(() => {
         const fetchProducts = async () => {
             setLoading(true);
             try {
-                // When clicking "Shop" from Header, searchParams might be empty or just contain 'view'.
-                // The user requested no query params specifically for the API call in this case.
-                const response = await getProducts();
+                const ordering = getOrderingValue(sortBy);
+                const minPrice = searchParams.get('min_price') || "";
+                const maxPrice = searchParams.get('max_price') || "";
+
+                let query = `ordering=${ordering}`;
+                if (minPrice) query += `&min_price=${minPrice}`;
+                if (maxPrice) query += `&max_price=${maxPrice}`;
+
+                const response = await getProducts(query);
                 setProducts(response.results);
             } catch (error) {
                 console.error("Error fetching products:", error);
@@ -50,7 +67,7 @@ function ShopPageContent() {
         };
 
         fetchProducts();
-    }, []); // Only fetch on mount to satisfy "do not pass any query params" when coming from Header
+    }, [sortBy, searchParams]);
 
     useEffect(() => {
         if (viewParam === 'list') {
@@ -125,12 +142,13 @@ function ShopPageContent() {
                             </div>
 
                             <div className="flex items-center">
-                                <Select defaultValue="latest">
+                                <Select value={sortBy} onValueChange={setSortBy}>
                                     <SelectTrigger className="w-[180px] rounded-full border-muted-foreground/20">
-                                        <SelectValue placeholder="Sort by latest" />
+                                        <SelectValue placeholder="Filter" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="latest">Sort by latest</SelectItem>
+                                        <SelectItem value="newest">Sort by newest</SelectItem>
+                                        <SelectItem value="oldest">Sort by oldest</SelectItem>
                                         <SelectItem value="price-low">Price: Low to High</SelectItem>
                                         <SelectItem value="price-high">Price: High to Low</SelectItem>
                                     </SelectContent>

@@ -1,23 +1,43 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams, useSearchParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Checkbox } from "@/components/ui/checkbox";
 import { getCategories, getTags, Category, Tag } from "@/services/menuService";
 import { SidebarSkeleton } from "@/components/skeletons";
 import { cn } from "@/lib/utils";
+import { useCart } from "@/context/CartContext";
+import Image from "next/image";
+import { X } from "lucide-react";
 
 export function ShopSidebar() {
     const params = useParams();
     const searchParams = useSearchParams();
+    const router = useRouter();
     const activeId = params?.id ? params.id.toString() : null;
     const isTag = searchParams.get('type') === 'tag';
 
-    const [priceRange, setPriceRange] = useState([0, 100]);
+    // Initialize from URL or defaults
+    const urlMin = parseInt(searchParams.get('min_price') || "0");
+    const urlMax = parseInt(searchParams.get('max_price') || "100");
+
+    const [priceRange, setPriceRange] = useState([urlMin, urlMax]);
     const [categories, setCategories] = useState<Category[]>([]);
     const [tags, setTags] = useState<Tag[]>([]);
     const [loading, setLoading] = useState(true);
+
+    // Sync state with URL when searchParams change (e.g. on navigation)
+    useEffect(() => {
+        const min = parseInt(searchParams.get('min_price') || "0");
+        const max = parseInt(searchParams.get('max_price') || "100");
+        setPriceRange([min, max]);
+    }, [searchParams]);
+    const { cartItems, removeFromCart, isLoading: isCartLoading } = useCart();
+
+    const subtotal = cartItems.reduce((acc, item) => {
+        return acc + (parseFloat(item.product.price) * item.quantity);
+    }, 0);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -46,8 +66,67 @@ export function ShopSidebar() {
         <div className="space-y-8">
             {/* Shopping Cart */}
             <div className="bg-[#f4f4f4] p-8 rounded-sm">
-                <h3 className="text-2xl font-display font-medium text-foreground mb-4">Shopping Cart</h3>
-                <p className="text-muted-foreground text-sm">No products in the cart.</p>
+                <h3 className="text-2xl font-display font-medium text-foreground mb-6">Shopping Cart</h3>
+
+                {cartItems.length === 0 ? (
+                    <p className="text-muted-foreground text-sm">No products in the cart.</p>
+                ) : (
+                    <div className="space-y-6">
+                        <div className="space-y-4 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+                            {cartItems.map((item) => (
+                                <div key={item.id} className="flex gap-4 group">
+                                    <div className="relative w-16 h-16 shrink-0 bg-white rounded-sm overflow-hidden border border-border/50">
+                                        {item.product.images?.[0]?.image && (
+                                            <Image
+                                                src={item.product.images[0].image}
+                                                alt={item.product.title}
+                                                fill
+                                                className="object-cover"
+                                            />
+                                        )}
+                                    </div>
+                                    <div className="flex-1 min-w-0">
+                                        <div className="flex justify-between items-start gap-2">
+                                            <h4 className="text-[18px] font-display font-medium text-[#444] leading-tight group-hover:text-primary transition-colors">
+                                                {item.product.title}
+                                            </h4>
+                                            <button
+                                                onClick={() => removeFromCart(item.id)}
+                                                className="w-4 h-4 rounded bg-[#444] text-white flex items-center justify-center hover:bg-primary transition-colors mt-1 shrink-0"
+                                            >
+                                                <X className="w-3 h-3" />
+                                            </button>
+                                        </div>
+                                        <div className="mt-1 flex items-center gap-1 text-sm">
+                                            <span className="text-muted-foreground">{item.quantity} ×</span>
+                                            <span className="text-[#ff6b01] font-bold">${parseFloat(item.product.price).toFixed(2)}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        <div className="pt-4 border-t border-border/50 space-y-6">
+                            <div className="flex justify-end items-baseline gap-2 text-muted-foreground font-display">
+                                <span className="text-lg font-medium">Subtotal:</span>
+                                <span className="text-xl font-bold text-[#ff6b01]">${subtotal.toFixed(2)}</span>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-3">
+                                <Link href="/cart">
+                                    <Button className="w-full rounded-full bg-[#ffb936] hover:bg-[#ffa700] text-white font-bold h-11 uppercase text-[11px] border-none shadow-sm">
+                                        View Cart
+                                    </Button>
+                                </Link>
+                                <Link href="/checkout">
+                                    <Button className="w-full rounded-full bg-[#ffb936] hover:bg-[#ffa700] text-white font-bold h-11 uppercase text-[11px] border-none shadow-sm">
+                                        Checkout
+                                    </Button>
+                                </Link>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
 
             {/* Price Filter */}
@@ -67,7 +146,17 @@ export function ShopSidebar() {
                     </div>
                 </div>
                 <div className="flex justify-end">
-                    <Button className="rounded-full px-6 font-bold text-xs h-9 uppercase">Filter</Button>
+                    <Button
+                        onClick={() => {
+                            const params = new URLSearchParams(searchParams.toString());
+                            params.set('min_price', priceRange[0].toString());
+                            params.set('max_price', priceRange[1].toString());
+                            router.push(`?${params.toString()}`, { scroll: false });
+                        }}
+                        className="rounded-full px-6 font-bold text-xs h-9 uppercase"
+                    >
+                        Filter
+                    </Button>
                 </div>
             </div>
 

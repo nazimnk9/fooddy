@@ -30,6 +30,17 @@ function ShopCategoryContent() {
     const [products, setProducts] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [displayTitle, setDisplayTitle] = useState("");
+    const [sortBy, setSortBy] = useState("newest");
+
+    const getOrderingValue = (value: string) => {
+        switch (value) {
+            case "newest": return "-created_at";
+            case "oldest": return "created_at";
+            case "price-low": return "price";
+            case "price-high": return "-price";
+            default: return "-created_at";
+        }
+    };
 
     // Check if we are filtering by tag based on query param ?type=tag
     const type = searchParams.get('type');
@@ -53,11 +64,14 @@ function ShopCategoryContent() {
             try {
                 // Fetch Products
                 let query = "";
-                if (isTag) {
-                    query = `tags__id=${categoryId}`;
-                } else {
-                    query = `category__id=${categoryId}`;
-                }
+                const ordering = getOrderingValue(sortBy);
+                const minPrice = searchParams.get('min_price') || "";
+                const maxPrice = searchParams.get('max_price') || "";
+
+                const baseQuery = isTag ? `tags__id=${categoryId}` : `category__id=${categoryId}`;
+                query = `${baseQuery}&ordering=${ordering}`;
+                if (minPrice) query += `&min_price=${minPrice}`;
+                if (maxPrice) query += `&max_price=${maxPrice}`;
 
                 const productsData = await getProducts(query);
 
@@ -81,7 +95,7 @@ function ShopCategoryContent() {
         };
 
         fetchData();
-    }, [categoryId, isTag]);
+    }, [categoryId, isTag, sortBy, searchParams]);
 
     const handleViewChange = (mode: 'grid' | 'list') => {
         setViewMode(mode);
@@ -148,12 +162,13 @@ function ShopCategoryContent() {
                             </div>
 
                             <div className="flex items-center">
-                                <Select defaultValue="latest">
+                                <Select value={sortBy} onValueChange={setSortBy}>
                                     <SelectTrigger className="w-[180px] rounded-full border-muted-foreground/20">
-                                        <SelectValue placeholder="Sort by latest" />
+                                        <SelectValue placeholder="Filter" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="latest">Sort by latest</SelectItem>
+                                        <SelectItem value="newest">Sort by newest</SelectItem>
+                                        <SelectItem value="oldest">Sort by oldest</SelectItem>
                                         <SelectItem value="price-low">Price: Low to High</SelectItem>
                                         <SelectItem value="price-high">Price: High to Low</SelectItem>
                                     </SelectContent>
