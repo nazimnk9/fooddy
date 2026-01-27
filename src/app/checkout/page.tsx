@@ -35,11 +35,12 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { getCookie } from "@/utils/cookieUtils";
-import { BASE_URL } from "@/services/authService";
+import { getCookie, setCookie } from "@/utils/cookieUtils";
+import { BASE_URL, loginUser } from "@/services/authService";
 import { getAddresses, createAddress, updateAddress, deleteAddress, Address } from "@/services/addressService";
 import { getCart, CartItem } from "@/services/cartService";
 import { checkoutOnline, placeOrderCOD } from "@/services/checkoutService";
+import { useRouter } from "next/navigation";
 
 import pizzaMargherita from "@/assets/food/pizza-margherita.jpg";
 
@@ -53,6 +54,7 @@ import pizzaMargherita from "@/assets/food/pizza-margherita.jpg";
 // }
 
 export default function CheckoutPage() {
+    const router = useRouter();
     const [showLogin, setShowLogin] = useState(false);
     const [showCoupon, setShowCoupon] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
@@ -62,6 +64,7 @@ export default function CheckoutPage() {
     const [addresses, setAddresses] = useState<Address[]>([]);
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const [loading, setLoading] = useState(true);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [saving, setSaving] = useState(false);
     const [placingOrder, setPlacingOrder] = useState(false);
     const [selectedAddressId, setSelectedAddressId] = useState<number | null>(null);
@@ -81,6 +84,10 @@ export default function CheckoutPage() {
     const [updateCity, setUpdateCity] = useState("");
     const [updateState, setUpdateState] = useState("");
     const [updateZipCode, setUpdateZipCode] = useState("");
+
+    // Login state
+    const [loginEmail, setLoginEmail] = useState("");
+    const [loginPassword, setLoginPassword] = useState("");
 
     const fetchAddresses = async () => {
         try {
@@ -102,12 +109,18 @@ export default function CheckoutPage() {
 
     useEffect(() => {
         const loadInitialData = async () => {
+            const token = getCookie("access_token");
+            if (!token) {
+                router.push("/");
+                return;
+            }
+            setIsLoggedIn(true);
             setLoading(true);
             await Promise.all([fetchAddresses(), fetchCartData()]);
             setLoading(false);
         };
         loadInitialData();
-    }, []);
+    }, [router]);
 
     const handleSaveAddress = async (e: React.MouseEvent) => {
         e.preventDefault();
@@ -218,6 +231,29 @@ export default function CheckoutPage() {
         setIsDeleteModalOpen(true);
     };
 
+    const handleLogin = async () => {
+        if (!loginEmail || !loginPassword) {
+            alert("Please enter both email and password");
+            return;
+        }
+
+        setSaving(true);
+        try {
+            const response = await loginUser({ email: loginEmail, password: loginPassword });
+            if (response.access) {
+                setCookie("access_token", response.access, 7);
+                setIsLoggedIn(true);
+                setShowLogin(false);
+                await Promise.all([fetchAddresses(), fetchCartData()]);
+            }
+        } catch (error) {
+            console.error("Login failed:", error);
+            alert("Login failed. Please check your credentials.");
+        } finally {
+            setSaving(false);
+        }
+    };
+
     return (
         <div className="min-h-screen bg-background flex flex-col">
             <Header />
@@ -252,49 +288,64 @@ export default function CheckoutPage() {
                 <div className="container-fooddy max-w-6xl">
 
                     {/* Returning Customer Toggle */}
-                    <div className="mb-8">
-                        <div className="border-t-2 border-muted bg-muted/10 p-4 text-sm text-muted-foreground flex gap-2 items-center">
-                            <Folder className="w-4 h-4" />
-                            <span>Returning customer? <button onClick={() => setShowLogin(!showLogin)} className="text-primary hover:underline">Click here to login</button></span>
-                        </div>
+                    {!isLoggedIn && (
+                        <div className="mb-8">
+                            <div className="border-t-2 border-muted bg-muted/10 p-4 text-sm text-muted-foreground flex gap-2 items-center">
+                                <Folder className="w-4 h-4" />
+                                <span>Returning customer? <button onClick={() => setShowLogin(!showLogin)} className="text-primary hover:underline">Click here to login</button></span>
+                            </div>
 
-                        {showLogin && (
-                            <div className="mt-6 p-6 border border-border rounded-sm animate-fade-in">
-                                <p className="text-muted-foreground text-sm mb-4">If you have shopped with us before, please enter your details below. If you are a new customer, please proceed to the Billing & Shipping section.</p>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
-                                    <div className="space-y-2">
-                                        <Label htmlFor="login-username">Username or email <span className="text-destructive">*</span></Label>
-                                        <Input id="login-username" className="bg-white rounded-full" />
-                                    </div>
-                                    <div className="space-y-2">
-                                        <Label htmlFor="login-password">Password <span className="text-destructive">*</span></Label>
-                                        <div className="relative">
+                            {showLogin && (
+                                <div className="mt-6 p-6 border border-border rounded-sm animate-fade-in">
+                                    <p className="text-muted-foreground text-sm mb-4">If you have shopped with us before, please enter your details below. If you are a new customer, please proceed to the Billing & Shipping section.</p>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+                                        <div className="space-y-2">
+                                            <Label htmlFor="login-username">Username or email <span className="text-destructive">*</span></Label>
                                             <Input
-                                                id="login-password"
-                                                type={showPassword ? "text" : "password"}
-                                                className="bg-white rounded-full pr-10"
+                                                id="login-username"
+                                                className="bg-white rounded-full"
+                                                value={loginEmail}
+                                                onChange={(e) => setLoginEmail(e.target.value)}
                                             />
-                                            <button
-                                                type="button"
-                                                onClick={() => setShowPassword(!showPassword)}
-                                                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                                            >
-                                                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                                            </button>
+                                        </div>
+                                        <div className="space-y-2">
+                                            <Label htmlFor="login-password">Password <span className="text-destructive">*</span></Label>
+                                            <div className="relative">
+                                                <Input
+                                                    id="login-password"
+                                                    type={showPassword ? "text" : "password"}
+                                                    className="bg-white rounded-full pr-10"
+                                                    value={loginPassword}
+                                                    onChange={(e) => setLoginPassword(e.target.value)}
+                                                />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setShowPassword(!showPassword)}
+                                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                                                >
+                                                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
+                                    <div className="flex items-center gap-2 mb-4">
+                                        <Checkbox id="remember-me" />
+                                        <Label htmlFor="remember-me" className="font-normal text-muted-foreground">Remember me</Label>
+                                    </div>
+                                    <div className="flex items-center gap-4">
+                                        <Button
+                                            className="rounded-full px-8 font-bold uppercase"
+                                            onClick={handleLogin}
+                                            disabled={saving}
+                                        >
+                                            {saving ? "Logging in..." : "Login"}
+                                        </Button>
+                                        <Link href="#" className="text-primary hover:underline text-sm">Lost your password?</Link>
+                                    </div>
                                 </div>
-                                <div className="flex items-center gap-2 mb-4">
-                                    <Checkbox id="remember-me" />
-                                    <Label htmlFor="remember-me" className="font-normal text-muted-foreground">Remember me</Label>
-                                </div>
-                                <div className="flex items-center gap-4">
-                                    <Button className="rounded-full px-8 font-bold uppercase">Login</Button>
-                                    <Link href="#" className="text-primary hover:underline text-sm">Lost your password?</Link>
-                                </div>
-                            </div>
-                        )}
-                    </div>
+                            )}
+                        </div>
+                    )}
 
                     {/* Coupon Toggle */}
                     <div className="mb-12">
