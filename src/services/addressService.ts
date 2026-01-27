@@ -54,3 +54,41 @@ export const createAddress = async (addressData: CreateAddressData) => {
 
     return await response.json();
 };
+
+export const updateAddress = async (id: number, addressData: Partial<CreateAddressData>) => {
+    const token = getCookie("access_token");
+    if (!token) throw new Error("No access token found");
+
+    const response = await fetch(`${BASE_URL}/orders/address/${id}`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+        },
+        body: JSON.stringify(addressData),
+    });
+
+    if (!response.ok) {
+        throw new Error(`Failed to update address: ${response.statusText}`);
+    }
+
+    return await response.json();
+};
+
+export const deleteAddress = async (id: number) => {
+    const token = getCookie("access_token");
+    if (!token) throw new Error("No access token found");
+
+    const response = await fetch(`${BASE_URL}/orders/address/${id}`, {
+        method: "DELETE",
+        headers: {
+            "Authorization": `Bearer ${token}`,
+        },
+    });
+
+    if (!response.ok) {
+        throw new Error(`Failed to delete address: ${response.statusText}`);
+    }
+
+    return true;
+};

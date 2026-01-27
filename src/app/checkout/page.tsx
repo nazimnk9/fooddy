@@ -18,9 +18,26 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Label } from "@/components/ui/label";
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogFooter,
+} from "@/components/ui/dialog";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { getCookie } from "@/utils/cookieUtils";
 import { BASE_URL } from "@/services/authService";
-import { getAddresses, createAddress, Address } from "@/services/addressService";
+import { getAddresses, createAddress, updateAddress, deleteAddress, Address } from "@/services/addressService";
 import { getCart, CartItem } from "@/services/cartService";
 
 import pizzaMargherita from "@/assets/food/pizza-margherita.jpg";
@@ -45,12 +62,22 @@ export default function CheckoutPage() {
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
+    const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+    const [updatingAddress, setUpdatingAddress] = useState<Address | null>(null);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [addressToDelete, setAddressToDelete] = useState<Address | null>(null);
 
     // Form state for new address
     const [street, setStreet] = useState("");
     const [city, setCity] = useState("");
     const [state, setState] = useState("");
     const [zipCode, setZipCode] = useState("");
+
+    // Form state for update address
+    const [updateStreet, setUpdateStreet] = useState("");
+    const [updateCity, setUpdateCity] = useState("");
+    const [updateState, setUpdateState] = useState("");
+    const [updateZipCode, setUpdateZipCode] = useState("");
 
     const fetchAddresses = async () => {
         try {
@@ -101,6 +128,58 @@ export default function CheckoutPage() {
         } finally {
             setSaving(false);
         }
+    };
+
+    const handleUpdateAddress = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!updatingAddress) return;
+
+        setSaving(true);
+        try {
+            await updateAddress(updatingAddress.id, {
+                street: updateStreet,
+                city: updateCity,
+                state: updateState,
+                zip_code: updateZipCode
+            });
+            setIsUpdateModalOpen(false);
+            setUpdatingAddress(null);
+            await fetchAddresses();
+        } catch (error) {
+            console.error("Error updating address:", error);
+        } finally {
+            setSaving(false);
+        }
+    };
+
+    const openUpdateModal = (address: Address) => {
+        setUpdatingAddress(address);
+        setUpdateStreet(address.street);
+        setUpdateCity(address.city);
+        setUpdateState(address.state);
+        setUpdateZipCode(address.zip_code);
+        setIsUpdateModalOpen(true);
+    };
+
+    const handleDeleteAddress = async () => {
+        if (!addressToDelete) return;
+
+        setSaving(true);
+        try {
+            await deleteAddress(addressToDelete.id);
+            setAddressToDelete(null);
+            setIsDeleteModalOpen(false);
+            await fetchAddresses();
+        } catch (error) {
+            console.error("Error deleting address:", error);
+        } finally {
+            setSaving(false);
+        }
+    };
+
+    const openDeleteModal = (address: Address) => {
+        setAddressToDelete(address);
+        setIsDeleteModalOpen(true);
     };
 
     return (
@@ -218,10 +297,22 @@ export default function CheckoutPage() {
                                                     <p className="text-sm text-muted-foreground">{address.city}, {address.state} {address.zip_code}</p>
                                                 </div>
                                                 <div className="flex items-center gap-2 opacity-100 group-hover:opacity-100 transition-opacity">
-                                                    <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-secondary">
+                                                    <Button
+                                                        type="button"
+                                                        variant="ghost"
+                                                        size="icon"
+                                                        className="h-8 w-8 text-muted-foreground hover:text-secondary"
+                                                        onClick={() => openUpdateModal(address)}
+                                                    >
                                                         <Pencil className="h-4 w-4" />
                                                     </Button>
-                                                    <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-destructive">
+                                                    <Button
+                                                        type="button"
+                                                        variant="ghost"
+                                                        size="icon"
+                                                        className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                                                        onClick={() => openDeleteModal(address)}
+                                                    >
                                                         <Trash2 className="h-4 w-4" />
                                                     </Button>
                                                 </div>
@@ -545,6 +636,100 @@ export default function CheckoutPage() {
                     </div>
                 </div>
             </main>
+
+            {/* Update Address Modal */}
+            <Dialog open={isUpdateModalOpen} onOpenChange={setIsUpdateModalOpen}>
+                <DialogContent className="sm:max-w-[500px] rounded-3xl">
+                    <DialogHeader>
+                        <DialogTitle className="text-2xl font-display font-semibold">Update Address</DialogTitle>
+                    </DialogHeader>
+                    <form onSubmit={handleUpdateAddress} className="space-y-6 py-4">
+                        <div className="space-y-4">
+                            <div className="space-y-2">
+                                <Label htmlFor="update-street">Street address <span className="text-destructive">*</span></Label>
+                                <Input
+                                    id="update-street"
+                                    className="bg-muted/30 rounded-full"
+                                    required
+                                    value={updateStreet}
+                                    onChange={(e) => setUpdateStreet(e.target.value)}
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="update-city">Town / City <span className="text-destructive">*</span></Label>
+                                <Input
+                                    id="update-city"
+                                    className="bg-muted/30 rounded-full"
+                                    required
+                                    value={updateCity}
+                                    onChange={(e) => setUpdateCity(e.target.value)}
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="update-state">State <span className="text-destructive">*</span></Label>
+                                <Input
+                                    id="update-state"
+                                    className="bg-muted/30 rounded-full"
+                                    required
+                                    value={updateState}
+                                    onChange={(e) => setUpdateState(e.target.value)}
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="update-zip">ZIP Code <span className="text-destructive">*</span></Label>
+                                <Input
+                                    id="update-zip"
+                                    className="bg-muted/30 rounded-full"
+                                    required
+                                    value={updateZipCode}
+                                    onChange={(e) => setUpdateZipCode(e.target.value)}
+                                />
+                            </div>
+                        </div>
+                        <DialogFooter className="flex-row gap-2 sm:justify-end">
+                            <Button
+                                type="button"
+                                variant="ghost"
+                                className="rounded-full px-6"
+                                onClick={() => setIsUpdateModalOpen(false)}
+                            >
+                                Cancel
+                            </Button>
+                            <Button
+                                type="submit"
+                                disabled={saving}
+                                className="rounded-full px-8 font-bold uppercase shadow-gold hover:shadow-lg transition-all"
+                            >
+                                {saving ? "Updating..." : "Update Address"}
+                            </Button>
+                        </DialogFooter>
+                    </form>
+                </DialogContent>
+            </Dialog>
+
+            {/* Delete Confirmation Modal */}
+            <AlertDialog open={isDeleteModalOpen} onOpenChange={setIsDeleteModalOpen}>
+                <AlertDialogContent className="rounded-3xl">
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Are you sure you want to delete this address?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            This action cannot be undone. This will permanently delete your address
+                            from our servers.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter className="flex-row gap-2 sm:justify-end">
+                        <AlertDialogCancel className="rounded-full px-6">Cancel</AlertDialogCancel>
+                        <Button
+                            onClick={handleDeleteAddress}
+                            disabled={saving}
+                            variant="destructive"
+                            className="rounded-full px-8 font-bold uppercase transition-all"
+                        >
+                            {saving ? "Deleting..." : "Delete"}
+                        </Button>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
 
             <Footer />
         </div>
