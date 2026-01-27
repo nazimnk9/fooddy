@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Label } from "@/components/ui/label";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
     Dialog,
     DialogContent,
@@ -372,7 +373,23 @@ export default function CheckoutPage() {
 
                             <div className="space-y-6">
                                 {loading ? (
-                                    <p className="text-muted-foreground">Loading addresses...</p>
+                                    <div className="grid gap-4">
+                                        {[1, 2, 3].map((i) => (
+                                            <div key={i} className="p-4 rounded-xl border border-border bg-white flex justify-between items-center group">
+                                                <div className="flex items-center gap-4 flex-1">
+                                                    <Skeleton className="w-5 h-5 rounded-full" />
+                                                    <div className="space-y-2 flex-1">
+                                                        <Skeleton className="h-5 w-1/3" />
+                                                        <Skeleton className="h-4 w-1/2" />
+                                                    </div>
+                                                </div>
+                                                <div className="flex items-center gap-2">
+                                                    <Skeleton className="h-8 w-8 rounded-md" />
+                                                    <Skeleton className="h-8 w-8 rounded-md" />
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
                                 ) : addresses.length === 0 ? (
                                     <p className="text-muted-foreground italic text-center py-4 bg-muted/5 rounded-xl border border-dashed border-border">No address found</p>
                                 ) : (
