@@ -558,13 +558,13 @@ export default function CheckoutPage() {
                                         <Label htmlFor="address">Street address <span className="text-destructive">*</span></Label>
                                         <Input
                                             id="address"
-                                            placeholder="House number and street name"
+                                            //placeholder="House number and street name"
                                             className="bg-white rounded-full"
                                             required
                                             value={street}
                                             onChange={(e) => setStreet(e.target.value)}
                                         />
-                                        <Input id="address2" placeholder="Apartment, suite, unit, etc. (optional)" className="bg-white rounded-full" />
+                                        {/* <Input id="address2" placeholder="Apartment, suite, unit, etc. (optional)" className="bg-white rounded-full" /> */}
                                     </div>
 
                                     <div className="space-y-2">
