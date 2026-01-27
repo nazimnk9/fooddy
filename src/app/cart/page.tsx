@@ -143,7 +143,7 @@ export default function CartPage() {
                                                         type="number"
                                                         value={localQuantities[item.id] || ""}
                                                         onChange={(e) => handleQuantityChange(item.id, parseInt(e.target.value) || 1)}
-                                                        className="w-full text-center bg-transparent focus:outline-none font-semibold text-foreground text-sm"
+                                                        className="w-full text-center bg-transparent focus:outline-none font-semibold text-foreground text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                                         min="1"
                                                         disabled={isLoading}
                                                     />
