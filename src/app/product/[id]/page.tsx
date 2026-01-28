@@ -6,7 +6,7 @@ import { useParams } from "next/navigation";
 import { Star, ShoppingCart, ChevronUp, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
+import Footer from "@/components/Footer";
 import { cn } from "@/lib/utils";
 import { getProductById, Product } from "@/services/menuService";
 import { useCart } from "@/context/CartContext";

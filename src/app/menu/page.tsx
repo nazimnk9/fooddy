@@ -1,11 +1,13 @@
 "use client";
-import { useState, useMemo, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Search } from "lucide-react";
 import { Header } from "@/components/Header";
-import { MenuHero } from "@/components/MenuHero";
 import { CategoryTabs } from "@/components/CategoryTabs";
 import { FoodCard, FoodItem } from "@/components/FoodCard";
 import Footer from "@/components/Footer";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { getCategories, getProducts, Category } from "@/services/menuService";
 import { ProductCardSkeleton, CategoryTabsSkeleton } from "@/components/skeletons";
 
@@ -17,6 +19,8 @@ const MenuPage = () => {
     const [products, setProducts] = useState<FoodItem[]>([]);
     const [loading, setLoading] = useState(true);
     const [loadingCategories, setLoadingCategories] = useState(true);
+    const [searchInput, setSearchInput] = useState("");
+    const [searchQuery, setSearchQuery] = useState("");
 
     // Fetch Categories
     useEffect(() => {
@@ -34,16 +38,22 @@ const MenuPage = () => {
         fetchCategories();
     }, []);
 
-    // Fetch Products based on active category
+    // Fetch Products based on active category and search query
     useEffect(() => {
         const fetchMenuProducts = async () => {
             setLoading(true);
             try {
-                let query = "";
+                let params = [];
+
                 if (activeCategory !== "All") {
-                    query += `category__id=${activeCategory}`;
+                    params.push(`category__id=${activeCategory}`);
                 }
 
+                if (searchQuery) {
+                    params.push(`search=${encodeURIComponent(searchQuery)}`);
+                }
+
+                const query = params.join("&");
                 const data = await getProducts(query);
 
                 const mappedProducts: FoodItem[] = data.results.map((product) => ({
@@ -66,22 +76,49 @@ const MenuPage = () => {
         };
 
         fetchMenuProducts();
-    }, [activeCategory]);
+    }, [activeCategory, searchQuery]);
+
+    const handleSearch = (e?: React.FormEvent) => {
+        if (e) e.preventDefault();
+        setActiveCategory("All");
+        setSearchQuery(searchInput);
+    };
 
     return (
         <div className="min-h-screen bg-background">
             <Header />
 
-            {/* Hero Banner */}
-            {/* <MenuHero /> */}
-
             {/* Menu Section */}
             <section className="py-20 mt-12">
                 <div className="container-fooddy">
-                    {/* Section Header */}
-                    <div className="mb-12">
-                        <h2 className="section-title mb-4">Our Menu Items</h2>
-                        {/* <p className="section-subtitle">Clients' Most Popular Choice</p> */}
+                    {/* Section Header with Search */}
+                    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-12">
+                        <div>
+                            <h2 className="section-title mb-2">Our Menu Items</h2>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <Button type="submit" variant="outline" className="h-11 px-6" onClick={() => {
+                                        setSearchQuery("");
+                                        setSearchInput("");
+                                    }}>
+                                Reset
+                            </Button>
+                        <form onSubmit={handleSearch} className="flex items-center gap-2 w-full md:max-w-md">
+                            <div className="relative flex-1">
+                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                                <Input
+                                    type="text"
+                                    placeholder="Search your favorite dishes..."
+                                    className="pl-10 h-11 border-muted-foreground/20 focus:border-accent"
+                                    value={searchInput}
+                                    onChange={(e) => setSearchInput(e.target.value)}
+                                />
+                            </div>
+                            <Button type="submit" variant="accent" className="h-11 px-6">
+                                Search
+                            </Button>
+                        </form>
+                        </div>
                     </div>
 
                     {/* Category Tabs */}
@@ -92,7 +129,13 @@ const MenuPage = () => {
                             <CategoryTabs
                                 categories={categories}
                                 activeCategory={activeCategory}
-                                onCategoryChange={setActiveCategory}
+                                onCategoryChange={(id) => {
+                                    setActiveCategory(id);
+                                    if (searchQuery) {
+                                        setSearchQuery("");
+                                        setSearchInput("");
+                                    }
+                                }}
                             />
                         )}
                     </div>
@@ -107,7 +150,7 @@ const MenuPage = () => {
                             </div>
                         ) : (
                             <motion.div
-                                key={activeCategory}
+                                key={`${activeCategory}-${searchQuery}`}
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
@@ -129,8 +172,22 @@ const MenuPage = () => {
                             className="text-center py-16"
                         >
                             <p className="text-muted-foreground text-lg">
-                                No items found in this category.
+                                {searchQuery
+                                    ? `No items found matching "${searchQuery}"`
+                                    : "No items found in this category."}
                             </p>
+                            {/* {searchQuery && (
+                                <Button
+                                    variant="link"
+                                    className="text-accent mt-2"
+                                    onClick={() => {
+                                        setSearchQuery("");
+                                        setSearchInput("");
+                                    }}
+                                >
+                                    Clear search
+                                </Button>
+                            )} */}
                         </motion.div>
                     )}
                 </div>
