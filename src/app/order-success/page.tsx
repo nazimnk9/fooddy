@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { CheckCircle2, ShoppingBag, ArrowRight, Home, Package } from "lucide-react";
 import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
+import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 
 export default function OrderSuccessPage() {
