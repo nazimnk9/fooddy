@@ -1,19 +1,19 @@
 "use client";
 
 import { Header } from "@/components/Header";
-import { Hero } from "@/components/Hero";
-import { Categories } from "@/components/Categories";
-import { HowToOrder } from "@/components/HowToOrder";
+import Hero from "@/components/Hero";
+import MenuCategories from "@/components/MenuCategories";
+import HowToOrder from "@/components/HowToOrder";
 import { AppDownload } from "@/components/AppDownload";
-import { PopularDishes } from "@/components/PopularDishes";
+import PopularMenu from "@/components/PopularMenu";
 import { DealCountdown } from "@/components/DealCountdown";
 import { Restaurants } from "@/components/Restaurants";
 import { Testimonials } from "@/components/Testimonials";
-import { Features } from "@/components/Features";
-import { Blog } from "@/components/Blog";
+import WhyChooseUs from "@/components/WhyChooseUs";
+import BlogSection from "@/components/BlogSection";
 import { Gallery } from "@/components/Gallery";
 import { Newsletter } from "@/components/Newsletter";
-import { Footer } from "@/components/Footer";
+import Footer from "@/components/Footer";
 
 export default function Home() {
     return (
@@ -21,17 +21,17 @@ export default function Home() {
             <Header />
             <main>
                 <Hero />
-                <Categories />
+                <MenuCategories />
                 <HowToOrder />
                 {/* <AppDownload /> */}
-                <PopularDishes />
+                <PopularMenu />
                 {/* <DealCountdown /> */}
                 {/* <Restaurants />
                 <Testimonials /> */}
-                <Features />
-                <Blog />
+                <WhyChooseUs />
+                <BlogSection />
                 {/* <Gallery /> */}
-                <Newsletter />
+                {/* <Newsletter /> */}
             </main>
             <Footer />
         </div>

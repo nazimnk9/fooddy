@@ -1,95 +1,118 @@
-import { motion } from "framer-motion";
-import { MapPin, Store, ClipboardList, Truck } from "lucide-react";
+import { motion } from 'framer-motion';
+import { ShoppingBag, MapPin, CreditCard, Truck } from 'lucide-react';
 
 const steps = [
-  { icon: Store, title: "Add Menu dishes into the cart", step: 1 },
-  { icon: MapPin, title: "Write your location (Within 5 km radious of our Restaurant location)", step: 2 },
-
-  { icon: ClipboardList, title: "Make your order", step: 3 },
-  { icon: Truck, title: "Food is on the way", step: 4 },
+  {
+    icon: ShoppingBag,
+    step: '01',
+    title: 'Add to Cart',
+    description: 'Browse our menu and add your favorite dishes to the cart',
+  },
+  {
+    icon: MapPin,
+    step: '02',
+    title: 'Enter Location',
+    description: 'Write your delivery address (within 5km radius of our restaurant)',
+  },
+  {
+    icon: CreditCard,
+    step: '03',
+    title: 'Place Order',
+    description: 'Review your order and confirm payment securely',
+  },
+  {
+    icon: Truck,
+    step: '04',
+    title: 'Food Delivered',
+    description: 'Relax while we prepare and deliver your delicious meal',
+  },
 ];
 
-export const HowToOrder = () => {
-  return (
-    <section className="py-20 bg-secondary">
-      <div className="container-fooddy">
-        {/* Section Header */}
-        <div className="text-center mb-16">
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="section-subtitle mb-4"
-          >
-            Follow the Steps
-          </motion.p>
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="section-title"
-          >
-            How to order?
-          </motion.h2>
-        </div>
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.15,
+    },
+  },
+};
 
-        {/* Steps */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+const itemVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5 },
+  },
+};
+
+const HowToOrder = () => {
+  return (
+    <section className="section-padding bg-background">
+      <div className="container-custom">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-12"
+        >
+          <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
+            How to Order
+          </h2>
+          <p className="text-muted-foreground max-w-2xl mx-auto">
+            Getting your favorite Italian dishes delivered is easy. Just follow these simple steps.
+          </p>
+        </motion.div>
+
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+        >
           {steps.map((step, index) => (
             <motion.div
               key={step.step}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.15 }}
-              className="text-center group relative md:mb-0 mb-8 last:mb-0"
+              variants={itemVariants}
+              className="relative group"
             >
-              <div className="relative inline-block mb-6">
-                <div className="w-20 h-20 md:w-40 md:h-40 rounded-full mb-4 bg-background flex items-center justify-center mx-auto shadow-md group-hover:shadow-lg transition-shadow">
-                  <step.icon className="w-full h-full text-primary p-3" />
-                </div>
-                <div className="step-number mx-auto group-hover:scale-110 transition-transform">
+              <div className="bg-card border border-border rounded-2xl p-6 h-full card-hover relative overflow-hidden">
+                {/* Step Number Background */}
+                <div className="absolute -right-4 -top-4 text-8xl font-heading font-bold text-secondary opacity-50">
                   {step.step}
                 </div>
-              </div>
-              <h3 className="text-lg font-display font-semibold text-foreground">
-                {step.title}
-              </h3>
-
-              {/* Arrow connector between steps */}
-              {index < steps.length - 1 && (
-                <div className="hidden lg:block absolute top-[8.5rem] -right-[55%] w-full h-12 pointer-events-none z-0">
-                  <svg
-                    width="100%"
-                    height="100%"
-                    viewBox="0 0 100 35"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-full h-full opacity-40"
-                  >
-                    <path
-                      d="M10 9 Q50 40 90 10"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeDasharray="6 4"
-                      className="text-muted-foreground"
-                    />
-                    <path
-                      d="M85 9 L90 12 L86 17"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="text-muted-foreground"
-                    />
-                  </svg>
+                
+                {/* Icon */}
+                <div className="relative mb-6">
+                  <div className="w-16 h-16 rounded-xl bg-accent/10 flex items-center justify-center group-hover:bg-accent/20 transition-colors duration-300">
+                    <step.icon className="w-8 h-8 text-accent" />
+                  </div>
                 </div>
+
+                {/* Content */}
+                <div className="relative">
+                  <h3 className="font-heading text-xl font-bold text-foreground mb-2">
+                    {step.title}
+                  </h3>
+                  <p className="text-muted-foreground text-sm">
+                    {step.description}
+                  </p>
+                </div>
+              </div>
+
+              {/* Connector Line */}
+              {index < steps.length - 1 && (
+                <div className="hidden lg:block absolute top-1/2 -right-3 w-6 h-0.5 bg-border" />
               )}
             </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
 };
+
+export default HowToOrder;

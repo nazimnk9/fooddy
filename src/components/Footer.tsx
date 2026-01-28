@@ -1,170 +1,156 @@
-import {
-  Facebook,
-  Twitter,
-  Instagram,
-  Youtube,
-  MapPin,
-  Phone,
-  Mail,
-} from "lucide-react";
-import Image from "next/image";
-import downloadBg from "@/assets/Roast.jpeg";
-import downloadBgMobile from "@/assets/khechuri.jpeg";
+import { motion } from 'framer-motion';
+import { MapPin, Phone, Mail, Clock, Facebook, Instagram, Twitter } from 'lucide-react';
+import logo from '@/assets/logo_1.png';
 
-const footerLinks = {
-  company: [
-    { name: "About Us", href: "#" },
-    { name: "Careers", href: "#" },
-    { name: "Blog", href: "#" },
-    { name: "Press", href: "#" },
-  ],
-  support: [
-    { name: "Help Center", href: "#" },
-    { name: "Safety", href: "#" },
-    { name: "Partner", href: "#" },
-    { name: "Terms", href: "#" },
-  ],
-  legal: [
-    { name: "Privacy Policy", href: "#" },
-    { name: "Terms of Service", href: "#" },
-    { name: "Cookies", href: "#" },
-    { name: "Licenses", href: "#" },
-  ],
-};
-
-const socialLinks = [
-  { icon: Facebook, href: "#" },
-  { icon: Twitter, href: "#" },
-  { icon: Instagram, href: "#" },
-  { icon: Youtube, href: "#" },
-];
-
-export const Footer = () => {
+const Footer = () => {
   return (
-    <footer className="relative text-white" id="contact">
-      <div className="absolute inset-0 z-0">
-        {/* Desktop Image */}
-        <Image
-          src={downloadBg}
-          alt="App Download Background"
-          fill
-          className="hidden md:block object-fixed"
-        />
-        {/* Mobile Image */}
-        <Image
-          src={downloadBgMobile}
-          alt="App Download Background Mobile"
-          fill
-          className="block md:hidden object-fixed"
-        />
-        <div className="absolute inset-0 bg-dark/80" />
-      </div>
-      <div className="container-fooddy relative z-10 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+    <footer id="contact" className="bg-primary text-primary-foreground">
+      {/* Main Footer */}
+      <div className="container-custom py-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           {/* Brand */}
-          <div className="lg:col-span-2">
-            <a href="#" className="flex items-center gap-2 mb-4">
-              <Image
-                src="/logo_1.png"
-                alt="Fooddy Logo"
-                width={150}
-                height={50}
-                className="h-35 w-auto object-contain"
-                priority
-              />
-            </a>
-            <p className="text-white/60 mb-6 max-w-xs">
-              Dawat - Restaurant & Grill, your favorite Restaurant and food delivery station. Order delicious and
-              fresh foods from us!
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            <img src={logo.src} alt="Dawat Restaurant" className="h-20 w-auto mb-4" />
+            <p className="text-primary-foreground/70 text-sm mb-6">
+              Experience the authentic taste of Italy with our handcrafted dishes made from the finest ingredients.
             </p>
-            <div className="space-y-3">
-              <div className="flex items-center gap-3 text-white/60">
-                <MapPin className="w-5 h-5 text-primary" />
-                <span>Piazza dei Mirti 19, Rome, Italy</span>
-              </div>
-              <div className="flex items-center gap-3 text-white/60">
-                <Phone className="w-5 h-5 text-primary" />
-                <span>344 4335555</span>
-              </div>
-              <div className="flex items-center gap-3 text-white/60">
-                <Mail className="w-5 h-5 text-primary" />
-                <span>dawatristoranteroma@gmail.com</span>
-              </div>
+            <div className="flex gap-4">
+              <a
+                href="#"
+                className="w-10 h-10 rounded-full bg-primary-foreground/10 flex items-center justify-center hover:bg-accent transition-colors duration-300"
+                aria-label="Facebook"
+              >
+                <Facebook className="w-5 h-5" />
+              </a>
+              <a
+                href="#"
+                className="w-10 h-10 rounded-full bg-primary-foreground/10 flex items-center justify-center hover:bg-accent transition-colors duration-300"
+                aria-label="Instagram"
+              >
+                <Instagram className="w-5 h-5" />
+              </a>
+              <a
+                href="#"
+                className="w-10 h-10 rounded-full bg-primary-foreground/10 flex items-center justify-center hover:bg-accent transition-colors duration-300"
+                aria-label="Twitter"
+              >
+                <Twitter className="w-5 h-5" />
+              </a>
             </div>
-          </div>
+          </motion.div>
 
-          {/* Company Links */}
-          <div>
-            <h4 className="font-semibold mb-4">Company</h4>
-            <ul className="space-y-2">
-              {footerLinks.company.map((link) => (
-                <li key={link.name}>
+          {/* Quick Links */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+          >
+            <h3 className="font-heading text-lg font-bold mb-6">Quick Links</h3>
+            <ul className="space-y-3">
+              {['Home', 'Menu', 'About Us', 'Blog', 'Contact'].map((link) => (
+                <li key={link}>
                   <a
-                    href={link.href}
-                    className="text-white/60 hover:text-primary transition-colors"
+                    href="#"
+                    className="text-primary-foreground/70 hover:text-primary-foreground transition-colors duration-300"
                   >
-                    {link.name}
+                    {link}
                   </a>
                 </li>
               ))}
             </ul>
-          </div>
+          </motion.div>
 
-          {/* Support Links */}
-          <div>
-            <h4 className="font-semibold mb-4">Support</h4>
-            <ul className="space-y-2">
-              {footerLinks.support.map((link) => (
-                <li key={link.name}>
-                  <a
-                    href={link.href}
-                    className="text-white/60 hover:text-primary transition-colors"
-                  >
-                    {link.name}
-                  </a>
-                </li>
-              ))}
+          {/* Opening Hours */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
+            <h3 className="font-heading text-lg font-bold mb-6">Opening Hours</h3>
+            <ul className="space-y-3">
+              <li className="flex items-start gap-3">
+                <Clock className="w-5 h-5 mt-0.5 text-accent" />
+                <div>
+                  <p className="font-medium">Mon - Fri</p>
+                  <p className="text-primary-foreground/70 text-sm">11:00 AM - 10:00 PM</p>
+                </div>
+              </li>
+              <li className="flex items-start gap-3">
+                <Clock className="w-5 h-5 mt-0.5 text-accent" />
+                <div>
+                  <p className="font-medium">Sat - Sun</p>
+                  <p className="text-primary-foreground/70 text-sm">10:00 AM - 11:00 PM</p>
+                </div>
+              </li>
             </ul>
-          </div>
+          </motion.div>
 
-          {/* Legal Links */}
-          <div>
-            <h4 className="font-semibold mb-4">Legal</h4>
-            <ul className="space-y-2">
-              {footerLinks.legal.map((link) => (
-                <li key={link.name}>
-                  <a
-                    href={link.href}
-                    className="text-white/60 hover:text-primary transition-colors"
-                  >
-                    {link.name}
-                  </a>
-                </li>
-              ))}
+          {/* Contact Info */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+          >
+            <h3 className="font-heading text-lg font-bold mb-6">Contact Us</h3>
+            <ul className="space-y-4">
+              <li className="flex items-start gap-3">
+                <MapPin className="w-5 h-5 mt-0.5 text-accent flex-shrink-0" />
+                <p className="text-primary-foreground/70 text-sm">
+                  Via Roma 123, 00100 Roma, Italy
+                </p>
+              </li>
+              <li className="flex items-center gap-3">
+                <Phone className="w-5 h-5 text-accent" />
+                <a
+                  href="tel:+390612345678"
+                  className="text-primary-foreground/70 text-sm hover:text-primary-foreground transition-colors duration-300"
+                >
+                  +39 06 1234 5678
+                </a>
+              </li>
+              <li className="flex items-center gap-3">
+                <Mail className="w-5 h-5 text-accent" />
+                <a
+                  href="mailto:info@dawat.it"
+                  className="text-primary-foreground/70 text-sm hover:text-primary-foreground transition-colors duration-300"
+                >
+                  info@dawat.it
+                </a>
+              </li>
             </ul>
-          </div>
+          </motion.div>
         </div>
       </div>
 
       {/* Bottom Bar */}
-      <div className="border-t border-white/10">
-        <div className="container-fooddy py-6 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-white/40 text-sm">
-            © 2026 Dawat - Restaurant & Grill. All rights reserved.
-          </p>
-          <div className="flex items-center gap-4">
-            {socialLinks.map((social, index) => (
-              <a
-                key={index}
-                href={social.href}
-                className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-colors"
-              >
-                <social.icon className="w-5 h-5" />
+      <div className="border-t border-primary-foreground/10">
+        <div className="container-custom py-6">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <p className="text-primary-foreground/50 text-sm text-center md:text-left">
+              © 2026 Dawat Restaurant. All rights reserved.
+            </p>
+            <div className="flex gap-6 text-sm">
+              <a href="#" className="text-primary-foreground/50 hover:text-primary-foreground transition-colors duration-300">
+                Privacy Policy
               </a>
-            ))}
+              <a href="#" className="text-primary-foreground/50 hover:text-primary-foreground transition-colors duration-300">
+                Terms of Service
+              </a>
+            </div>
           </div>
         </div>
       </div>
     </footer>
   );
 };
+
+export default Footer;
+

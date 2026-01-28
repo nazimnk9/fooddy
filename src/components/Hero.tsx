@@ -1,202 +1,141 @@
 
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import Image from "next/image";
-import { Button } from "@/components/ui/button";
-import { Clock, Store, Smartphone, Truck, ChevronRight, ChevronLeft } from "lucide-react";
-
-// Import desktop images
-import heroImage from "@/assets/hero-food.jpg";
-import heroSweets from "@/assets/Sweets.jpeg";
-import heroChicken from "@/assets/Chicken_curry.jpeg";
-import heroRoast from "@/assets/Roast.jpeg";
-
-// Import mobile images
-import heroPizzaMobile from "@/assets/pizza.jpeg";
-import heroBurgerMobile from "@/assets/burger_2.jpeg";
-import heroRiceMobile from "@/assets/rice_2.jpeg";
-import heroPRiceMobile from "@/assets/p_rice.jpeg";
-import heroKhechuriMobile from "@/assets/khechuri.jpeg";
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import hero1 from '@/assets/hero-1.jpg';
+import hero2 from '@/assets/hero-2.jpg';
+import hero3 from '@/assets/hero-3.jpg';
 
 const slides = [
   {
-    image: heroImage,
-    mobileImage: heroPizzaMobile,
-    title1: "Order Food Delivery",
-    titleHighlighted: "From Your Favorite",
-    title2: "Restaurants!",
-    description: "Order takeaway online from your favorite restaurants",
-    buttonText: "Menu"
+    image: hero1,
+    title: 'Experience Authentic Italian Cuisine',
+    subtitle: 'Where tradition meets modern culinary excellence',
   },
   {
-    image: heroSweets,
-    mobileImage: heroBurgerMobile,
-    title1: "Sweeten Your Day",
-    titleHighlighted: "With Delicious",
-    title2: "Desserts!",
-    description: "Indulge in our wide variety of traditional sweets",
-    buttonText: "Order Sweets"
+    image: hero2,
+    title: 'Fresh Pasta Made Daily',
+    subtitle: 'Handcrafted with passion and the finest ingredients',
   },
   {
-    image: heroChicken,
-    mobileImage: heroRiceMobile,
-    title1: "Spicy & Savory",
-    titleHighlighted: "Authentic",
-    title2: "Chicken Curry!",
-    description: "Taste the rich flavors of our chef's special curry",
-    buttonText: "Order Curry"
+    image: hero3,
+    title: 'Wood-Fired Pizza Perfection',
+    subtitle: 'Crispy, flavorful, and authentically Italian',
   },
-  {
-    image: heroRoast,
-    mobileImage: heroPRiceMobile,
-    title1: "Celebration Special",
-    titleHighlighted: "Premium",
-    title2: "Roast!",
-    description: "Perfect choice for your special family gatherings",
-    buttonText: "Order Roast"
-  }
 ];
 
-const features = [
-  { icon: Clock, text: "24/7 delivery" },
-  { icon: Store, text: "2500 restaurants" },
-  { icon: Smartphone, text: "order with app" },
-  { icon: Truck, text: "fast delivery" },
-];
-
-export const Hero = () => {
+const Hero = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 5000);
+    }, 6000);
     return () => clearInterval(timer);
   }, []);
 
-  const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % slides.length);
-  const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+  const goToSlide = (index: number) => {
+    setCurrentSlide(index);
+  };
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % slides.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+  };
 
   return (
-    <section className="relative min-h-screen flex items-center pt-20 overflow-hidden">
-      {/* Background Image Slider */}
-      <AnimatePresence mode="popLayout">
+    <section id="home" className="relative h-screen w-full overflow-hidden">
+      <AnimatePresence mode="wait">
         <motion.div
           key={currentSlide}
           initial={{ opacity: 0, scale: 1.1 }}
           animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 1.5 }}
-          className="absolute inset-0 z-0"
+          exit={{ opacity: 0, scale: 0.95 }}
+          transition={{ duration: 0.8 }}
+          className="absolute inset-0"
         >
-          {/* Desktop Image */}
-          <Image
-            src={slides[currentSlide].image}
-            alt="Hero Background"
-            className="hidden md:block w-full h-full object-fixed"
-            priority
+          <div
+            className="absolute inset-0 bg-cover bg-center"
+            style={{ backgroundImage: `url(${slides[currentSlide].image.src})` }}
           />
-          {/* Mobile Image */}
-          <Image
-            src={slides[currentSlide].mobileImage}
-            alt="Hero Background Mobile"
-            className="block md:hidden w-full h-full object-fixed"
-            priority
-          />
-          <div className="absolute inset-0 bg-dark/70" />
+          <div className="absolute inset-0 bg-gradient-to-b from-primary/60 via-primary/40 to-primary/70" />
         </motion.div>
       </AnimatePresence>
 
       {/* Content */}
-      <div className="container-fooddy relative z-10 py-20">
-        <div className="max-w-2xl mr-20">
-          <AnimatePresence mode="popLayout">
-            <div key={currentSlide}>
-              <motion.h1
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.6 }}
-                className="text-4xl md:text-6xl lg:text-7xl font-display font-bold text-white leading-tight mb-6"
-              >
-                {slides[currentSlide].title1}
-                <br />
-                <span className="text-primary">{slides[currentSlide].titleHighlighted}</span>
-                <br />
-                {slides[currentSlide].title2}
-              </motion.h1>
-
-              <motion.p
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-                className="text-lg text-white/80 mb-8"
-              >
-                {slides[currentSlide].description}
-              </motion.p>
-
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.6, delay: 0.4 }}
-              >
-                <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-6 text-lg font-semibold shadow-gold">
-                  {slides[currentSlide].buttonText}
-                </Button>
-              </motion.div>
-            </div>
-          </AnimatePresence>
-        </div>
-
-        {/* Navigation Controls */}
-        <div className="absolute right-4 top-1/2 -translate-y-1/2 z-20 hidden md:flex flex-col gap-4">
-          {slides.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setCurrentSlide(index)}
-              className={`w-3 h-3 rounded-full transition-all ${currentSlide === index ? "bg-primary scale-125" : "bg-white/50 hover:bg-white"
-                }`}
-            />
-          ))}
-        </div>
-
-        {/* Navigation Arrows */}
-        <div className="absolute bottom-2 right-4 md:right-10 flex gap-4 z-20">
-          <button
-            onClick={prevSlide}
-            className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center text-white hover:bg-primary hover:text-primary-foreground transition-all"
+      <div className="relative h-full flex items-center justify-center text-center px-4">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentSlide}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -30 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="max-w-4xl"
           >
-            <ChevronLeft className="w-6 h-6" />
-          </button>
-          <button
-            onClick={nextSlide}
-            className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center text-white hover:bg-primary hover:text-primary-foreground transition-all"
-          >
-            <ChevronRight className="w-6 h-6" />
-          </button>
-        </div>
-
-
-        {/* Feature Badges - Kept Constant */}
-        {/* <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.6 }}
-          className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4"
-        >
-          {features.map((feature, index) => (
-            <div
-              key={index}
-              className="flex items-center gap-3 bg-white/10 backdrop-blur-sm rounded-lg px-4 py-3"
-            >
-              <feature.icon className="w-6 h-6 text-primary" />
-              <span className="text-white text-sm font-medium">{feature.text}</span>
+            <h1 className="font-heading text-4xl md:text-6xl lg:text-7xl font-bold text-soft-white mb-6 leading-tight">
+              {slides[currentSlide].title}
+            </h1>
+            <p className="text-lg md:text-xl text-soft-white/90 mb-8 font-body">
+              {slides[currentSlide].subtitle}
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button
+                variant="default"
+                size="lg"
+                className="font-bold bg-[#1e4dc9] hover:bg-[#1e4dc9]/90 text-white min-w-[140px] rounded-md transition-all duration-300"
+              >
+                Order Now
+              </Button>
+              <Button
+                variant="outline"
+                size="lg"
+                className="font-bold border-2 border-white text-white bg-transparent hover:bg-white/10 min-w-[140px] rounded-md transition-all duration-300"
+              >
+                View Menu
+              </Button>
             </div>
-          ))}
-        </motion.div> */}
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
+      {/* Navigation Arrows */}
+      <button
+        onClick={prevSlide}
+        className="absolute left-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-soft-white/10 backdrop-blur-sm hover:bg-soft-white/20 transition-colors duration-300 text-soft-white"
+        aria-label="Previous slide"
+      >
+        <ChevronLeft className="w-6 h-6" />
+      </button>
+      <button
+        onClick={nextSlide}
+        className="absolute right-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-soft-white/10 backdrop-blur-sm hover:bg-soft-white/20 transition-colors duration-300 text-soft-white"
+        aria-label="Next slide"
+      >
+        <ChevronRight className="w-6 h-6" />
+      </button>
+
+      {/* Dots */}
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3">
+        {slides.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => goToSlide(index)}
+            className={`w-3 h-3 rounded-full transition-all duration-300 ${
+              index === currentSlide
+                ? 'bg-accent w-8'
+                : 'bg-soft-white/50 hover:bg-soft-white/80'
+              }`}
+            aria-label={`Go to slide ${index + 1}`}
+          />
+        ))}
       </div>
     </section>
   );
 };
+
+export default Hero;

@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
+import Footer from "@/components/Footer";
 import { ShopSidebar } from "./components/ShopSidebar";
 import { ProductCard } from "./components/ProductCard";
 import { LayoutGrid, List as ListIcon, Loader2, RotateCcw } from "lucide-react";

@@ -5,7 +5,7 @@ import { Header } from "@/components/Header";
 import { MenuHero } from "@/components/MenuHero";
 import { CategoryTabs } from "@/components/CategoryTabs";
 import { FoodCard, FoodItem } from "@/components/FoodCard";
-import { Footer } from "@/components/Footer";
+import Footer from "@/components/Footer";
 import { getCategories, getProducts, Category } from "@/services/menuService";
 import { ProductCardSkeleton, CategoryTabsSkeleton } from "@/components/skeletons";
 
@@ -39,9 +39,9 @@ const MenuPage = () => {
         const fetchMenuProducts = async () => {
             setLoading(true);
             try {
-                let query = "is_popular=true";
+                let query = "";
                 if (activeCategory !== "All") {
-                    query += `&category__id=${activeCategory}`;
+                    query += `category__id=${activeCategory}`;
                 }
 
                 const data = await getProducts(query);
@@ -73,15 +73,15 @@ const MenuPage = () => {
             <Header />
 
             {/* Hero Banner */}
-            <MenuHero />
+            {/* <MenuHero /> */}
 
             {/* Menu Section */}
-            <section className="py-20">
+            <section className="py-20 mt-12">
                 <div className="container-fooddy">
                     {/* Section Header */}
-                    <div className="text-center mb-12">
-                        <h2 className="section-title mb-4">What's Popular</h2>
-                        <p className="section-subtitle">Clients' Most Popular Choice</p>
+                    <div className="mb-12">
+                        <h2 className="section-title mb-4">Our Menu Items</h2>
+                        {/* <p className="section-subtitle">Clients' Most Popular Choice</p> */}
                     </div>
 
                     {/* Category Tabs */}
@@ -112,7 +112,7 @@ const MenuPage = () => {
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
                                 transition={{ duration: 0.3 }}
-                                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+                                className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8"
                             >
                                 {products.map((item, index) => (
                                     <FoodCard key={item.id} item={item} index={index} />

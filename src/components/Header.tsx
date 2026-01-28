@@ -61,7 +61,7 @@ export const Header = () => {
       <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
         {/* Top Header - Home Page Only */}
         {/* {isHomePage && ( */}
-        <div className="bg-primary py-2 px-4 hidden md:block">
+        {/* <div className="bg-primary py-2 px-4 hidden md:block">
           <div className="container-fooddy flex justify-between items-center text-primary-foreground">
             <div className="flex items-center gap-2 text-sm font-medium">
               <span className="opacity-80">Call us for Ordering</span>
@@ -83,7 +83,7 @@ export const Header = () => {
               )}
             </div>
           </div>
-        </div>
+        </div> */}
         {/* )} */}
 
         <div className="container-fooddy py-2">

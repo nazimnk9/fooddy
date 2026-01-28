@@ -22,7 +22,7 @@ export const CategoryTabs = ({
         {activeCategory === "All" && (
           <motion.div
             layoutId="activeCategory"
-            className="absolute inset-0 bg-primary rounded"
+            className="absolute inset-0 bg-accent rounded"
             transition={{ type: "spring", duration: 0.5 }}
           />
         )}
@@ -39,7 +39,7 @@ export const CategoryTabs = ({
           {activeCategory === category.id && (
             <motion.div
               layoutId="activeCategory"
-              className="absolute inset-0 bg-primary rounded"
+              className="absolute inset-0 bg-accent rounded"
               transition={{ type: "spring", duration: 0.5 }}
             />
           )}

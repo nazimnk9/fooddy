@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Open+Sans:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,59 +6,55 @@
 
 @layer base {
   :root {
+    /* Fooddy Color Palette */
     --background: 0 0% 100%;
-    --foreground: 0 0% 7%;
+    --foreground: 0 0% 13%;
 
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 7%;
+    --card-foreground: 0 0% 13%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 7%;
+    --popover-foreground: 0 0% 13%;
 
-    --primary: 0 0% 7%;
-    --primary-foreground: 0 0% 100%;
+    /* Golden Yellow Primary - Fooddy Brand Color */
+    --primary: 43 100% 62%;
+    --primary-foreground: 0 0% 13%;
 
     --secondary: 0 0% 96%;
-    --secondary-foreground: 0 0% 7%;
+    --secondary-foreground: 0 0% 13%;
 
     --muted: 0 0% 96%;
     --muted-foreground: 0 0% 45%;
 
-    --accent: 224 76% 40%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 43 100% 62%;
+    --accent-foreground: 0 0% 13%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
 
     --border: 0 0% 90%;
     --input: 0 0% 90%;
-    --ring: 224 76% 40%;
+    --ring: 43 100% 62%;
 
     --radius: 0.5rem;
-    
-    --rating: 43 96% 56%;
 
-    /* Custom Design Tokens */
-    --font-heading: 'Montserrat', sans-serif;
-    --font-body: 'Inter', sans-serif;
-    
-    --charcoal: 0 0% 7%;
-    --charcoal-light: 0 0% 15%;
-    --soft-white: 0 0% 100%;
+    /* Custom Fooddy Colors */
+    --gold: 43 100% 62%;
+    --gold-dark: 43 100% 50%;
+    --dark: 0 0% 13%;
+    --dark-soft: 0 0% 20%;
     --light-gray: 0 0% 96%;
-    --deep-blue: 224 76% 40%;
-    --deep-blue-hover: 224 76% 35%;
-    --slate: 215 16% 47%;
-    
-    --gradient-dark: linear-gradient(180deg, hsl(0 0% 7%) 0%, hsl(0 0% 15%) 100%);
-    --gradient-accent: linear-gradient(135deg, hsl(224 76% 40%) 0%, hsl(224 76% 50%) 100%);
-    
-    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-    --shadow-card: 0 4px 20px -2px rgb(0 0 0 / 0.08);
-    --shadow-card-hover: 0 12px 40px -4px rgb(0 0 0 / 0.15);
+    --medium-gray: 0 0% 60%;
+
+    /* Gradients */
+    --gradient-gold: linear-gradient(135deg, hsl(43, 100%, 62%) 0%, hsl(35, 100%, 55%) 100%);
+    --gradient-dark: linear-gradient(180deg, hsl(0, 0%, 13%) 0%, hsl(0, 0%, 20%) 100%);
+
+    /* Shadows */
+    --shadow-sm: 0 2px 8px hsl(0 0% 0% / 0.08);
+    --shadow-md: 0 4px 16px hsl(0 0% 0% / 0.12);
+    --shadow-lg: 0 8px 32px hsl(0 0% 0% / 0.16);
+    --shadow-gold: 0 4px 20px hsl(43, 100%, 62%, 0.3);
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -67,46 +63,37 @@
     --sidebar-accent: 240 4.8% 95.9%;
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-ring: 43 100% 62%;
   }
 
   .dark {
-    --background: 0 0% 7%;
-    --foreground: 0 0% 96%;
-
-    --card: 0 0% 10%;
-    --card-foreground: 0 0% 96%;
-
-    --popover: 0 0% 10%;
-    --popover-foreground: 0 0% 96%;
-
-    --primary: 0 0% 100%;
-    --primary-foreground: 0 0% 7%;
-
-    --secondary: 0 0% 15%;
-    --secondary-foreground: 0 0% 96%;
-
-    --muted: 0 0% 15%;
+    --background: 0 0% 8%;
+    --foreground: 0 0% 95%;
+    --card: 0 0% 12%;
+    --card-foreground: 0 0% 95%;
+    --popover: 0 0% 12%;
+    --popover-foreground: 0 0% 95%;
+    --primary: 43 100% 62%;
+    --primary-foreground: 0 0% 13%;
+    --secondary: 0 0% 18%;
+    --secondary-foreground: 0 0% 95%;
+    --muted: 0 0% 18%;
     --muted-foreground: 0 0% 65%;
-
-    --accent: 224 76% 50%;
-    --accent-foreground: 0 0% 100%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
+    --accent: 43 100% 62%;
+    --accent-foreground: 0 0% 13%;
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 0 0% 95%;
     --border: 0 0% 20%;
     --input: 0 0% 20%;
-    --ring: 224 76% 50%;
-
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
+    --ring: 43 100% 62%;
+    --sidebar-background: 0 0% 10%;
+    --sidebar-foreground: 0 0% 95%;
+    --sidebar-primary: 43 100% 62%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-accent: 0 0% 15%;
+    --sidebar-accent-foreground: 0 0% 95%;
+    --sidebar-border: 0 0% 15%;
+    --sidebar-ring: 43 100% 62%;
   }
 }
 
@@ -120,7 +107,7 @@
   }
 
   body {
-    @apply bg-background text-foreground font-body antialiased;
+    @apply bg-background text-foreground font-sans antialiased;
   }
 
   h1,
@@ -129,7 +116,7 @@
   h4,
   h5,
   h6 {
-    @apply font-heading;
+    @apply font-display;
   }
 }
 
@@ -139,7 +126,7 @@
   }
 
   .section-title {
-    @apply text-4xl md:text-5xl font-heading font-bold text-foreground;
+    @apply text-4xl md:text-5xl font-display font-bold text-foreground;
   }
 
   .section-subtitle {
@@ -160,7 +147,7 @@
   }
 
   .category-card-overlay {
-    @apply absolute inset-0 bg-gradient-to-t from-charcoal/80 via-charcoal/30 to-transparent opacity-70 group-hover:opacity-90 transition-opacity duration-300;
+    @apply absolute inset-0 bg-gradient-to-t from-dark/80 via-dark/30 to-transparent opacity-70 group-hover:opacity-90 transition-opacity duration-300;
   }
 
   .dish-card {
@@ -176,7 +163,7 @@
   }
 
   .step-number {
-    @apply w-12 h-12 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-heading font-bold text-xl;
+    @apply w-12 h-12 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-display font-bold text-xl;
   }
 
   .category-tab {
@@ -186,7 +173,7 @@
   }
 
   .category-tab-active {
-    @apply bg-accent text-primary-foreground rounded hover:text-white;
+    @apply bg-primary text-primary-foreground rounded hover:text-white;
   }
 
   .food-card {
@@ -239,33 +226,6 @@
 
   .star-rating {
     @apply flex items-center gap-0.5 text-primary;
-  }
-  .container-custom {
-    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
-  }
-
-  .section-padding {
-    @apply py-16 md:py-24;
-  }
-
-  .text-gradient {
-    @apply bg-gradient-to-r from-accent to-blue-400 bg-clip-text text-transparent;
-  }
-
-  .card-hover {
-    @apply transition-all duration-300 hover:shadow-card-hover hover:-translate-y-1;
-  }
-
-  .btn-primary {
-    @apply bg-primary text-primary-foreground hover:bg-charcoal-light transition-colors duration-300;
-  }
-
-  .btn-accent {
-    @apply bg-accent text-accent-foreground hover:bg-deep-blue-hover transition-colors duration-300;
-  }
-
-  .link-underline {
-    @apply relative after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-accent after:transition-all after:duration-300 hover:after:w-full;
   }
 }
 
@@ -329,14 +289,6 @@
     50% {
       opacity: 0.8;
     }
-  }
-
-   .font-heading {
-    font-family: var(--font-heading);
-  }
-
-  .font-body {
-    font-family: var(--font-body);
   }
 
   .hover-lift {
