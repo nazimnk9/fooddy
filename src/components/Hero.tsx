@@ -64,7 +64,7 @@ const Hero = () => {
             className="absolute inset-0 bg-cover bg-center"
             style={{ backgroundImage: `url(${slides[currentSlide].image.src})` }}
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-primary/60 via-primary/40 to-primary/70" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70" />
         </motion.div>
       </AnimatePresence>
 
@@ -128,8 +128,7 @@ const Hero = () => {
           <button
             key={index}
             onClick={() => goToSlide(index)}
-            className={`w-3 h-3 rounded-full transition-all duration-300 ${
-              index === currentSlide
+            className={`w-3 h-3 rounded-full transition-all duration-300 ${index === currentSlide
                 ? 'bg-accent w-8'
                 : 'bg-soft-white/50 hover:bg-soft-white/80'
               }`}

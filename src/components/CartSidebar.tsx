@@ -117,14 +117,14 @@ export function CartSheetContent({ onAuthRequired }: { onAuthRequired?: () => vo
 
                         <div className="grid grid-cols-2 gap-3">
                             <Link href="/cart" className="w-full" onClick={closeCart}>
-                                <Button variant="outline" className="w-full h-11 border-primary/20 text-primary hover:bg-foreground font-bold rounded-xl">
+                                <Button variant="outline" className="w-full h-11 border-primary/20 text-primary hover:bg-primary font-bold rounded-xl">
                                     VIEW CART
                                 </Button>
                             </Link>
                             <Button
                                 variant="ghost"
                                 onClick={closeCart}
-                                className="w-full h-11 text-muted-foreground hover:text-foreground hover:bg-muted/50 font-bold rounded-xl text-xs uppercase tracking-widest"
+                                className="w-full h-11 text-muted-foreground hover:text-primary hover:bg-primary/50 font-bold rounded-xl text-xs uppercase tracking-widest"
                             >
                                 CLOSE
                             </Button>

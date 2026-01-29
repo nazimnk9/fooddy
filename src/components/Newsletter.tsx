@@ -5,7 +5,7 @@ import { Mail } from "lucide-react";
 
 export const Newsletter = () => {
   return (
-    <section className="py-16 bg-primary">
+    <section className="py-16 bg-[#0b0f19]">
       <div className="container-fooddy">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -33,7 +33,7 @@ export const Newsletter = () => {
                 className="pl-10 bg-white border-0 h-12"
               />
             </div>
-            <Button className="bg-dark text-white hover:bg-dark-soft h-12 px-6">
+            <Button className="bg-primary text-white hover:bg-primary/90 h-12 px-6">
               Subscribe
             </Button>
           </div>

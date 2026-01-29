@@ -42,7 +42,7 @@ export const DealCountdown = () => {
   ];
 
   return (
-    <section className="py-20 bg-primary">
+    <section className="py-20 bg-[#0b0f19]">
       <div className="container-fooddy">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Content */}
@@ -81,7 +81,7 @@ export const DealCountdown = () => {
 
             <Button
               size="lg"
-              className="bg-primary-foreground text-primary hover:bg-primary-foreground/90"
+              className="bg-primary text-primary-foreground hover:bg-primary/90"
             >
               Order Now
             </Button>
