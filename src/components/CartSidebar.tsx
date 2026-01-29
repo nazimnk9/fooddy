@@ -33,7 +33,7 @@ export function CartSheetContent({ onAuthRequired }: { onAuthRequired?: () => vo
                             </div>
                         ) : (
                             cartItems.map((item: UICartItem) => (
-                                <div key={item.id} className="flex gap-4 items-center bg-secondary/30 p-4 rounded-2xl shadow-sm border border-border/40 relative group transition-all hover:shadow-md hover:border-primary/20">
+                                <div key={item.id} className="flex gap-2 items-center bg-secondary/30 p-4 rounded-2xl shadow-sm border border-border/40 relative group transition-all hover:shadow-md hover:border-primary/20">
                                     {/* Remove Button */}
                                     <button
                                         onClick={() => removeFromCart(item.id)}
@@ -60,7 +60,7 @@ export function CartSheetContent({ onAuthRequired }: { onAuthRequired?: () => vo
                                         </div>
                                     </div>
 
-                                    <div className="flex flex-col items-center gap-2 bg-white rounded-full p-1.5 shadow-sm border border-border/50">
+                                    <div className="flex flex-col items-center gap-2 bg-white rounded-full p-1.5 shadow-sm border border-border/50 mr-2">
                                         <button
                                             onClick={() => updateQuantity(item.id, item.quantity + 1)}
                                             className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-primary hover:text-white text-primary transition-all duration-300"
