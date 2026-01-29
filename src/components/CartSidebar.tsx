@@ -37,7 +37,7 @@ export function CartSheetContent({ onAuthRequired }: { onAuthRequired?: () => vo
                                     {/* Remove Button */}
                                     <button
                                         onClick={() => removeFromCart(item.id)}
-                                        className="absolute right-3 top-3 text-muted-foreground hover:text-destructive transition-colors opacity-0 group-hover:opacity-100"
+                                        className="absolute right-1 top-1 text-muted-foreground hover:text-destructive transition-colors opacity-100 group-hover:opacity-100"
                                     >
                                         <Trash2 className="w-4 h-4" />
                                     </button>
@@ -48,7 +48,7 @@ export function CartSheetContent({ onAuthRequired }: { onAuthRequired?: () => vo
                                                 src={item.product.images[0].image}
                                                 alt={item.product.title}
                                                 fill
-                                                className="object-cover"
+                                                className="object-fixed"
                                             />
                                         )}
                                     </div>

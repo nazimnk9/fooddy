@@ -1,8 +1,17 @@
 import { motion } from 'framer-motion';
 import { MapPin, Phone, Mail, Clock, Facebook, Instagram, Twitter } from 'lucide-react';
 import logo from '@/assets/logo_1.png';
+import Link from 'next/link';
 
 const Footer = () => {
+  const quickLinks = [
+    { name: 'Home', href: '/' },
+    { name: 'Menu Items', href: '/menu' },
+    { name: 'About Us', href: '#about' },
+    { name: 'Blog', href: '#' },
+    { name: 'Contact', href: '#contact' },
+  ];
+
   return (
     <footer id="contact" className="bg-primary text-primary-foreground">
       {/* Main Footer */}
@@ -53,14 +62,14 @@ const Footer = () => {
           >
             <h3 className="font-heading text-lg font-bold mb-6">Quick Links</h3>
             <ul className="space-y-3">
-              {['Home', 'Menu', 'About Us', 'Blog', 'Contact'].map((link) => (
-                <li key={link}>
-                  <a
-                    href="#"
+              {quickLinks.map((link) => (
+                <li key={link.name}>
+                  <Link
+                    href={link.href}
                     className="text-primary-foreground/70 hover:text-primary-foreground transition-colors duration-300"
                   >
-                    {link}
-                  </a>
+                    {link.name}
+                  </Link>
                 </li>
               ))}
             </ul>

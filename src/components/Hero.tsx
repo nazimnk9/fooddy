@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import hero1 from '@/assets/hero-1.jpg';
 import hero2 from '@/assets/hero-2.jpg';
 import hero3 from '@/assets/hero-3.jpg';
+import { useRouter } from 'next/navigation';
 
 const slides = [
   {
@@ -27,6 +28,7 @@ const slides = [
 
 const Hero = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const router = useRouter();
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -94,6 +96,7 @@ const Hero = () => {
               <Button
                 variant="outline"
                 size="lg"
+                onClick={() => router.push('/menu')}
                 className="font-bold border-2 border-white text-white bg-transparent hover:bg-white/10 min-w-[140px] rounded-md transition-all duration-300"
               >
                 View Menu

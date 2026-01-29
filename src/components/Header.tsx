@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ShoppingCart, Search, User, Phone } from "lucide-react";
+import { HelpCircle, LogIn, LogOut, Menu, X, ShoppingCart, Search, User, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -16,6 +16,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { CartSheetContent } from "./CartSidebar";
 import { AuthModal } from "./AuthModal";
@@ -119,41 +120,7 @@ export const Header = () => {
               {/* <button className="p-2 text-muted-foreground hover:text-primary transition-colors">
               <Search className="w-5 h-5" />
             </button> */}
-              <DropdownMenu modal={false}>
-                <DropdownMenuTrigger asChild>
-                  <button className="p-2 text-muted-foreground hover:text-primary transition-colors outline-none">
-                    <User className="w-5 h-5" />
-                  </button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  {!isLoggedIn ? (
-                    <DropdownMenuItem
-                      className="cursor-pointer"
-                      onClick={() => setAuthModalOpen(true)}
-                    >
-                      Login
-                    </DropdownMenuItem>
-                  ) : (
-                    <>
-                      <DropdownMenuItem className="cursor-pointer">
-                        Profile
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        className="cursor-pointer text-red-500 focus:text-red-500"
-                        onClick={() => {
-                          deleteCookie("access_token");
-                          deleteCookie("refresh_token");
-                          window.location.reload();
-                        }}
-                      >
-                        Logout
-                      </DropdownMenuItem>
-                    </>
-                  )}
-                </DropdownMenuContent>
-              </DropdownMenu>
-
-              <Sheet modal={false} open={isCartOpen} onOpenChange={isCartOpen ? closeCart : openCart}>
+            <Sheet modal={false} open={isCartOpen} onOpenChange={isCartOpen ? closeCart : openCart}>
                 <SheetTrigger asChild>
                   <button
                     onClick={openCart}
@@ -172,6 +139,53 @@ export const Header = () => {
                   <CartSheetContent onAuthRequired={() => setAuthModalOpen(true)} />
                 </SheetContent>
               </Sheet>
+              <DropdownMenu modal={false}>
+                <DropdownMenuTrigger asChild>
+                  <button className="p-2 text-muted-foreground hover:text-primary transition-colors outline-none">
+                    <User className="w-5 h-5" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-[240px] p-0 rounded-2xl overflow-hidden border-none shadow-[0_2px_20px_rgba(0,0,0,0.15)]">
+                  <div className="p-4 flex flex-col gap-4">
+                    <h3 className="font-bold text-[#1a2b4b] text-xl px-2">Profile</h3>
+
+                    <DropdownMenuItem className="flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer focus:bg-transparent hover:text-primary transition-colors hover:bg-accent/10 focus:bg-accent/10">
+                      <HelpCircle className="w-6 h-6 text-[#1a2b4b]" />
+                      <span className="text-[#1a2b4b] font-medium text-base">Support</span>
+                    </DropdownMenuItem>
+                  </div>
+
+                  {!isLoggedIn ? (
+                    <div className="bg-[#f4f7fa] p-2">
+                      <DropdownMenuItem
+                        className="flex items-center gap-3 px-4 py-3 cursor-pointer rounded-xl hover:bg-accent/10 focus:bg-accent/10"
+                        onClick={() => setAuthModalOpen(true)}
+                      >
+                        <LogIn className="w-6 h-6 text-[#1a2b4b]" />
+                        <span className="text-[#1a2b4b] font-bold text-base">Log in or sign up</span>
+                      </DropdownMenuItem>
+                    </div>
+                  ) : (
+                    <div className="bg-[#f4f7fa] p-2 flex flex-col gap-1">
+                      <DropdownMenuItem className="flex items-center gap-3 px-4 py-3 cursor-pointer rounded-xl hover:bg-accent/10 focus:bg-accent/10">
+                        <User className="w-6 h-6 text-[#1a2b4b]" />
+                        <span className="text-[#1a2b4b] font-bold text-base">Profile</span>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        className="flex items-center gap-3 px-4 py-3 cursor-pointer rounded-xl hover:bg-accent/10 focus:bg-accent/10 text-red-500 focus:text-red-500"
+                        onClick={() => {
+                          deleteCookie("access_token");
+                          deleteCookie("refresh_token");
+                          window.location.reload();
+                        }}
+                      >
+                        <LogOut className="w-6 h-6" />
+                        <span className="font-bold text-base">Logout</span>
+                      </DropdownMenuItem>
+                    </div>
+                  )}
+                </DropdownMenuContent>
+              </DropdownMenu>
 
               {/* Mobile Menu Button */}
               <button
