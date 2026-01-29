@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Plus, Minus, Trash2 } from "lucide-react";
+import { Plus, Minus, Trash2, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
@@ -19,61 +19,67 @@ export function CartSheetContent({ onAuthRequired }: { onAuthRequired?: () => vo
     }, 0);
 
     return (
-        <div className="flex flex-col h-full">
+        <div className="flex flex-col h-full bg-white">
             <div className="flex-1 overflow-hidden">
                 <ScrollArea className="h-full pr-4">
-                    <div className="space-y-6 pt-6">
+                    <div className="space-y-6 pt-2">
                         {cartItems.length === 0 ? (
-                            <div className="text-white text-center py-10 opacity-70">
-                                Your cart is empty
+                            <div className="text-muted-foreground text-center py-20">
+                                <div className="mb-4 opacity-20 flex justify-center">
+                                    <ShoppingCart className="w-16 h-16" />
+                                </div>
+                                <p className="text-lg font-medium">Your cart is empty</p>
+                                <p className="text-sm">Add some delicious dishes to get started!</p>
                             </div>
                         ) : (
                             cartItems.map((item: UICartItem) => (
-                                <div key={item.id} className="flex gap-4 items-center bg-white p-4 rounded-lg shadow-sm border border-border/50 relative group">
+                                <div key={item.id} className="flex gap-4 items-center bg-secondary/30 p-4 rounded-2xl shadow-sm border border-border/40 relative group transition-all hover:shadow-md hover:border-primary/20">
                                     {/* Remove Button */}
                                     <button
                                         onClick={() => removeFromCart(item.id)}
-                                        className="absolute right-2 top-2 text-muted-foreground hover:text-destructive transition-colors"
+                                        className="absolute right-3 top-3 text-muted-foreground hover:text-destructive transition-colors opacity-0 group-hover:opacity-100"
                                     >
                                         <Trash2 className="w-4 h-4" />
                                     </button>
 
-                                    <div className="relative w-20 h-20 rounded-full overflow-hidden shrink-0 border border-border">
+                                    <div className="relative w-20 h-20 rounded-full overflow-hidden shrink-0 border-2 border-white shadow-sm ring-1 ring-border/20">
                                         {item.product.images?.[0]?.image && (
                                             <Image
                                                 src={item.product.images[0].image}
                                                 alt={item.product.title}
                                                 fill
-                                                className="object-fixed"
+                                                className="object-cover"
                                             />
                                         )}
                                     </div>
 
-                                    <div className="flex-1 min-w-0 pr-6">
-                                        <h4 className="font-semibold text-foreground text-sm leading-tight mb-2 pr-4">{item.product.title}</h4>
+                                    <div className="flex-1 min-w-0 pr-2">
+                                        <h4 className="font-bold text-foreground text-sm leading-tight mb-1 line-clamp-2">{item.product.title}</h4>
                                         <div className="flex items-center justify-between">
-                                            <span className="font-bold text-primary">${parseFloat(item.product.price).toFixed(2)}</span>
+                                            <span className="font-extrabold text-primary">${parseFloat(item.product.price).toFixed(2)}</span>
                                         </div>
                                     </div>
 
-                                    <div className="flex flex-col items-center gap-1 bg-muted/20 rounded-full p-1">
+                                    <div className="flex flex-col items-center gap-2 bg-white rounded-full p-1.5 shadow-sm border border-border/50">
                                         <button
                                             onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                                            className="w-6 h-6 flex items-center justify-center rounded-full hover:bg-white hover:shadow-sm text-xs font-bold transition-all"
+                                            className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-primary hover:text-white text-primary transition-all duration-300"
                                             disabled={isLoading}
                                         >
-                                            <Plus className="w-3 h-3" />
+                                            <Plus className="w-3.5 h-3.5" />
                                         </button>
-                                        <span className="text-xs font-semibold">{item.quantity}</span>
+                                        <span className="text-xs font-bold w-4 text-center">{item.quantity}</span>
                                         <button
                                             onClick={() => updateQuantity(item.id, item.quantity - 1)}
                                             disabled={isLoading || item.quantity <= 1}
                                             className={cn(
-                                                "w-6 h-6 flex items-center justify-center rounded-full hover:bg-white hover:shadow-sm text-xs font-bold transition-all",
-                                                (isLoading || item.quantity <= 1) && "opacity-50 cursor-not-allowed"
+                                                "w-7 h-7 flex items-center justify-center rounded-full transition-all duration-300",
+                                                (isLoading || item.quantity <= 1)
+                                                    ? "text-muted-foreground/30 cursor-not-allowed"
+                                                    : "text-primary hover:bg-primary hover:text-white"
                                             )}
                                         >
-                                            <Minus className="w-3 h-3" />
+                                            <Minus className="w-3.5 h-3.5" />
                                         </button>
                                     </div>
                                 </div>
@@ -83,24 +89,17 @@ export function CartSheetContent({ onAuthRequired }: { onAuthRequired?: () => vo
                 </ScrollArea>
             </div>
 
-            <div className="pt-6 mt-auto">
-                <Separator className="mb-4 bg-white/20" />
-                <div className="space-y-4">
+            <div className="pt-6 mt-auto border-t border-border/50">
+                <div className="space-y-5">
                     {/* Total */}
-                    <div className="flex items-center justify-between text-lg font-semibold">
-                        <span className="text-white/80">Total</span>
-                        <span className="text-white">${subtotal.toFixed(2)}</span>
+                    <div className="flex items-center justify-between">
+                        <span className="text-muted-foreground font-medium">Subtotal</span>
+                        <span className="text-2xl font-bold text-foreground">${subtotal.toFixed(2)}</span>
                     </div>
 
                     {/* Buttons */}
-                    <div className="grid grid-cols-2 gap-4">
-                        <Link href="/cart" className="w-full" onClick={closeCart}>
-                            <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-bold">
-                                CART
-                            </Button>
-                        </Link>
-                        <Link
-                            href={isLoggedIn ? "/checkout" : "#"}
+                    <div className="flex flex-col gap-3">
+                        <Link href="/checkout"
                             className="w-full"
                             onClick={(e) => {
                                 if (!isLoggedIn) {
@@ -111,17 +110,32 @@ export function CartSheetContent({ onAuthRequired }: { onAuthRequired?: () => vo
                                 }
                             }}
                         >
-                            <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-bold">
-                                CHECKOUT
+                            <Button className="w-full h-12 bg-primary text-primary-foreground hover:bg-primary/90 font-bold text-base rounded-xl shadow-lg shadow-primary/20 transition-all active:scale-95">
+                                CHECKOUT NOW
                             </Button>
                         </Link>
+
+                        <div className="grid grid-cols-2 gap-3">
+                            <Link href="/cart" className="w-full" onClick={closeCart}>
+                                <Button variant="outline" className="w-full h-11 border-primary/20 text-primary hover:bg-foreground font-bold rounded-xl">
+                                    VIEW CART
+                                </Button>
+                            </Link>
+                            <Button
+                                variant="ghost"
+                                onClick={closeCart}
+                                className="w-full h-11 text-muted-foreground hover:text-foreground hover:bg-muted/50 font-bold rounded-xl text-xs uppercase tracking-widest"
+                            >
+                                CLOSE
+                            </Button>
+                        </div>
                     </div>
 
-                    <div className="text-center">
-                        <Link href="/shop" onClick={closeCart}>
-                            <Button variant="link" className="text-white/80 hover:text-white text-xs uppercase tracking-wider font-semibold">
-                                continue shopping
-                            </Button>
+                    <div className="text-center pb-2">
+                        <Link href="/menu" onClick={closeCart}>
+                            <span className="text-primary hover:underline text-sm font-semibold cursor-pointer">
+                                Continue Shopping
+                            </span>
                         </Link>
                     </div>
                 </div>

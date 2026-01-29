@@ -2,6 +2,7 @@
 import { useState, useEffect, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search } from "lucide-react";
+import { useParams } from "next/navigation";
 import { Header } from "@/components/Header";
 import { CategoryTabs } from "@/components/CategoryTabs";
 import { FoodCard, FoodItem } from "@/components/FoodCard";
@@ -13,9 +14,12 @@ import { ProductCardSkeleton, CategoryTabsSkeleton, MenuSkeleton } from "@/compo
 
 import pizzaMargherita from "@/assets/food/pizza-margherita.jpg"; // Fallback image
 
-const MenuContent = () => {
+const MenuCategoryContent = () => {
+    const params = useParams();
+    const categoryId = params.id as string;
+
     const [categories, setCategories] = useState<Category[]>([]);
-    const [activeCategory, setActiveCategory] = useState<number | "All">("All");
+    const [activeCategory, setActiveCategory] = useState<number | "All">(parseInt(categoryId) || "All");
     const [products, setProducts] = useState<FoodItem[]>([]);
     const [loading, setLoading] = useState(true);
     const [loadingCategories, setLoadingCategories] = useState(true);
@@ -97,10 +101,10 @@ const MenuContent = () => {
                             <h2 className="section-title mb-2">Our Menu Items</h2>
                         </div>
                         <div className="flex items-center gap-2">
-                            <Button type="submit" variant="outline" className="h-11 px-6" onClick={() => {
+                            < Button type="submit" variant="outline" className="h-11 px-6" onClick={() => {
                                 setSearchQuery("");
                                 setSearchInput("");
-                                setActiveCategory("All");
+                                setActiveCategory(parseInt(categoryId) || "All");
                             }}>
                                 Reset
                             </Button>
@@ -188,11 +192,10 @@ const MenuContent = () => {
     );
 };
 
-export default function MenuPage() {
+export default function MenuCategoryPage() {
     return (
         <Suspense fallback={<MenuSkeleton />}>
-            <MenuContent />
+            <MenuCategoryContent />
         </Suspense>
     );
 }
-

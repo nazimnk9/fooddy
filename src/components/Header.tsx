@@ -165,9 +165,9 @@ export const Header = () => {
                     </span>
                   </button>
                 </SheetTrigger>
-                <SheetContent side="left" className="w-full sm:w-[400px] border-none shadow-none bg-black/50 flex flex-col backdrop-blur-[2px]">
-                  <SheetHeader className="px-1">
-                    <SheetTitle className="text-left text-white">Shopping Cart</SheetTitle>
+                <SheetContent side="left" className="w-full sm:w-[400px] border-none shadow-xl bg-white flex flex-col">
+                  <SheetHeader className="px-1 border-b pb-4 mb-4">
+                    <SheetTitle className="text-left text-foreground font-bold text-2xl">Shopping Cart</SheetTitle>
                   </SheetHeader>
                   <CartSheetContent onAuthRequired={() => setAuthModalOpen(true)} />
                 </SheetContent>

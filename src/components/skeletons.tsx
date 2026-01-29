@@ -140,9 +140,42 @@ export function ProductDetailSkeleton() {
 export function CategoryTabsSkeleton() {
     return (
         <div className="flex flex-wrap items-center justify-center gap-2 md:gap-4">
-            {Array.from({ length: 6 }).map((_, i) => (
+            {Array.from({ length: 7 }).map((_, i) => (
                 <Skeleton key={i} className="h-10 w-24 rounded-full" />
             ))}
         </div>
     );
 }
+
+export function MenuSkeleton() {
+    return (
+        <div className="min-h-screen bg-background">
+            <div className="py-20 mt-12">
+                <div className="container-fooddy">
+                    {/* Header Skeleton */}
+                    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-12">
+                        <Skeleton className="h-10 w-48" />
+                        <div className="flex items-center gap-2 w-full md:max-w-md">
+                            <Skeleton className="h-11 w-20 rounded-md" />
+                            <Skeleton className="h-11 flex-1 rounded-md" />
+                            <Skeleton className="h-11 w-24 rounded-md" />
+                        </div>
+                    </div>
+
+                    {/* Tabs Skeleton */}
+                    <div className="mb-12">
+                        <CategoryTabsSkeleton />
+                    </div>
+
+                    {/* Products Grid Skeleton */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+                        {Array.from({ length: 6 }).map((_, i) => (
+                            <ProductCardSkeleton key={i} viewMode="grid" />
+                        ))}
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
+
