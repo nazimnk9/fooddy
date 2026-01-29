@@ -80,7 +80,7 @@ export default function ProductPage() {
 
     return (
         <div className="bg-background flex flex-col">
-            <main className="flex-1 pt-12 pb-20">
+            <main className="flex-1 pt-20 pb-20">
                 <div className="container-fooddy">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-20">
                         {/* Left Column - Image */}
