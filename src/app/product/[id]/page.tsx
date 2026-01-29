@@ -163,7 +163,7 @@ export default function ProductPage() {
                                     className="h-12 px-8 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 font-bold uppercase tracking-wide gap-2"
                                 >
                                     <ShoppingCart className="w-5 h-5" />
-                                    Order
+                                    Add To Cart
                                 </Button>
                             </div>
 
