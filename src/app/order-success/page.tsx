@@ -53,7 +53,7 @@ export default function OrderSuccessPage() {
                                 Keep Shopping
                             </Link>
                         </Button>
-                        <Button asChild variant="outline" className="rounded-full h-14 px-10 font-bold uppercase tracking-wide hover:bg-muted transition-all gap-2 border-2 w-full sm:w-auto">
+                        <Button asChild variant="outline" className="rounded-full h-14 px-10 font-bold uppercase tracking-wide hover:bg-primary transition-all gap-2 border-2 w-full sm:w-auto">
                             <Link href="/">
                                 <Home className="w-5 h-5" />
                                 Back to Home
