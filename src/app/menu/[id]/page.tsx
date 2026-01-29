@@ -87,9 +87,9 @@ const MenuCategoryContent = () => {
     };
 
     return (
-        <div className="bg-background">
+        <div className="bg-background py-36">
             {/* Menu Section */}
-            <section className="py-20">
+            <section className="">
                 <div className="container-fooddy">
                     {/* Section Header with Search */}
                     <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-12">

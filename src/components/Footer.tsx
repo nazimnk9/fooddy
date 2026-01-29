@@ -1,10 +1,12 @@
 "use client";
+import { useState, useEffect } from "react";
 import { motion } from 'framer-motion';
 import { MapPin, Phone, Mail, Clock, Facebook, Instagram, Twitter } from 'lucide-react';
 import logo from '@/assets/logo_1.png';
 import Link from 'next/link';
-
+import { usePathname } from "next/navigation";
 const Footer = () => {
+  const pathname = usePathname();
   const quickLinks = [
     { name: 'Home', href: '/' },
     { name: 'Menu Items', href: '/menu' },
@@ -12,6 +14,11 @@ const Footer = () => {
     { name: 'Blog', href: '#' },
     { name: 'Contact', href: '#contact' },
   ];
+
+  // Scroll to top on route change
+    useEffect(() => {
+      window.scrollTo(0, 0);
+    }, [pathname]);
 
   return (
     <footer id="contact" className="bg-[#0b0f19] text-primary-foreground">
