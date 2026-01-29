@@ -88,7 +88,7 @@ export const Header = () => {
         {/* )} */}
 
         <div className="container-fooddy py-2">
-          <div className="flex items-center justify-between h-42">
+          <div className="flex items-center justify-between h-20">
             {/* Logo */}
             {/* Logo */}
             <a href="/" className="flex items-center gap-2">
@@ -120,7 +120,7 @@ export const Header = () => {
               {/* <button className="p-2 text-muted-foreground hover:text-primary transition-colors">
               <Search className="w-5 h-5" />
             </button> */}
-            <Sheet modal={false} open={isCartOpen} onOpenChange={isCartOpen ? closeCart : openCart}>
+              <Sheet modal={false} open={isCartOpen} onOpenChange={isCartOpen ? closeCart : openCart}>
                 <SheetTrigger asChild>
                   <button
                     onClick={openCart}
