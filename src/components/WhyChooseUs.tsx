@@ -52,7 +52,7 @@ const WhyChooseUs = () => {
         className="absolute inset-0 bg-cover bg-center bg-fixed"
         style={{ backgroundImage: `url(${whyChooseUsBg.src})` }}
       />
-      <div className="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/85 to-primary/70" />
+      <div className="absolute inset-0 bg-gradient-to-r from-foreground/95 via-foreground/85 to-foreground/70" />
 
       {/* Content */}
       <div className="relative container-custom py-20">

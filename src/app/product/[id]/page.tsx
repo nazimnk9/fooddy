@@ -1,12 +1,11 @@
 "use client";
-
 import { useState, useEffect } from "react";
+
+import Link from "next/link";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { Star, ShoppingCart, ChevronUp, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Header } from "@/components/Header";
-import Footer from "@/components/Footer";
 import { cn } from "@/lib/utils";
 import { getProductById, Product } from "@/services/menuService";
 import { useCart } from "@/context/CartContext";
@@ -43,30 +42,26 @@ export default function ProductPage() {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-background flex flex-col">
-                <Header />
+            <div className="bg-background flex flex-col">
                 <div className="flex-1 py-24">
                     <ProductDetailSkeleton />
                 </div>
-                <Footer />
             </div>
         );
     }
 
     if (error || !product) {
         return (
-            <div className="min-h-screen bg-background flex flex-col">
-                <Header />
+            <div className="bg-background flex flex-col">
                 <div className="flex-1 container-fooddy py-32 text-center">
                     <h1 className="text-2xl font-bold">Product not found</h1>
                     <p className="text-muted-foreground mt-4">{error || `The product with ID ${id} does not exist.`}</p>
                     <div className="mt-8">
                         <Button asChild>
-                            <a href="/shop">Back to Shop</a>
+                            <Link href="/shop">Back to Shop</Link>
                         </Button>
                     </div>
                 </div>
-                <Footer />
             </div>
         );
     }
@@ -84,10 +79,8 @@ export default function ProductPage() {
     const productImage = product.images.length > 0 ? product.images[0].image : dishPizza;
 
     return (
-        <div className="min-h-screen bg-background flex flex-col">
-            <Header />
-
-            <main className="flex-1 pt-52 pb-20">
+        <div className="bg-background flex flex-col">
+            <main className="flex-1 pt-12 pb-20">
                 <div className="container-fooddy">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-20">
                         {/* Left Column - Image */}
@@ -228,7 +221,6 @@ export default function ProductPage() {
                 </div>
             </main>
 
-            <Footer />
         </div>
     );
 }

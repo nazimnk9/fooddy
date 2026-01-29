@@ -1,3 +1,4 @@
+"use client";
 import { motion } from 'framer-motion';
 import { MapPin, Phone, Mail, Clock, Facebook, Instagram, Twitter } from 'lucide-react';
 import logo from '@/assets/logo_1.png';

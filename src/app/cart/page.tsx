@@ -4,8 +4,6 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { X, AlertCircle, Truck, Plus, Minus } from "lucide-react";
-import { Header } from "@/components/Header";
-import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useCart, UICartItem } from "@/context/CartContext";
@@ -52,8 +50,7 @@ export default function CartPage() {
     const shipping = 0; // Free shipping
 
     return (
-        <div className="min-h-screen bg-background flex flex-col">
-            <Header />
+        <div className="bg-background flex flex-col">
 
             {/* Hero Section */}
             <section
@@ -248,7 +245,6 @@ export default function CartPage() {
                     </div>
                 </div>
             </main>
-            <Footer />
         </div>
     );
 }

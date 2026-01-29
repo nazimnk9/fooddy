@@ -8,6 +8,9 @@ export const metadata: Metadata = {
     description: "Order food delivery from Dawat - Restaurant & Grill",
 };
 
+import { Header } from "@/components/Header";
+import Footer from "@/components/Footer";
+
 export default function RootLayout({
     children,
 }: Readonly<{
@@ -15,10 +18,14 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <body>
+            <body className="flex flex-col min-h-screen">
                 <Providers>
                     <CartProvider>
-                        {children}
+                        <Header />
+                        <main className="flex-1 mt-[80px]">
+                            {children}
+                        </main>
+                        <Footer />
                     </CartProvider>
                 </Providers>
             </body>

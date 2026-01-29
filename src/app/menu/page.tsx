@@ -2,10 +2,8 @@
 import { useState, useEffect, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search } from "lucide-react";
-import { Header } from "@/components/Header";
 import { CategoryTabs } from "@/components/CategoryTabs";
 import { FoodCard, FoodItem } from "@/components/FoodCard";
-import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { getCategories, getProducts, Category } from "@/services/menuService";
@@ -85,11 +83,9 @@ const MenuContent = () => {
     };
 
     return (
-        <div className="min-h-screen bg-background">
-            <Header />
-
+        <div className="bg-background">
             {/* Menu Section */}
-            <section className="py-20 mt-12">
+            <section className="py-20">
                 <div className="container-fooddy">
                     {/* Section Header with Search */}
                     <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-12">
@@ -181,9 +177,6 @@ const MenuContent = () => {
                     )}
                 </div>
             </section>
-
-            {/* Footer */}
-            <Footer />
         </div>
     );
 };

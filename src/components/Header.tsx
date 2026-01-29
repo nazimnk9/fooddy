@@ -1,3 +1,4 @@
+"use client";
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -23,13 +24,15 @@ import { AuthModal } from "./AuthModal";
 import { getCookie, deleteCookie } from "@/utils/cookieUtils";
 import { useCart } from "@/context/CartContext";
 
+import Link from "next/link";
+
 const navLinks = [
   { name: "Home", href: "/" },
   { name: "Menu Items", href: "/menu" },
   // { name: "Shop", href: "/shop" },
-  { name: "About Us", href: "#about" },
+  { name: "About Us", href: "/#about" },
   // { name: "Restaurants", href: "#restaurants" },
-  { name: "Contact", href: "#contact" },
+  { name: "Contact", href: "/#contact" },
 ];
 
 export const Header = () => {
@@ -91,7 +94,7 @@ export const Header = () => {
           <div className="flex items-center justify-between h-20">
             {/* Logo */}
             {/* Logo */}
-            <a href="/" className="flex items-center gap-2">
+            <Link href="/" className="flex items-center gap-2">
               <Image
                 src="/logo_1.png"
                 alt="Fooddy Logo"
@@ -100,18 +103,18 @@ export const Header = () => {
                 className="h-20 w-auto object-contain"
                 priority
               />
-            </a>
+            </Link>
 
             {/* Desktop Navigation */}
             <nav className="hidden lg:flex items-center gap-8">
               {navLinks.map((link) => (
-                <a
+                <Link
                   key={link.name}
                   href={link.href}
                   className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
                 >
                   {link.name}
-                </a>
+                </Link>
               ))}
             </nav>
 

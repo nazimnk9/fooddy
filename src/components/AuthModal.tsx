@@ -1,3 +1,5 @@
+
+"use client";
 import { useState } from "react";
 import { Dialog, DialogContent, DialogTrigger, DialogClose, DialogPortal, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";

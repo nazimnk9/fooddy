@@ -2,16 +2,12 @@
 
 import Link from "next/link";
 import { CheckCircle2, ShoppingBag, ArrowRight, Home, Package } from "lucide-react";
-import { Header } from "@/components/Header";
-import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 
 export default function OrderSuccessPage() {
     return (
-        <div className="min-h-screen bg-background flex flex-col">
-            <Header />
-
-            <main className="flex-1 flex flex-col items-center justify-center py-48 px-4">
+        <div className="bg-background flex flex-col">
+            <main className="flex-1 flex flex-col items-center justify-center py-12 px-4">
                 <div className="max-w-2xl w-full text-center space-y-8 animate-in fade-in zoom-in duration-700">
                     {/* Success Icon */}
                     <div className="relative mx-auto w-32 h-32 flex items-center justify-center bg-primary/10 rounded-full">
@@ -63,7 +59,6 @@ export default function OrderSuccessPage() {
                 </div>
             </main>
 
-            <Footer />
         </div>
     );
 }

@@ -4,8 +4,6 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Folder, FileText, Check, Eye, EyeOff, Pencil, Trash2 } from "lucide-react";
-import { Header } from "@/components/Header";
-import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -256,8 +254,7 @@ export default function CheckoutPage() {
     };
 
     return (
-        <div className="min-h-screen bg-background flex flex-col">
-            <Header />
+        <div className="bg-background flex flex-col">
 
             {/* Hero Section */}
             <section
@@ -858,7 +855,6 @@ export default function CheckoutPage() {
                 </AlertDialogContent>
             </AlertDialog>
 
-            <Footer />
         </div>
     );
 }
