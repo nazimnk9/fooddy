@@ -87,7 +87,7 @@ const MenuCategoryContent = () => {
     };
 
     return (
-        <div className="bg-background py-36">
+        <div className="bg-background py-12">
             {/* Menu Section */}
             <section className="">
                 <div className="container-fooddy">
