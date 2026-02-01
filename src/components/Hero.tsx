@@ -86,20 +86,20 @@ const Hero = () => {
               {slides[currentSlide].subtitle}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button
+              {/* <Button
                 variant="default"
                 size="lg"
                 className="font-bold bg-[#1e4dc9] hover:bg-[#1e4dc9]/90 text-white min-w-[140px] rounded-md transition-all duration-300"
               >
                 Order Now
-              </Button>
+              </Button> */}
               <Button
                 variant="outline"
                 size="lg"
                 onClick={() => router.push('/menu')}
                 className="font-bold border-2 border-white text-white bg-transparent hover:bg-white/10 min-w-[140px] rounded-md transition-all duration-300"
               >
-                View Menu
+                Order Now
               </Button>
             </div>
           </motion.div>
