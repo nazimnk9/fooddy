@@ -24,7 +24,10 @@ export const loginUser = async (credentials: LoginCredentials) => {
         });
 
         if (!response.ok) {
-            throw new Error(`Login failed: ${response.statusText}`);
+            const errorData = await response.json().catch(() => ({}));
+            const error = new Error(`Login failed: ${response.statusText}`);
+            (error as any).data = errorData;
+            throw error;
         }
 
         return await response.json();
@@ -45,7 +48,10 @@ export const registerUser = async (data: RegisterData) => {
         });
 
         if (!response.ok) {
-            throw new Error(`Registration failed: ${response.statusText}`);
+            const errorData = await response.json().catch(() => ({}));
+            const error = new Error(`Registration failed: ${response.statusText}`);
+            (error as any).data = errorData;
+            throw error;
         }
 
         return await response.json();

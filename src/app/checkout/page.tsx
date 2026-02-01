@@ -34,6 +34,7 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { AlertCircle } from "lucide-react";
 import { getCookie, setCookie } from "@/utils/cookieUtils";
 import { BASE_URL, loginUser } from "@/services/authService";
 import { getAddresses, createAddress, updateAddress, deleteAddress, Address } from "@/services/addressService";
@@ -87,6 +88,17 @@ export default function CheckoutPage() {
     // Login state
     const [loginEmail, setLoginEmail] = useState("");
     const [loginPassword, setLoginPassword] = useState("");
+
+    // Alert Dialog State
+    const [alertConfig, setAlertConfig] = useState<{
+        open: boolean;
+        title: string;
+        message: string;
+    }>({
+        open: false,
+        title: "",
+        message: ""
+    });
 
     const fetchAddresses = async () => {
         try {
@@ -245,9 +257,14 @@ export default function CheckoutPage() {
                 setShowLogin(false);
                 await Promise.all([fetchAddresses(), fetchCartData()]);
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error("Login failed:", error);
-            alert("Login failed. Please check your credentials.");
+            const errorMsg = error.data?.detail || "Login failed. Please check your credentials.";
+            setAlertConfig({
+                open: true,
+                title: "Login Failed",
+                message: errorMsg
+            });
         } finally {
             setSaving(false);
         }
@@ -255,6 +272,27 @@ export default function CheckoutPage() {
 
     return (
         <div className="bg-background flex flex-col">
+            <AlertDialog
+                open={alertConfig.open}
+                onOpenChange={(open) => setAlertConfig({ ...alertConfig, open })}
+            >
+                <AlertDialogContent className="rounded-2xl max-w-[400px]">
+                    <AlertDialogHeader className="flex flex-col items-center text-center">
+                        <div className="w-12 h-12 bg-destructive/10 rounded-full flex items-center justify-center mb-2">
+                            <AlertCircle className="w-6 h-6 text-destructive" />
+                        </div>
+                        <AlertDialogTitle className="text-xl font-bold">{alertConfig.title}</AlertDialogTitle>
+                        <AlertDialogDescription className="text-gray-600 pt-2 whitespace-pre-line">
+                            {alertConfig.message}
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter className="sm:justify-center">
+                        <AlertDialogAction className="rounded-full px-8 bg-primary hover:bg-primary/90 text-white font-bold h-11 min-w-[120px]">
+                            OK
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
 
             {/* Hero Section */}
             <section
