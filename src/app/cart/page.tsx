@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useCart, UICartItem } from "@/context/CartContext";
 import { useEffect } from "react";
+import { AuthModal } from "@/components/AuthModal";
 
 // Image imports
 import pizzaMargherita from "@/assets/food/pizza-margherita.jpg";
@@ -16,9 +17,10 @@ import heroBg from "@/assets/hero-bg.jpg"; // Using a generic hero bg or falling
 // Actually, I can use the pizza image as a background since the reference image has a pizza-like background.
 
 export default function CartPage() {
-    const { cartItems, removeFromCart, updateQuantity, updateMultipleQuantities, isLoading } = useCart();
+    const { cartItems, removeFromCart, updateQuantity, updateMultipleQuantities, isLoading, isLoggedIn } = useCart();
     const [couponCode, setCouponCode] = useState("");
     const [localQuantities, setLocalQuantities] = useState<Record<number, number>>({});
+    const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
     // Sync local state when cartItems changes (e.g., initial load or item removal)
     useEffect(() => {
@@ -236,7 +238,12 @@ export default function CartPage() {
                                 </div>
                             </div>
 
-                            <Link href="/checkout" className="w-full">
+                            <Link href="/checkout" className="w-full" onClick={(e) => {
+                                if (!isLoggedIn) {
+                                    e.preventDefault();
+                                    setIsAuthModalOpen(true);
+                                }
+                            }}>
                                 <Button className="w-full h-14 mt-6 rounded-full font-bold text-lg uppercase tracking-wide shadow-lg hover:shadow-xl transition-shadow">
                                     Proceed to Checkout
                                 </Button>
@@ -245,6 +252,7 @@ export default function CartPage() {
                     </div>
                 </div>
             </main>
+            <AuthModal open={isAuthModalOpen} onOpenChange={setIsAuthModalOpen} />
         </div>
     );
 }
