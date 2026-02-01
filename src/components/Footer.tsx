@@ -11,7 +11,7 @@ const Footer = () => {
     { name: 'Home', href: '/' },
     { name: 'Menu Items', href: '/menu' },
     { name: 'About Us', href: '#about' },
-    { name: 'Blog', href: '#' },
+    // { name: 'Blog', href: '#' },
     { name: 'Contact', href: '#contact' },
   ];
 
@@ -84,7 +84,7 @@ const Footer = () => {
           </motion.div>
 
           {/* Opening Hours */}
-          <motion.div
+          {/* <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -107,7 +107,7 @@ const Footer = () => {
                 </div>
               </li>
             </ul>
-          </motion.div>
+          </motion.div> */}
 
           {/* Contact Info */}
           <motion.div
