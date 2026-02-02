@@ -3,6 +3,7 @@
 import { useRef, useEffect, useState } from "react";
 import Image from "next/image";
 import { motion, useScroll, useTransform, useAnimation, AnimatePresence } from "framer-motion";
+import { Phone, MapPin, Facebook, Music, Mail, Instagram, Globe } from "lucide-react";
 
 export default function AboutPage() {
     const sectionRef = useRef(null);
@@ -190,11 +191,35 @@ export default function AboutPage() {
                                 <div className="space-y-2 md:space-y-3">
                                     <div className="border-l-2 border-[#c5a059]/30 pl-4 py-1">
                                         <p className="text-gray-500 text-sm md:text-base lg:text-sm uppercase tracking-widest font-medium">Mon — Thu</p>
-                                        <p className="text-base md:text-xl lg:text-base text-white font-light mt-1">10.00 am — 01:00 am</p>
+                                        <p className="text-base md:text-xl lg:text-base text-black font-light mt-1">10.00 am — 01:00 am</p>
                                     </div>
                                     <div className="border-l-2 border-[#c5a059]/30 pl-4 py-1">
                                         <p className="text-gray-500 text-sm md:text-base lg:text-sm uppercase tracking-widest font-medium">Fri — Sun</p>
-                                        <p className="text-base md:text-xl lg:text-base text-white font-light mt-1">10:00 am — 02:00 am</p>
+                                        <p className="text-base md:text-xl lg:text-base text-black font-light mt-1">10:00 am — 02:00 am</p>
+                                    </div>
+                                </div>
+
+                                {/* Contact Information Section - Matching Image */}
+                                <div className="pt-4 space-y-6">
+                                    <div className="flex flex-col items-start gap-4">
+                                        {[
+                                            { Icon: Phone, text: "344 433 5555" },
+                                            { Icon: MapPin, text: "Piazza dei mirti 19, Roma, Italy" },
+                                            { Icon: Facebook, text: "Dawat Restaurante / Dawat Mirti" },
+                                            { Icon: Music, text: "dawatrestaurant19" },
+                                            { Icon: Mail, text: "dawatristoranteroma@gmail.com" },
+                                            { Icon: Instagram, text: "dawat_ristorante" },
+                                            { Icon: Globe, text: "www.dawatsrls.com" },
+                                        ].map((item, idx) => (
+                                            <div key={idx} className="flex flex-row gap-2 justify-center items-start space-y-2 group">
+                                                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#c5a059] via-[#e2c792] to-[#c5a059] flex items-center justify-center shadow-lg transform transition-transform group-hover:scale-110">
+                                                    <item.Icon className="w-5 h-5 text-[#0b241e]" />
+                                                </div>
+                                                <span className="text-black text-sm md:text-base font-medium tracking-wide">
+                                                    {item.text}
+                                                </span>
+                                            </div>
+                                        ))}
                                     </div>
                                 </div>
                             </div>
