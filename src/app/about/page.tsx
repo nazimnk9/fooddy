@@ -106,7 +106,7 @@ export default function AboutPage() {
     const xOffset = -(currentIndex * itemWidth);
 
     return (
-        <div className="bg-[#0b241e] text-white min-h-screen font-serif selection:bg-[#c5a059]/30 overflow-x-hidden">
+        <div className="bg-[#fff] text-white min-h-screen font-serif selection:bg-[#c5a059]/30 overflow-x-hidden">
             {/* Hero Section - Matching Image 0 & 3 */}
             <section className="relative pt-24 md:pt-40 pb-12 md:pb-24 px-4 flex flex-col items-center justify-center overflow-hidden">
                 <div className="relative z-10 text-center">
@@ -117,7 +117,7 @@ export default function AboutPage() {
                             About
                         </h1>
                     </div>
-                    <p className="text-3xl md:text-6xl lg:text-8xl font-normal leading-tight mt-2 md:mt-4 relative z-10">
+                    <p className="text-3xl md:text-6xl lg:text-8xl font-normal leading-tight mt-2 md:mt-4 relative z-10 text-black">
                         our restaurant
                     </p>
                 </div>
@@ -146,24 +146,24 @@ export default function AboutPage() {
                     {/* Right/Bottom: Content Area */}
                     <div className="flex flex-col items-center lg:items-start text-center lg:text-left space-y-10 md:space-y-16">
                         {/* Floral Icon - Matching Image 1/4 */}
-                        <div className="text-[#c5a059] opacity-90 scale-125 md:scale-150">
-                            <svg width="60" height="60" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M40 10C40 10 45 25 55 25C65 25 70 35 70 40C70 45 65 55 55 55C45 55 40 70 40 70C40 70 35 55 25 55C15 55 10 45 10 40C10 35 15 25 25 25C35 25 40 10 40 10Z" stroke="currentColor" strokeWidth="1" />
-                                <circle cx="40" cy="40" r="6" stroke="currentColor" strokeWidth="1" />
-                                <path d="M40 5V15M40 65V75M5 40H15M65 40H75" stroke="currentColor" strokeWidth="0.5" />
-                                <path d="M40 70V80" stroke="currentColor" strokeWidth="1" />
-                            </svg>
+                        <div className="opacity-90 scale-125 md:scale-150 relative w-20 h-20">
+                            <Image
+                                src="/halal-removebg-preview.png"
+                                alt="Halal Certified"
+                                fill
+                                className="object-contain"
+                            />
                         </div>
 
                         <div className="space-y-6 md:space-y-8 max-w-2xl mx-auto lg:mx-0">
-                            <h2 className="text-3xl md:text-5xl lg:text-7xl font-normal leading-[1.05]">
+                            <h2 className="text-3xl md:text-5xl lg:text-7xl font-normal leading-[1.05] text-black">
                                 Around the world, one plate at a time
                             </h2>
 
                             <div className="w-20 h-[1px] bg-[#c5a059]/40 mx-auto lg:mx-0 md:hidden" />
 
                             <p className="text-gray-400 text-base md:text-xl leading-relaxed font-light">
-                                Welcome to <span className="text-white font-bold italic">La.Revi</span>, one of the best restaurants in the country. This is the place where food meets passion and where the world\'s finest chefs are creating the culinary masterpieces.
+                                Welcome to <span className="text-black font-bold italic">La.Revi</span>, one of the best restaurants in the country. This is the place where food meets passion and where the world\'s finest chefs are creating the culinary masterpieces.
                             </p>
                         </div>
 
@@ -250,14 +250,14 @@ export default function AboutPage() {
                             >
                                 <div className="mb-6 md:mb-10 space-y-2">
                                     <span className="text-[#c5a059] text-sm md:text-lg font-medium tracking-[0.3em]">{item.year}</span>
-                                    <h3 className="text-xl md:text-4xl lg:text-5xl font-normal mt-1 group-hover:text-[#c5a059] transition-all duration-700 ease-out">{item.title}</h3>
+                                    <h3 className="text-xl md:text-4xl lg:text-5xl font-normal mt-1 group-hover:text-[#c5a059] transition-all duration-700 ease-out text-black">{item.title}</h3>
                                 </div>
                                 <div className="relative aspect-[16/10] md:aspect-[4/3] rounded-md overflow-hidden bg-black/40">
                                     <Image
                                         src={item.img}
                                         alt={item.title}
                                         fill
-                                        className="object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110 pointer-events-none"
+                                        className="object-fixed transition-transform duration-[1.5s] ease-out group-hover:scale-110 pointer-events-none"
                                     />
                                     <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-700" />
                                 </div>
