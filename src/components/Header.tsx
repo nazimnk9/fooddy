@@ -144,8 +144,9 @@ export const Header = () => {
               </Sheet>
               <DropdownMenu modal={false}>
                 <DropdownMenuTrigger asChild>
-                  <button className="p-2 text-muted-foreground hover:text-primary transition-colors outline-none">
+                  <button className="p-2 text-muted-foreground hover:text-primary transition-colors outline-none flex flex-col items-center gap-1">
                     <User className="w-5 h-5" />
+                    <span className="text-xs font-medium">Profile</span>
                   </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-[240px] p-0 rounded-2xl overflow-hidden border-none shadow-[0_2px_20px_rgba(0,0,0,0.15)]">

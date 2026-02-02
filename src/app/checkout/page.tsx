@@ -301,10 +301,10 @@ export default function CheckoutPage() {
             >
                 <div className="hero-banner-overlay" />
                 <div className="relative z-10 text-center">
-                    <h1 className="text-5xl md:text-7xl font-display font-normal text-white mb-6 tracking-wide">
+                    <h1 className="text-5xl md:text-7xl font-display font-normal text-white tracking-wide">
                         CHECKOUT
                     </h1>
-                    <nav className="flex items-center justify-center gap-3 text-sm">
+                    {/* <nav className="flex items-center justify-center gap-3 text-sm">
                         <Link href="/" className="breadcrumb-link uppercase tracking-wider">
                             Home
                         </Link>
@@ -316,7 +316,7 @@ export default function CheckoutPage() {
                         <span className="breadcrumb-active uppercase tracking-wider">
                             Checkout
                         </span>
-                    </nav>
+                    </nav> */}
                 </div>
             </section>
 
@@ -655,7 +655,7 @@ export default function CheckoutPage() {
                                     <div className="flex justify-end">
                                         <Button
                                             onClick={handleSaveAddress}
-                                            disabled={saving || !street || !city || !state || !zipCode}
+                                            disabled={saving || !street || !city || !zipCode}
                                             className="px-8 h-12 rounded-full font-bold uppercase tracking-wide text-white shadow-gold hover:shadow-lg transition-all"
                                         >
                                             {saving ? "Saving..." : "Save Address"}
