@@ -185,10 +185,12 @@ export const Header = () => {
                     </div>
                   ) : (
                     <div className="bg-[#f4f7fa] p-2 flex flex-col gap-1">
-                      <DropdownMenuItem className="flex items-center gap-3 px-4 py-3 cursor-pointer rounded-xl hover:bg-accent/10 focus:bg-accent/10">
-                        <User className="w-6 h-6 text-[#1a2b4b]" />
-                        <span className="text-[#1a2b4b] font-bold text-base">Profile</span>
-                      </DropdownMenuItem>
+                      <Link href="/profile">
+                        <DropdownMenuItem className="flex items-center gap-3 px-4 py-3 cursor-pointer rounded-xl hover:bg-accent/10 focus:bg-accent/10">
+                          <User className="w-6 h-6 text-[#1a2b4b]" />
+                          <span className="text-[#1a2b4b] font-bold text-base">Profile</span>
+                        </DropdownMenuItem>
+                      </Link>
                       <DropdownMenuItem
                         className="flex items-center gap-3 px-4 py-3 cursor-pointer rounded-xl hover:bg-accent/10 focus:bg-accent/10 text-red-500 focus:text-red-500"
                         onClick={() => {
