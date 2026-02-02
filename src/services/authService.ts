@@ -60,3 +60,24 @@ export const registerUser = async (data: RegisterData) => {
         throw error;
     }
 };
+
+export const getUserProfile = async (token: string) => {
+    try {
+        const response = await fetch(`${BASE_URL}/me/`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to fetch profile: ${response.statusText}`);
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error("Get user profile error:", error);
+        throw error;
+    }
+};

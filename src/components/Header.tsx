@@ -23,6 +23,7 @@ import { CartSheetContent } from "./CartSidebar";
 import { AuthModal } from "./AuthModal";
 import { getCookie, deleteCookie } from "@/utils/cookieUtils";
 import { useCart } from "@/context/CartContext";
+import { getUserProfile } from "@/services/authService";
 
 import Link from "next/link";
 
@@ -39,13 +40,26 @@ export const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { isCartOpen, openCart, closeCart, cartCount } = useCart();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userProfile, setUserProfile] = useState<any>(null);
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const pathname = usePathname();
   const isHomePage = pathname === "/";
 
   useEffect(() => {
+    const fetchProfile = async (token: string) => {
+      try {
+        const profile = await getUserProfile(token);
+        setUserProfile(profile);
+      } catch (error) {
+        console.error("Error fetching user profile:", error);
+      }
+    };
+
     const token = getCookie("access_token");
     setIsLoggedIn(!!token);
+    if (token) {
+      fetchProfile(token);
+    }
   }, []);
 
   return (
@@ -146,12 +160,12 @@ export const Header = () => {
                 <DropdownMenuTrigger asChild>
                   <button className="p-2 text-muted-foreground hover:text-primary transition-colors outline-none flex flex-col items-center gap-1">
                     <User className="w-5 h-5" />
-                    <span className="text-xs font-medium">Profile</span>
+                    <span className="text-xs font-medium">{isLoggedIn && userProfile ? userProfile.first_name + " " + userProfile.last_name : "Profile"}</span>
                   </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-[240px] p-0 rounded-2xl overflow-hidden border-none shadow-[0_2px_20px_rgba(0,0,0,0.15)]">
                   <div className="p-4 flex flex-col gap-4">
-                    <h3 className="font-bold text-[#1a2b4b] text-xl px-2">Profile</h3>
+                    <h3 className="font-bold text-[#1a2b4b] text-xl px-2">{isLoggedIn && userProfile ? userProfile.first_name + " " + userProfile.last_name : "Profile"}</h3>
 
                     <DropdownMenuItem className="flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer focus:bg-transparent hover:text-primary transition-colors hover:bg-accent/10 focus:bg-accent/10">
                       <HelpCircle className="w-6 h-6 text-[#1a2b4b]" />
