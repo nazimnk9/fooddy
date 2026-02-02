@@ -138,21 +138,21 @@ export default function ProductPage() {
                                 {product.title}
                             </h1>
 
-                            <div className="flex items-center justify-between mb-6">
+                            {/* <div className="flex items-center justify-between mb-6">
                                 <span className="text-2xl font-bold text-primary">
                                     ${parseFloat(product.price).toFixed(2)}
                                 </span>
                                 <div className="flex items-center gap-1">
-                                    {renderStars(5)} {/* API doesn't have rating, defaulting to 5 */}
+                                    {renderStars(5)}
                                 </div>
-                            </div>
+                            </div> */}
 
                             <p className="text-muted-foreground mb-8">
                                 {product.description}
                             </p>
 
                             {/* Delivery Date Mock */}
-                            <div className="mb-6">
+                            {/* <div className="mb-6">
                                 <label className="block text-sm text-muted-foreground mb-2">Delivery Date:</label>
                                 <div className="relative max-w-[200px]">
                                     <input
@@ -160,7 +160,7 @@ export default function ProductPage() {
                                         className="w-full px-4 py-2 rounded-full border border-border bg-white text-sm focus:outline-none focus:border-primary"
                                     />
                                 </div>
-                            </div>
+                            </div> */}
 
                             {/* Actions */}
                             <div className="flex items-center gap-4 mb-8">
@@ -225,7 +225,7 @@ export default function ProductPage() {
                             >
                                 Description
                             </button>
-                            <button
+                            {/* <button
                                 onClick={() => setActiveTab("reviews")}
                                 className={cn(
                                     "px-6 py-2 rounded-full font-bold text-sm uppercase tracking-wide transition-colors",
@@ -235,7 +235,7 @@ export default function ProductPage() {
                                 )}
                             >
                                 Reviews (1)
-                            </button>
+                            </button> */}
                         </div>
 
                         <div className="text-muted-foreground leading-relaxed">
