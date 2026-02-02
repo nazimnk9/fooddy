@@ -628,12 +628,14 @@ export default function CheckoutPage() {
                                 </div> */}
 
                                     <div className="space-y-2">
-                                        <Label htmlFor="state">State <span className="text-destructive">*</span></Label>
+                                        <Label htmlFor="state">State 
+                                            {/* <span className="text-destructive">*</span> */}
+                                            </Label>
                                         <Input
                                             id="state"
                                             type="text"
                                             className="bg-white rounded-full"
-                                            required
+                                            //required
                                             value={state}
                                             onChange={(e) => setState(e.target.value)}
                                         />
@@ -828,11 +830,13 @@ export default function CheckoutPage() {
                                 />
                             </div>
                             <div className="space-y-2">
-                                <Label htmlFor="update-state">State <span className="text-destructive">*</span></Label>
+                                <Label htmlFor="update-state">State 
+                                    {/* <span className="text-destructive">*</span> */}
+                                    </Label>
                                 <Input
                                     id="update-state"
                                     className="bg-muted/30 rounded-full"
-                                    required
+                                    //required
                                     value={updateState}
                                     onChange={(e) => setUpdateState(e.target.value)}
                                 />
