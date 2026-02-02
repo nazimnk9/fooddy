@@ -30,7 +30,7 @@ const navLinks = [
   { name: "Home", href: "/" },
   { name: "Menu Items", href: "/menu" },
   // { name: "Shop", href: "/shop" },
-  { name: "About Us", href: "/#about" },
+  { name: "About Us", href: "/about" },
   // { name: "Restaurants", href: "#restaurants" },
   { name: "Contact", href: "/#contact" },
 ];
