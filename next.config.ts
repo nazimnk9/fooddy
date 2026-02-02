@@ -17,6 +17,12 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'http',
+        hostname: 'apis.dawatsrls.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'http',
         hostname: 'localhost',
         port: '',
         pathname: '/**',
