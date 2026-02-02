@@ -4,13 +4,14 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useParams } from "next/navigation";
-import { Star, ShoppingCart, ChevronUp, ChevronDown } from "lucide-react";
+import { Star, ShoppingCart, ChevronUp, ChevronDown, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { getProductById, Product } from "@/services/menuService";
 import { useCart } from "@/context/CartContext";
 import { ProductDetailSkeleton } from "@/components/skeletons";
 import dishPizza from "@/assets/dish-pizza.jpg"; // Fallback image
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function ProductPage() {
     const params = useParams();
@@ -21,6 +22,10 @@ export default function ProductPage() {
     const [quantity, setQuantity] = useState(1);
     const [activeTab, setActiveTab] = useState<"description" | "reviews">("description");
     const { addToCart } = useCart();
+
+    // Lightbox State
+    const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -39,6 +44,20 @@ export default function ProductPage() {
 
         fetchProduct();
     }, [id]);
+
+    // Handle keyboard navigation for lightbox
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (!isLightboxOpen) return;
+
+            if (e.key === "Escape") setIsLightboxOpen(false);
+            if (e.key === "ArrowLeft") handlePrevImage();
+            if (e.key === "ArrowRight") handleNextImage();
+        };
+
+        window.addEventListener("keydown", handleKeyDown);
+        return () => window.removeEventListener("keydown", handleKeyDown);
+    }, [isLightboxOpen, currentImageIndex]);
 
     if (loading) {
         return (
@@ -66,6 +85,20 @@ export default function ProductPage() {
         );
     }
 
+    const images = product.images.map(img => img.image).length > 0
+        ? product.images.map(img => img.image)
+        : [dishPizza];
+
+    const currentImage = images[currentImageIndex];
+
+    const handlePrevImage = () => {
+        setCurrentImageIndex(prev => (prev === 0 ? images.length - 1 : prev - 1));
+    };
+
+    const handleNextImage = () => {
+        setCurrentImageIndex(prev => (prev === images.length - 1 ? 0 : prev + 1));
+    };
+
     const renderStars = (rating: number = 5) => {
         return Array.from({ length: 5 }, (_, i) => (
             <Star
@@ -76,25 +109,25 @@ export default function ProductPage() {
         ));
     };
 
-    const productImage = product.images.length > 0 ? product.images[0].image : dishPizza;
-
     return (
         <div className="bg-background flex flex-col">
             <main className="flex-1 pt-20 pb-20">
                 <div className="container-fooddy">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-20">
                         {/* Left Column - Image */}
-                        <div className="relative aspect-square rounded-3xl overflow-hidden bg-muted">
+                        <div
+                            className="relative aspect-square rounded-3xl overflow-hidden bg-muted cursor-zoom-in group"
+                            onClick={() => setIsLightboxOpen(true)}
+                        >
                             <Image
-                                src={productImage}
+                                src={currentImage}
                                 alt={product.title}
                                 fill
-                                className="object-fixed"
+                                className="object-cover transition-transform duration-500 group-hover:scale-105"
                                 priority
                             />
-                            <div className="absolute top-4 right-4 bg-white p-2 rounded-full shadow-md">
+                            <div className="absolute top-4 right-4 bg-white/80 backdrop-blur-sm p-2 rounded-full shadow-md group-hover:bg-white transition-colors">
                                 <span className="sr-only">Zoom</span>
-                                {/* Mock zoom icon/functionality if needed */}
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5 text-gray-500"><circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" /></svg>
                             </div>
                         </div>
@@ -209,7 +242,6 @@ export default function ProductPage() {
                             {activeTab === "description" ? (
                                 <div className="space-y-4">
                                     <p>{product.description}</p>
-                                    {/* <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p> */}
                                 </div>
                             ) : (
                                 <div>
@@ -221,6 +253,75 @@ export default function ProductPage() {
                 </div>
             </main>
 
+            {/* Image Lightbox - Framer Motion Overlay */}
+            <AnimatePresence>
+                {isLightboxOpen && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-md flex items-center justify-center p-4 md:p-10"
+                        onClick={() => setIsLightboxOpen(false)}
+                    >
+                        {/* Close Button */}
+                        <button
+                            className="absolute top-6 right-6 text-white/70 hover:text-white bg-white/10 hover:bg-white/20 p-3 rounded-full transition-all z-[110]"
+                            onClick={() => setIsLightboxOpen(false)}
+                        >
+                            <X className="w-8 h-8" />
+                        </button>
+
+                        {/* Navigation Arrows */}
+                        {images.length > 1 && (
+                            <>
+                                <button
+                                    className="absolute left-6 text-white/70 hover:text-white bg-white/10 hover:bg-white/20 p-4 rounded-full transition-all z-[110]"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handlePrevImage();
+                                    }}
+                                >
+                                    <ChevronLeft className="w-10 h-10" />
+                                </button>
+                                <button
+                                    className="absolute right-6 text-white/70 hover:text-white bg-white/10 hover:bg-white/20 p-4 rounded-full transition-all z-[110]"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleNextImage();
+                                    }}
+                                >
+                                    <ChevronRight className="w-10 h-10" />
+                                </button>
+                            </>
+                        )}
+
+                        {/* Full Screen Image */}
+                        <motion.div
+                            initial={{ scale: 0.9, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.9, opacity: 0 }}
+                            transition={{ type: "spring", damping: 25, stiffness: 200 }}
+                            className="relative w-full h-full max-w-5xl max-h-[80vh] flex items-center justify-center"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <Image
+                                src={images[currentImageIndex]}
+                                alt={product.title}
+                                fill
+                                className="object-contain"
+                                priority
+                            />
+                        </motion.div>
+
+                        {/* Image Counter */}
+                        {images.length > 1 && (
+                            <div className="absolute bottom-10 left-1/2 -translate-x-1/2 text-white/60 font-medium tracking-widest uppercase text-sm">
+                                {currentImageIndex + 1} / {images.length}
+                            </div>
+                        )}
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </div>
     );
 }
