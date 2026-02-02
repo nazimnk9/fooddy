@@ -61,10 +61,10 @@ export default function CartPage() {
             >
                 <div className="hero-banner-overlay" />
                 <div className="relative z-10 text-center">
-                    <h1 className="text-5xl md:text-7xl font-display font-normal text-white mb-6 tracking-wide">
+                    <h1 className="text-5xl md:text-7xl font-display font-normal text-white tracking-wide">
                         CART
                     </h1>
-                    <nav className="flex items-center justify-center gap-3 text-sm">
+                    {/* <nav className="flex items-center justify-center gap-3 text-sm">
                         <Link href="/" className="breadcrumb-link uppercase tracking-wider">
                             Home
                         </Link>
@@ -76,7 +76,7 @@ export default function CartPage() {
                         <span className="breadcrumb-active uppercase tracking-wider">
                             Cart
                         </span>
-                    </nav>
+                    </nav> */}
                 </div>
             </section>
 

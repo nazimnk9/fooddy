@@ -222,7 +222,7 @@
   }
 
   .hero-banner {
-    @apply relative h-[350px] md:h-[400px] flex items-center justify-center;
+    @apply relative h-[150px] md:h-[200px] flex items-center justify-center;
     @apply bg-cover bg-center bg-no-repeat;
   }
 
