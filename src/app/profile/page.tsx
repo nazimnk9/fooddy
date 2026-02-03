@@ -2,7 +2,13 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { User, Clock, ChevronDown, Trash2, Loader2, Eye, EyeOff } from "lucide-react";
+import { User, Clock, ChevronDown, Trash2, Loader2, Eye, EyeOff, Facebook, Instagram } from "lucide-react";
+
+const TikTokIcon = () => (
+    <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+        <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z" />
+    </svg>
+);
 import { motion } from "framer-motion";
 import { getCookie, deleteCookie } from "@/utils/cookieUtils";
 import { getUserProfile, updateUserProfile, deleteUserProfile, getUserOrders } from "@/services/authService";
@@ -259,6 +265,22 @@ export default function ProfilePage() {
                                     <Clock className="w-5 h-5 text-gray-400" />
                                     <span>Order History</span>
                                 </button>
+                            </div>
+
+                            {/* Social Links */}
+                            <div className="p-4 border-t border-gray-100">
+                                <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4 px-4">Follow Us</p>
+                                <div className="flex px-4 gap-4">
+                                    <a href="https://facebook.com/dawat" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-[#1a2b4b] hover:text-white transition-all">
+                                        <Facebook className="w-5 h-5" />
+                                    </a>
+                                    <a href="https://instagram.com/dawat" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-[#1a2b4b] hover:text-white transition-all">
+                                        <Instagram className="w-5 h-5" />
+                                    </a>
+                                    <a href="https://tiktok.com/@dawat" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-[#1a2b4b] hover:text-white transition-all">
+                                        <TikTokIcon />
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
