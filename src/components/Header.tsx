@@ -27,6 +27,9 @@ import { getUserProfile } from "@/services/authService";
 
 import Link from "next/link";
 
+import { useAppSelector, useAppDispatch } from "@/redux/hooks";
+import { setProfile } from "@/redux/features/auth/authSlice";
+
 const navLinks = [
   { name: "Home", href: "/" },
   { name: "Menu Items", href: "/menu" },
@@ -39,28 +42,23 @@ const navLinks = [
 export const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { isCartOpen, openCart, closeCart, cartCount } = useCart();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userProfile, setUserProfile] = useState<any>(null);
+  const { isLoggedIn, userProfile } = useAppSelector((state) => state.auth);
   const [authModalOpen, setAuthModalOpen] = useState(false);
-  const pathname = usePathname();
-  const isHomePage = pathname === "/";
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    const fetchProfile = async (token: string) => {
+    const fetchProfile = async () => {
+      const token = getCookie("access_token");
+      if (!token) return;
       try {
         const profile = await getUserProfile(token);
-        setUserProfile(profile);
+        dispatch(setProfile(profile));
       } catch (error) {
-        console.error("Error fetching user profile:", error);
+        console.error("Error fetching initial profile:", error);
       }
     };
-
-    const token = getCookie("access_token");
-    setIsLoggedIn(!!token);
-    if (token) {
-      fetchProfile(token);
-    }
-  }, []);
+    fetchProfile();
+  }, [dispatch]);
 
   return (
     <>

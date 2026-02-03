@@ -81,3 +81,27 @@ export const getUserProfile = async (token: string) => {
         throw error;
     }
 };
+export const updateUserProfile = async (token: string, data: { first_name: string; last_name: string; phone: string; password?: string }) => {
+    try {
+        const response = await fetch(`${BASE_URL}/me/`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify(data),
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            const error = new Error(`Update profile failed: ${response.statusText}`);
+            (error as any).data = errorData;
+            throw error;
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error("Update user profile error:", error);
+        throw error;
+    }
+};

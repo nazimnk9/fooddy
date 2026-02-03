@@ -114,11 +114,11 @@ export default function AboutPage() {
                     <div className="relative inline-block">
                         {/* Decorative Circle - Centered on "About" */}
                         <div className="absolute left-1/2 top-[100%] -translate-x-1/2 -translate-y-1/2 border-[0.5px] border-[#c5a059]/40 rounded-full w-[150px] h-[150px] md:w-[300px] md:h-[300px] pointer-events-none" />
-                        <h1 className="text-[#c5a059] text-4xl md:text-6xl lg:text-7xl font-light italic relative z-10">
+                        <h1 className="text-[#c5a059] text-4xl md:text-5xl lg:text-6xl font-light italic relative z-10">
                             About
                         </h1>
                     </div>
-                    <p className="text-3xl md:text-6xl lg:text-8xl font-normal leading-tight mt-2 md:mt-4 relative z-10 text-black">
+                    <p className="text-3xl md:text-5xl lg:text-6xl font-normal leading-tight mt-2 md:mt-4 relative z-10 text-black">
                         our restaurant
                     </p>
                 </div>
@@ -152,12 +152,12 @@ export default function AboutPage() {
                                 src="/halal-removebg-preview.png"
                                 alt="Halal Certified"
                                 fill
-                                className="object-contain"
+                                className="object-fixed"
                             />
                         </div>
 
                         <div className="space-y-6 md:space-y-8 max-w-2xl mx-auto lg:mx-0">
-                            <h2 className="text-3xl md:text-5xl lg:text-7xl font-normal leading-[1.05] text-black">
+                            <h2 className="text-3xl md:text-5xl lg:text-6xl font-normal leading-[1.05] text-black">
                                 Around the world, one plate at a time
                             </h2>
 
