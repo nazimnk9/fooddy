@@ -129,3 +129,24 @@ export const deleteUserProfile = async (token: string) => {
         throw error;
     }
 };
+
+export const getUserOrders = async (token: string) => {
+    try {
+        const response = await fetch(`${BASE_URL}/orders/`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to fetch orders: ${response.statusText}`);
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error("Get user orders error:", error);
+        throw error;
+    }
+};
