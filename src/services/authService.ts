@@ -105,3 +105,27 @@ export const updateUserProfile = async (token: string, data: { first_name: strin
         throw error;
     }
 };
+
+export const deleteUserProfile = async (token: string) => {
+    try {
+        const response = await fetch(`${BASE_URL}/me/`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            const error = new Error(`Delete account failed: ${response.statusText}`);
+            (error as any).data = errorData;
+            throw error;
+        }
+
+        return true;
+    } catch (error) {
+        console.error("Delete user profile error:", error);
+        throw error;
+    }
+};

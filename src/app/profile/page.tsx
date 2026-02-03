@@ -4,8 +4,8 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { User, Clock, ChevronDown, Trash2, Loader2, Eye, EyeOff } from "lucide-react";
 import { motion } from "framer-motion";
-import { getCookie } from "@/utils/cookieUtils";
-import { getUserProfile, updateUserProfile } from "@/services/authService";
+import { getCookie, deleteCookie } from "@/utils/cookieUtils";
+import { getUserProfile, updateUserProfile, deleteUserProfile } from "@/services/authService";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -27,7 +27,7 @@ import {
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { useAppDispatch } from "@/redux/hooks";
-import { setProfile } from "@/redux/features/auth/authSlice";
+import { setProfile, logout } from "@/redux/features/auth/authSlice";
 
 export default function ProfilePage() {
     const router = useRouter();
@@ -40,6 +40,7 @@ export default function ProfilePage() {
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMessage] = useState("");
     const [alertTitle, setAlertTitle] = useState("");
+    const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
     // Form State
     const [firstName, setFirstName] = useState("");
@@ -160,6 +161,36 @@ export default function ProfilePage() {
         // and fetchProfile being called again if necessary, but here state is already set.
         // If we want to be sure, we can re-fetch.
         fetchProfile();
+    };
+
+    const handleDeleteAccount = async () => {
+        const token = getCookie("access_token");
+        if (!token) return;
+
+        setSaving(true);
+        try {
+            await deleteUserProfile(token);
+
+            // Clear credentials
+            deleteCookie("access_token");
+            deleteCookie("refresh_token");
+
+            // Clear Redux state
+            dispatch(logout());
+
+            // Redirect to home
+            router.push("/");
+            toast.success("Account deleted successfully");
+        } catch (error: any) {
+            console.error("Error deleting account:", error);
+            const errorMessage = error.data?.message || error.message || "Failed to delete account";
+            setAlertTitle("Delete Failed");
+            setAlertMessage(errorMessage);
+            setShowAlert(true);
+        } finally {
+            setSaving(false);
+            setShowDeleteDialog(false);
+        }
     };
 
     if (loading) {
@@ -296,7 +327,10 @@ export default function ProfilePage() {
                                     {saving ? "Saving..." : "Save"}
                                 </Button>
                                 <div className="pt-4 border-t border-gray-100">
-                                    <button className="text-red-500 font-bold hover:text-red-600 cursor-pointer hover:underline transition-colors">
+                                    <button
+                                        onClick={() => setShowDeleteDialog(true)}
+                                        className="text-red-500 font-bold hover:text-red-600 cursor-pointer hover:underline transition-colors"
+                                    >
                                         Delete Account
                                     </button>
                                 </div>
@@ -323,6 +357,34 @@ export default function ProfilePage() {
                             className="bg-[#1a2b4b] text-white hover:bg-[#1a2b4b]/90 rounded-xl h-11 px-8"
                         >
                             OK
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+
+            {/* Delete Account Confirmation Dialog */}
+            <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+                <AlertDialogContent className="bg-white rounded-2xl border-none shadow-xl">
+                    <AlertDialogHeader>
+                        <AlertDialogTitle className="text-[#1a2b4b] text-xl font-bold">
+                            Delete Account?
+                        </AlertDialogTitle>
+                        <AlertDialogDescription className="text-gray-500 text-base">
+                            This action cannot be undone. This will permanently delete your account and remove your data from our servers.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter className="gap-3">
+                        <AlertDialogAction
+                            onClick={() => setShowDeleteDialog(false)}
+                            className="bg-gray-100 text-gray-700 hover:bg-gray-200 rounded-xl h-11 px-6 border-none"
+                        >
+                            Cancel
+                        </AlertDialogAction>
+                        <AlertDialogAction
+                            onClick={handleDeleteAccount}
+                            className="bg-red-500 text-white hover:bg-red-600 rounded-xl h-11 px-8"
+                        >
+                            Delete
                         </AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>
