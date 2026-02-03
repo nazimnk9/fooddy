@@ -55,7 +55,7 @@ export const FoodCard = ({ item, index }: FoodCardProps) => {
                     src={item.image}
                     alt={item.name}
                     fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-110"
+                    className="object-fixed transition-transform duration-500 group-hover:scale-110"
                 />
 
                 {/* Floating Tag */}
