@@ -165,10 +165,12 @@ export const Header = () => {
                   <div className="p-4 flex flex-col gap-4">
                     <h3 className="font-bold text-[#1a2b4b] text-xl px-2">{isLoggedIn && userProfile ? userProfile.first_name + " " + userProfile.last_name : "Profile"}</h3>
 
-                    <DropdownMenuItem className="flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer focus:bg-transparent hover:text-primary transition-colors hover:bg-accent/10 focus:bg-accent/10">
-                      <HelpCircle className="w-6 h-6 text-[#1a2b4b]" />
-                      <span className="text-[#1a2b4b] font-medium text-base">Support</span>
-                    </DropdownMenuItem>
+                    <Link href="/contact">
+                      <DropdownMenuItem className="flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer focus:bg-transparent hover:text-primary transition-colors hover:bg-accent/10 focus:bg-accent/10">
+                        <HelpCircle className="w-6 h-6 text-[#1a2b4b]" />
+                        <span className="text-[#1a2b4b] font-medium text-base">Support</span>
+                      </DropdownMenuItem>
+                    </Link>
                   </div>
 
                   {!isLoggedIn ? (
