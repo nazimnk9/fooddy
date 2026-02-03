@@ -63,9 +63,9 @@ const Contact = () => {
     <div className="min-h-screen bg-background">
       {/* <Navbar /> */}
       
-      <main className="pt-20">
+      <main className="pt-10">
         {/* Hero Section */}
-        <section className="text-black py-16 md:py-6">
+        <section className="text-black py-6 md:py-6">
           <div className="container-custom text-center">
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
