@@ -225,8 +225,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     const openCart = () => setIsCartOpen(true);
     const closeCart = () => setIsCartOpen(false);
 
-    // Calculate total count
-    const cartCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
+    // Calculate unique product count
+    const cartCount = cartItems.length;
 
     return (
         <CartContext.Provider value={{
