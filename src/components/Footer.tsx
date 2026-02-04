@@ -10,9 +10,9 @@ const Footer = () => {
   const quickLinks = [
     { name: 'Home', href: '/' },
     { name: 'Menu Items', href: '/menu' },
-    { name: 'About Us', href: '#about' },
+    { name: 'About Us', href: '/about' },
     // { name: 'Blog', href: '#' },
-    { name: 'Contact', href: '#contact' },
+    { name: 'Contact', href: '/contact' },
   ];
 
   // Scroll to top on route change
