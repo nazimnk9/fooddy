@@ -34,7 +34,7 @@ const Footer = () => {
           >
             <img src={logo.src} alt="Dawat Restaurant" className="h-20 w-auto mb-4" />
             <p className="text-primary-foreground/70 text-sm mb-6">
-              Experience the authentic taste of Italy with our handcrafted dishes made from the finest ingredients.
+              Experience Authentic Bengali Cuisine.
             </p>
             <div className="flex gap-4">
               <a

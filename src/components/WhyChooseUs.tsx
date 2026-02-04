@@ -72,7 +72,7 @@ const WhyChooseUs = () => {
               Our passion for food, commitment to quality, and dedication to customer satisfaction 
               make us the preferred choice for food lovers.
             </p>
-            <div className="flex items-center gap-8">
+            {/* <div className="flex items-center gap-8">
               <div className="text-center">
                 <span className="block font-heading text-4xl font-bold text-accent">10+</span>
                 <span className="text-soft-white/70 text-sm">Years Experience</span>
@@ -87,7 +87,7 @@ const WhyChooseUs = () => {
                 <span className="block font-heading text-4xl font-bold text-accent">100+</span>
                 <span className="text-soft-white/70 text-sm">Menu Items</span>
               </div>
-            </div>
+            </div> */}
           </motion.div>
 
           {/* Right Features */}
