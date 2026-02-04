@@ -36,7 +36,7 @@ const navLinks = [
   // { name: "Shop", href: "/shop" },
   { name: "About Us", href: "/about" },
   // { name: "Restaurants", href: "#restaurants" },
-  { name: "Contact", href: "/contact" },
+  { name: "Visit", href: "/contact" },
 ];
 
 export const Header = () => {
