@@ -65,7 +65,7 @@ const WhyChooseUs = () => {
             transition={{ duration: 0.6 }}
           >
             <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-soft-white mb-6 leading-tight">
-              Why People Choose <span className="text-accent">Dawat</span>
+              Why People Choose <span className="text-[#C5A059]">Dawat</span>
             </h2>
             <p className="text-soft-white/80 text-lg mb-8 leading-relaxed">
               For over a decade, we've been serving the finest Italian cuisine in the heart of Italy. 
@@ -104,8 +104,8 @@ const WhyChooseUs = () => {
                 variants={itemVariants}
                 className="bg-soft-white/10 backdrop-blur-sm rounded-xl p-6 border border-soft-white/10 hover:bg-soft-white/15 transition-colors duration-300"
               >
-                <div className="w-12 h-12 rounded-lg bg-accent/20 flex items-center justify-center mb-4">
-                  <feature.icon className="w-6 h-6 text-accent" />
+                <div className="w-12 h-12 rounded-lg bg-[#C5A059]/20 flex items-center justify-center mb-4">
+                  <feature.icon className="w-6 h-6 text-white" />
                 </div>
                 <h3 className="font-heading text-lg font-bold text-soft-white mb-2">
                   {feature.title}

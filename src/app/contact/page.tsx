@@ -16,8 +16,8 @@ const contactInfo = [
     {
         icon: Mail,
         label: 'Email',
-        value: 'dawat@gmail.com',
-        href: 'mailto:dawat@gmail.com',
+        value: 'dawatristoranteroma@gmail.com',
+        href: 'mailto:dawatristoranteroma@gmail.com',
     },
     {
         icon: Globe,
@@ -28,7 +28,7 @@ const contactInfo = [
     {
         icon: MapPin,
         label: 'Location',
-        value: 'Piazza dei Mirti 19, Roma, Italy',
+        value: 'Piazza dei Mirti 19, Rome, Italy, 00172',
         href: 'https://maps.google.com/?q=Piazza+dei+Mirti+19,+Roma,+Italy',
     },
 ];
@@ -37,13 +37,13 @@ const socialLinks = [
     {
         icon: Facebook,
         label: 'Facebook',
-        href: 'https://facebook.com/dawat',
+        href: 'https://www.facebook.com/profile.php?id=61584845942070',
         color: 'hover:bg-blue-600',
     },
     {
         icon: Instagram,
         label: 'Instagram',
-        href: 'https://instagram.com/dawat',
+        href: 'https://www.instagram.com/dawat_ristorante',
         color: 'hover:bg-gradient-to-br hover:from-purple-600 hover:to-pink-500',
     },
     {
@@ -53,7 +53,7 @@ const socialLinks = [
             </svg>
         ),
         label: 'TikTok',
-        href: 'https://tiktok.com/@dawat',
+        href: 'https://www.tiktok.com/@dawatrestaurant19',
         color: 'hover:bg-black',
     },
 ];
@@ -73,7 +73,7 @@ const Contact = () => {
                             transition={{ duration: 0.6 }}
                             className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold mb-4"
                         >
-                            Get In Touch
+                            Visit Our Restaurant
                         </motion.h1>
                         <motion.p
                             initial={{ opacity: 0, y: 20 }}
@@ -330,7 +330,7 @@ const Contact = () => {
                                 </h2>
                                 <div className="rounded-xl overflow-hidden shadow-lg h-[400px] md:h-[500px] lg:h-[414px]">
                                     <iframe
-                                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2970.2893947888!2d12.5533!3d41.8947!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x132f61b6532013ad%3A0x28f1c82e908503c4!2sPiazza%20dei%20Mirti%2C%2019%2C%2000172%20Roma%20RM%2C%20Italy!5e0!3m2!1sen!2sus!4v1699000000000!5m2!1sen!2sus"
+                                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2970.5669844643858!2d12.5670847!3d41.88066200000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x132f625d0a003383%3A0xe4e850425f3c6060!2sPiazza%20dei%20Mirti%2C%2032%2C%2000172%20Roma%20RM%2C%20Italy!5e0!3m2!1sen!2sbd!4v1770285655241!5m2!1sen!2sbd"
                                         width="100%"
                                         height="100%"
                                         style={{ border: 0 }}
@@ -341,6 +341,7 @@ const Contact = () => {
                                         className="grayscale hover:grayscale-0 transition-all duration-500"
                                     />
                                 </div>
+                                
                                 <div className="bg-secondary rounded-lg p-4">
                                     <p className="text-sm text-muted-foreground">
                                         <strong className="text-foreground">Address:</strong> Piazza dei Mirti 19, 00172 Roma RM, Italy

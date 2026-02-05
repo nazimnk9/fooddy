@@ -121,7 +121,7 @@ const Footer = () => {
               <li className="flex items-start gap-3">
                 <MapPin className="w-5 h-5 mt-0.5 text-accent flex-shrink-0" />
                 <p className="text-primary-foreground/70 text-sm">
-                  Via Roma 123, 00100 Roma, Italy
+                  Piazza dei Mirti 19, Rome, Italy, 00172
                 </p>
               </li>
               <li className="flex items-center gap-3">
@@ -136,10 +136,10 @@ const Footer = () => {
               <li className="flex items-center gap-3">
                 <Mail className="w-5 h-5 text-accent" />
                 <a
-                  href="mailto:info@dawat.it"
+                  href="mailto:dawatristoranteroma@gmail.com"
                   className="text-primary-foreground/70 text-sm hover:text-primary-foreground transition-colors duration-300"
                 >
-                  info@dawat.it
+                  dawatristoranteroma@gmail.com
                 </a>
               </li>
             </ul>

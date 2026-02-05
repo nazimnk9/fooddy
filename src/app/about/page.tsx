@@ -4,6 +4,14 @@ import { useRef, useEffect, useState } from "react";
 import Image from "next/image";
 import { motion, useScroll, useTransform, useAnimation, AnimatePresence } from "framer-motion";
 import { Phone, MapPin, Facebook, Mail, Instagram, Globe } from "lucide-react";
+import hero2 from '@/assets/dawat_e_1.jpg';
+import hero1 from '@/assets/dawat_m.jpg';
+
+import show1 from '@/assets/show1.jpg';
+import love1 from '@/assets/loves1.jpg';
+import comfo from '@/assets/comfo.jpg';
+import community from '@/assets/community.jpg';
+import importance from '@/assets/importance.jpg';
 
 const TikTokIcon = () => (
     <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-[#0b241e]">
@@ -19,15 +27,17 @@ export default function AboutPage() {
     });
 
     // Parallax effect: Image moves vertically inside its fixed-size container
-    const y1 = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
-    const y2 = useTransform(scrollYProgress, [0, 1], ["-15%", "15%"]);
+    const yMainImage = useTransform(scrollYProgress, [0, 1], ["-12%", "12%"]);
+    const ySmallImage = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
+
 
     // Slider Data - Preserving User's manual change for 'Global Presence' image
     const sliderItems = [
-        { year: "2000", title: "Branch in NYC", img: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&q=80&w=800" },
-        { year: "2019", title: "Reward from Tiqil", img: "https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&q=80&w=800" },
-        { year: "1990", title: "Journey Begins", img: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&q=80&w=800" },
-        { year: "2024", title: "Global Presence", img: "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&q=80&w=800" }
+        { year: "2025", title: "Journey Begins", img: show1, pos: "object-center" },
+        { year: "2026", title: "Getting more loves", img: love1, pos: "object-center" },
+        { year: "2025", title: "All about Comfort", img: comfo, pos: "object-center" },
+        { year: "2026", title: "Community Love", img: community, pos: "object-center" },
+        { year: "2026", title: "Care about your Importance", img: importance, pos: "object-center" }
     ];
 
     // Triple buffer for truly seamless infinite loop (even during drag)
@@ -125,8 +135,9 @@ export default function AboutPage() {
                         </h1>
                     </div>
                     <p className="text-3xl md:text-5xl lg:text-6xl font-normal leading-tight mt-2 md:mt-4 relative z-10 text-black">
-                        our restaurant
+                        Dawat
                     </p>
+                    <p className="text-muted-foreground mt-2 font-normal ">Restaurant & Grill</p>
                 </div>
             </section>
 
@@ -135,20 +146,18 @@ export default function AboutPage() {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-start">
 
                     {/* Left/Top: Large Image Container */}
-                    <div className="w-full h-[400px] md:h-[600px] lg:h-[700px] rounded-lg overflow-hidden border border-white/5 bg-[#0a1f1a] relative">
-                        <motion.div
-                            style={{ y: y1, scale: 1.2 }}
-                            className="absolute inset-0 w-full h-[120%]"
-                        >
+                    <div className="relative w-full h-[400px] md:h-[600px] lg:h-[700px] overflow-hidden rounded-lg bg-[#0a1f1a]">
+                        <motion.div style={{ y: yMainImage }} className="absolute inset-0">
                             <Image
-                                src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=1000"
-                                alt="Our Story"
-                                fill
-                                className="object-fixed" // Preserving user preference
-                                priority
+                            src= {hero2}
+                            alt="Our Story"
+                            fill
+                            className="object-cover scale-[1.25]"
+                            priority
                             />
                         </motion.div>
                     </div>
+
 
                     {/* Right/Bottom: Content Area */}
                     <div className="flex flex-col items-center lg:items-start text-center lg:text-left space-y-10 md:space-y-16">
@@ -177,31 +186,25 @@ export default function AboutPage() {
                         {/* Bottom Row - Responsive Layout */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-12 w-full pt-4">
                             {/* Small Image Container */}
-                            <div className="relative aspect-[4/4] rounded-lg overflow-hidden border border-white/10 shadow-3xl bg-[#0a1f1a]">
-                                <motion.div
-                                    style={{ y: y2, scale: 1.3 }}
-                                    className="absolute inset-0 w-full h-[130%]"
-                                >
+                            <div className="relative aspect-square overflow-hidden rounded-lg bg-[#0a1f1a]">
+                                <motion.div style={{ y: ySmallImage }} className="absolute inset-0">
                                     <Image
-                                        src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&q=80&w=800"
-                                        alt="Featured Dish"
-                                        fill
-                                        className="object-fixed" // Preserving user preference
+                                    src= {hero1}
+                                    alt="Featured Dish"
+                                    fill
+                                    className="object-cover object-[50%_35%] scale-[1.05]"
                                     />
                                 </motion.div>
                             </div>
+
 
                             {/* Opening Hours */}
                             <div className="flex flex-col justify-center space-y-4 md:space-y-6 text-left">
                                 <h3 className="text-lg md:text-2xl lg:text-lg font-light tracking-wide text-[#c5a059]">Opening Hours</h3>
                                 <div className="space-y-2 md:space-y-3">
                                     <div className="border-l-2 border-[#c5a059]/30 pl-4 py-1">
-                                        <p className="text-gray-500 text-sm md:text-base lg:text-sm uppercase tracking-widest font-medium">Mon — Thu</p>
-                                        <p className="text-base md:text-xl lg:text-base text-black font-light mt-1">10.00 am — 01:00 am</p>
-                                    </div>
-                                    <div className="border-l-2 border-[#c5a059]/30 pl-4 py-1">
-                                        <p className="text-gray-500 text-sm md:text-base lg:text-sm uppercase tracking-widest font-medium">Fri — Sun</p>
-                                        <p className="text-base md:text-xl lg:text-base text-black font-light mt-1">10:00 am — 02:00 am</p>
+                                        <p className="text-gray-500 text-sm md:text-base lg:text-sm uppercase tracking-widest font-medium">All week days</p>
+                                        <p className="text-base md:text-xl lg:text-base text-black font-light mt-1">7:30 am — 11:00 PM</p>
                                     </div>
                                 </div>
 
@@ -280,7 +283,7 @@ export default function AboutPage() {
                                 className="slider-item flex-shrink-0 w-screen px-4 md:px-4 md:w-[500px] lg:w-[500px] group select-none"
                             >
                                 <div className="mb-6 md:mb-10 space-y-2">
-                                    <span className="text-[#c5a059] text-sm md:text-lg font-medium tracking-[0.3em]">{item.year}</span>
+                                    {/* <span className="text-[#c5a059] text-sm md:text-lg font-medium tracking-[0.3em]">{item.year}</span> */}
                                     <h3 className="text-xl md:text-4xl lg:text-5xl font-normal mt-1 group-hover:text-[#c5a059] transition-all duration-700 ease-out text-black">{item.title}</h3>
                                 </div>
                                 <div className="relative aspect-[16/10] md:aspect-[4/3] rounded-md overflow-hidden bg-black/40">
@@ -288,8 +291,9 @@ export default function AboutPage() {
                                         src={item.img}
                                         alt={item.title}
                                         fill
-                                        className="object-fixed transition-transform duration-[1.5s] ease-out group-hover:scale-110 pointer-events-none"
+                                        className={`object-cover ${item.pos} transition-transform duration-[1.5s] ease-out group-hover:scale-110 pointer-events-none`}
                                     />
+
                                     <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-700" />
                                 </div>
                             </div>
