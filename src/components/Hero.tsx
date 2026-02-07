@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import hero1 from '@/assets/hero-sp.png';
-import hero2 from '@/assets/hero-2.jpg';
+import hero2 from '@/assets/curry.jpg';
 import hero3 from '@/assets/hero-3.jpg';
 import { useRouter } from 'next/navigation';
 
@@ -16,14 +16,9 @@ const slides = [
   },
   {
     image: hero2,
-    title: 'Fresh Pasta Made Daily',
-    subtitle: 'Handcrafted with passion and the finest ingredients',
-  },
-  {
-    image: hero3,
-    title: 'Wood-Fired Pizza Perfection',
-    subtitle: 'Crispy, flavorful, and authentically Italian',
-  },
+    title: 'Dawat Special Menus',
+    subtitle: 'Find Special Bengali Menus when you come',
+  }
 ];
 
 const Hero = () => {
@@ -57,7 +52,7 @@ const Hero = () => {
           initial={{ opacity: 0, scale: 1.1 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.95 }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 1.2 }}
           className="absolute inset-0"
         >
           <div
