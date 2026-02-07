@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import hero1 from '@/assets/hero-1.jpg';
+import hero1 from '@/assets/hero-sp.png';
 import hero2 from '@/assets/hero-2.jpg';
 import hero3 from '@/assets/hero-3.jpg';
 import { useRouter } from 'next/navigation';
@@ -11,7 +11,7 @@ import { useRouter } from 'next/navigation';
 const slides = [
   {
     image: hero1,
-    title: 'Experience Authentic Italian Cuisine',
+    title: 'Experience Authentic Bengali Cuisine',
     subtitle: 'Where tradition meets modern culinary excellence',
   },
   {
@@ -61,9 +61,13 @@ const Hero = () => {
           className="absolute inset-0"
         >
           <div
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: `url(${slides[currentSlide].image.src})` }}
-          />
+  className="absolute inset-0 bg-cover bg-no-repeat"
+  style={{
+    backgroundImage: `url(${slides[currentSlide].image.src})`,
+    backgroundPosition: "center",
+    backgroundSize: "cover",
+  }}
+/>
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70" />
         </motion.div>
       </AnimatePresence>
