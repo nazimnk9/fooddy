@@ -3,9 +3,9 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import hero1 from '@/assets/hero-sp.png';
+import hero1 from '@/assets/hero-n.png';
 import hero2 from '@/assets/curry.jpg';
-import hero3 from '@/assets/hero-3.jpg';
+
 import { useRouter } from 'next/navigation';
 
 const slides = [
@@ -52,7 +52,7 @@ const Hero = () => {
           initial={{ opacity: 0, scale: 1.1 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.95 }}
-          transition={{ duration: 1.2 }}
+          transition={{ duration: 1.0 }}
           className="absolute inset-0"
         >
           <div

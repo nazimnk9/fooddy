@@ -1,34 +1,38 @@
 import { motion } from 'framer-motion';
 import { ArrowRight, Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import blog1 from '@/assets/blog-1.jpg';
-import blog2 from '@/assets/blog-2.jpg';
-import blog3 from '@/assets/blog-3.jpg';
+import blog1 from '@/assets/blog-n-1.png';
+import blog2 from '@/assets/blog-n-2.png';
+import blog3 from '@/assets/blog-n-3.png';
+import Link from "next/link";
 
 const blogs = [
   {
     id: 1,
-    title: 'The Art of Fresh Pasta Making',
-    excerpt: 'Discover the secrets behind our handmade pasta and traditional techniques passed down through generations.',
+    title: 'A Taste of Bengal in Italy: How Bengali Cuisine Fits the Italian Palate',
+    excerpt: 'What happens when Bengal’s bold aromas meet Italy’s love for comfort and tradition? At Dawat, we believe Bengali cuisine doesn’t just belong in Italy..',
     image: blog1,
     date: 'January 15, 2026',
-    category: 'Recipes',
+    category: 'Culture & Cuisine',
+    link: '/blog/taste-bengal-italy'
   },
   {
     id: 2,
-    title: 'Perfect Wine Pairing Guide',
-    excerpt: 'Learn how to pair Italian wines with your favorite dishes for an unforgettable dining experience.',
+    title: 'Must-Try Bengali Dishes for First-Time Guests in Our Restaurant',
+    excerpt: 'Visiting a Bengali restaurant for the first time can be exciting—and a little overwhelming. With rich aromas, unique spices,',
     image: blog2,
     date: 'January 10, 2026',
-    category: 'Wine',
+    category: 'Food Guide',
+    link: '/blog/must-try-bengali-dish'
   },
   {
     id: 3,
-    title: 'Fresh Ingredients: Farm to Table',
-    excerpt: 'We take pride in sourcing the freshest ingredients from local farms and importing the finest Italian products.',
+    title: 'Bengali vs Indian Cuisine: What’s the Difference?',
+    excerpt: 'Many people in Italy are familiar with “Indian food” — but few realize how diverse it truly is. Bengali cuisine, from the eastern part of the Indian subcontinent, has its own identity, flavors, and traditions that set it apart.',
     image: blog3,
     date: 'January 5, 2026',
-    category: 'Quality',
+    category: 'Food Culture',
+    link: '/blog/benali-vs-indian-cuisine'
   },
 ];
 
@@ -110,7 +114,7 @@ const BlogSection = () => {
                   {blog.excerpt}
                 </p>
                 <a
-                  href="#"
+                  href= {blog.link}
                   className="inline-flex items-center gap-2 text-accent font-medium text-sm hover:gap-3 transition-all duration-300"
                 >
                   Read More <ArrowRight className="w-4 h-4" />
@@ -127,9 +131,12 @@ const BlogSection = () => {
           transition={{ duration: 0.6 }}
           className="text-center"
         >
+          <Link href="/blog">
           <Button variant="outline" size="lg" className="gap-2">
             View All Posts <ArrowRight className="w-4 h-4" />
           </Button>
+          </Link>
+          
         </motion.div>
       </div>
     </section>
