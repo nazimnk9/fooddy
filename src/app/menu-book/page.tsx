@@ -29,6 +29,8 @@ const slideVariants: Variants = {
 };
 
 
+
+
 const modalVariants = {
   overlayIn: { opacity: 1 },
   overlayOut: { opacity: 0 },
@@ -63,19 +65,77 @@ function normalizeProduct(p) {
   };
 }
 
-async function fetchAllPages(url) {
-  let nextUrl = url;
-  const all = [];
+function safeText(v: unknown, fallback = "") {
+  if (v === null || v === undefined) return fallback;
+  return String(v);
+}
+
+/* ---------- API types ---------- */
+
+type ApiCategory = {
+  id: number;
+  title: string;
+  image?: string | null;
+};
+
+type ApiProduct = {
+  id: number;
+  title: string;
+  description?: string | null;
+  price?: string | number | null;
+  category?: Array<{ id: number }>;
+  images?: Array<{ image: string }>;
+};
+
+/* ---------- Normalizers ---------- */
+
+function normalizeCategory(c: ApiCategory) {
+  return {
+    id: c.id,
+    name: c.title ?? "Category",
+    image: c.image ?? null,
+  };
+}
+
+function normalizeProduct(p: ApiProduct) {
+  const catId =
+    Array.isArray(p.category) && p.category.length ? p.category[0]?.id : null;
+
+  const img =
+    Array.isArray(p.images) && p.images.length ? p.images[0]?.image : null;
+
+  return {
+    id: p.id,
+    name: p.title ?? "Item",
+    description: p.description ?? "",
+    price: p.price ?? null,
+    categoryId: catId,
+    image: img,
+  };
+}
+
+/* ---------- Pagination fetch ---------- */
+
+async function fetchAllPages(url: string) {
+  let nextUrl: string | null = url;
+  const all: ApiProduct[] = [];
+
   while (nextUrl) {
     const res = await fetch(nextUrl, { cache: "no-store" });
     if (!res.ok) throw new Error(`Failed to fetch: ${nextUrl}`);
+
     const json = await res.json();
-    const results = Array.isArray(json?.results) ? json.results : [];
+    const results: ApiProduct[] = Array.isArray(json?.results)
+      ? json.results
+      : [];
+
     all.push(...results);
     nextUrl = json?.next;
   }
+
   return all;
 }
+
 
 export default function MenuBookPage() {
   const [loading, setLoading] = useState(true);
