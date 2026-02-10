@@ -175,7 +175,8 @@ const normalizedProds = rawProducts.map(normalizeProduct).filter((p) => p.id != 
   }, []);
 
   const productsByCategory = useMemo(() => {
-    const map = new Map();
+    const map = new Map<number, Product[]>();
+
     for (const c of categories) map.set(c.id, []);
     for (const p of products) {
       if (p.categoryId != null && map.has(p.categoryId)) map.get(p.categoryId).push(p);
