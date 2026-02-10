@@ -294,7 +294,7 @@ const normalizedProds = rawProducts.map(normalizeProduct).filter((p) => p.id != 
                           <CategoryPage
                             category={current.category}
                             items={current.items}
-                            onItemClick={(item) => setSelectedItem(item)} // ✅ open modal
+                            onItemClick={(item: Product) => setSelectedItem(item)} // ✅ open modal
                           />
                         )}
                         {current?.type === "last" && <LastPage />}
