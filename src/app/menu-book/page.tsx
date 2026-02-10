@@ -439,7 +439,7 @@ export default function MenuBookPage() {
 
 /* ---------------------- Pages ---------------------- */
 
-function CoverPage(): JSX.Element {
+function CoverPage() {
   return (
     <div className="relative overflow-hidden rounded-[22px] border border-white/10 bg-black/30">
       <div
@@ -478,7 +478,7 @@ function CategoryPage({
   category: Category;
   items: Product[];
   onItemClick?: (item: Product) => void;
-}): JSX.Element {
+}) {
   return (
     <div className="relative">
       <div className="flex items-start justify-between gap-4">
@@ -526,7 +526,7 @@ function MenuCard({
 }: {
   item: Product;
   onClick: () => void;
-}): JSX.Element {
+}) {
   const price =
     item.price === null || item.price === undefined
       ? null
@@ -590,7 +590,7 @@ function MenuItemModal({
 }: {
   item: Product;
   onClose: () => void;
-}): JSX.Element {
+}) {
   const [isImageOpen, setIsImageOpen] = React.useState<boolean>(false);
 
   React.useEffect(() => {
@@ -756,7 +756,7 @@ function MenuItemModal({
   );
 }
 
-function LastPage(): JSX.Element {
+function LastPage() {
   return (
     <div className="relative overflow-hidden rounded-[22px] border border-white/10 bg-black/30">
       <div
