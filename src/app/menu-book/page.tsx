@@ -38,33 +38,6 @@ const modalVariants = {
   modalOut: { opacity: 0, y: 10, scale: 0.98 },
 };
 
-function safeText(v, fallback = "") {
-  if (v === null || v === undefined) return fallback;
-  return String(v);
-}
-
-function normalizeCategory(c) {
-  return {
-    id: c?.id,
-    name: c?.title ?? c?.name ?? "Category",
-    image: c?.image ?? null,
-  };
-}
-
-function normalizeProduct(p) {
-  const catId = Array.isArray(p?.category) && p.category.length ? p.category[0]?.id : null;
-  const img = Array.isArray(p?.images) && p.images.length ? p.images[0]?.image : null;
-
-  return {
-    id: p?.id,
-    name: p?.title ?? p?.name ?? "Item",
-    description: p?.description ?? "",
-    price: p?.price ?? null,
-    categoryId: catId,
-    image: img,
-  };
-}
-
 function safeText(v: unknown, fallback = "") {
   if (v === null || v === undefined) return fallback;
   return String(v);
