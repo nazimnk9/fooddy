@@ -94,7 +94,8 @@ async function fetchAllPages(url: string) {
   const all: ApiProduct[] = [];
 
   while (nextUrl) {
-    const res = await fetch(nextUrl, { cache: "no-store" });
+    const res: Response = await fetch(nextUrl, { cache: "no-store" });
+
     if (!res.ok) throw new Error(`Failed to fetch: ${nextUrl}`);
 
     const json = await res.json();
