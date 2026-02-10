@@ -157,10 +157,12 @@ const normalizedProds = rawProducts.map(normalizeProduct).filter((p) => p.id != 
 
         setCategories(normalizedCats);
         setProducts(normalizedProds);
-      } catch (e) {
-        if (!alive) return;
-        setErr(e?.message || "Something went wrong");
-      } finally {
+      } catch (e: unknown) {
+  if (!alive) return;
+  const message = e instanceof Error ? e.message : "Something went wrong";
+  setErr(message);
+}
+ finally {
         if (!alive) return;
         setLoading(false);
       }
