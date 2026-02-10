@@ -114,14 +114,21 @@ export default function MenuBookPage() {
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState("");
 
-  const [categories, setCategories] = useState([]);
-  const [products, setProducts] = useState([]);
+
+
+  type Category = ReturnType<typeof normalizeCategory>;
+  type Product = ReturnType<typeof normalizeProduct>;
+
+  const [categories, setCategories] = useState<Category[]>([]);
+const [products, setProducts] = useState<Product[]>([]);
+const [selectedItem, setSelectedItem] = useState<Product | null>(null);
+
 
   const [pageIndex, setPageIndex] = useState(0);
   const [direction, setDirection] = useState(1);
 
   // ✅ Modal state
-  const [selectedItem, setSelectedItem] = useState(null);
+
 
   useEffect(() => {
     let alive = true;
