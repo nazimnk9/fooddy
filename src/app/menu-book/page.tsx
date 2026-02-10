@@ -179,8 +179,11 @@ const normalizedProds = rawProducts.map(normalizeProduct).filter((p) => p.id != 
 
     for (const c of categories) map.set(c.id, []);
     for (const p of products) {
-      if (p.categoryId != null && map.has(p.categoryId)) map.get(p.categoryId).push(p);
-    }
+  if (p.categoryId == null) continue;
+  const list = map.get(p.categoryId);
+  if (!list) continue;
+  list.push(p);
+}
     for (const [k, list] of map.entries()) {
       list.sort((a, b) => safeText(a.name).localeCompare(safeText(b.name)));
       map.set(k, list);
