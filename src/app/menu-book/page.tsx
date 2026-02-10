@@ -148,7 +148,7 @@ export default function MenuBookPage() {
           .filter((c) => c.id != null);
 
         const rawProducts: ApiProduct[] = await fetchAllPages(
-          "http://apis.dawatsrls.com/api/v1/menu/products/"
+          "https://apis.dawatsrls.com/api/v1/menu/products/"
         );
         const normalizedProds: Product[] = rawProducts
           .map(normalizeProduct)
