@@ -32,11 +32,12 @@ import { setProfile } from "@/redux/features/auth/authSlice";
 
 const navLinks = [
   { name: "Home", href: "/" },
-  { name: "Menu Items", href: "/menu" },
+  { name: "Order Now", href: "/order-now" },
   // { name: "Shop", href: "/shop" },
   { name: "About Us", href: "/about" },
   // { name: "Restaurants", href: "#restaurants" },
   { name: "Visit", href: "/contact" },
+  { name: "Menu Book", href: "/menu-book" },
 ];
 
 export const Header = () => {
@@ -123,7 +124,7 @@ export const Header = () => {
                 <Link
                   key={link.name}
                   href={link.href}
-                  className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+                  className="text-sm font-medium text-[#36454F] hover:text-primary transition-colors"
                 >
                   {link.name}
                 </Link>
