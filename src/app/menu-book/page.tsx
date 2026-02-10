@@ -3,11 +3,11 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion, type Variants } from "framer-motion";
 
-
 /**
  * ✅ Added feature:
  * - Click a menu item -> opens modal with details
  * - Click outside modal OR click close icon -> closes modal
+ * - Click item image -> fullscreen preview (click outside / close / ESC to close)
  */
 
 const coverImage = "/menu-page-1.png";
@@ -28,10 +28,7 @@ const slideVariants: Variants = {
   }),
 };
 
-
-
-
-const modalVariants = {
+const modalVariants: Variants = {
   overlayIn: { opacity: 1 },
   overlayOut: { opacity: 0 },
   modalIn: { opacity: 1, y: 0, scale: 1 },
@@ -87,49 +84,46 @@ function normalizeProduct(p: ApiProduct) {
   };
 }
 
+type Category = ReturnType<typeof normalizeCategory>;
+type Product = ReturnType<typeof normalizeProduct>;
+
+type Page =
+  | { type: "cover" }
+  | { type: "last" }
+  | { type: "category"; category: Category; items: Product[] };
+
 /* ---------- Pagination fetch ---------- */
 
-async function fetchAllPages(url: string) {
+async function fetchAllPages(url: string): Promise<ApiProduct[]> {
   let nextUrl: string | null = url;
   const all: ApiProduct[] = [];
 
   while (nextUrl) {
     const res: Response = await fetch(nextUrl, { cache: "no-store" });
-
     if (!res.ok) throw new Error(`Failed to fetch: ${nextUrl}`);
 
-    const json = await res.json();
-    const results: ApiProduct[] = Array.isArray(json?.results)
-      ? json.results
-      : [];
+    const json: { results?: ApiProduct[]; next?: string | null } =
+      await res.json();
 
+    const results: ApiProduct[] = Array.isArray(json.results) ? json.results : [];
     all.push(...results);
-    nextUrl = json?.next;
+
+    nextUrl = json.next ?? null;
   }
 
   return all;
 }
 
-
 export default function MenuBookPage() {
-  const [loading, setLoading] = useState(true);
-  const [err, setErr] = useState("");
-
-
-
-  type Category = ReturnType<typeof normalizeCategory>;
-  type Product = ReturnType<typeof normalizeProduct>;
+  const [loading, setLoading] = useState<boolean>(true);
+  const [err, setErr] = useState<string>("");
 
   const [categories, setCategories] = useState<Category[]>([]);
-const [products, setProducts] = useState<Product[]>([]);
-const [selectedItem, setSelectedItem] = useState<Product | null>(null);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [selectedItem, setSelectedItem] = useState<Product | null>(null);
 
-
-  const [pageIndex, setPageIndex] = useState(0);
-  const [direction, setDirection] = useState(1);
-
-  // ✅ Modal state
-
+  const [pageIndex, setPageIndex] = useState<number>(0);
+  const [direction, setDirection] = useState<number>(1);
 
   useEffect(() => {
     let alive = true;
@@ -139,30 +133,40 @@ const [selectedItem, setSelectedItem] = useState<Product | null>(null);
         setLoading(true);
         setErr("");
 
-        const catRes = await fetch("https://apis.dawatsrls.com/api/v1/menu/category/", {
-          cache: "no-store",
-        });
+        const catRes: Response = await fetch(
+          "https://apis.dawatsrls.com/api/v1/menu/category/",
+          { cache: "no-store" }
+        );
         if (!catRes.ok) throw new Error("Failed to load categories");
+
         const catJson: { results?: ApiCategory[] } = await catRes.json();
-const catList: ApiCategory[] = Array.isArray(catJson.results) ? catJson.results : [];
-const normalizedCats = catList.map(normalizeCategory).filter((c) => c.id != null);
+        const catList: ApiCategory[] = Array.isArray(catJson.results)
+          ? catJson.results
+          : [];
+        const normalizedCats: Category[] = catList
+          .map(normalizeCategory)
+          .filter((c) => c.id != null);
 
-const rawProducts: ApiProduct[] = await fetchAllPages("http://apis.dawatsrls.com/api/v1/menu/products/");
-const normalizedProds = rawProducts.map(normalizeProduct).filter((p) => p.id != null);
-
+        const rawProducts: ApiProduct[] = await fetchAllPages(
+          "http://apis.dawatsrls.com/api/v1/menu/products/"
+        );
+        const normalizedProds: Product[] = rawProducts
+          .map(normalizeProduct)
+          .filter((p) => p.id != null);
 
         if (!alive) return;
 
-        normalizedCats.sort((a, b) => safeText(a.name).localeCompare(safeText(b.name)));
+        normalizedCats.sort((a, b) =>
+          safeText(a.name).localeCompare(safeText(b.name))
+        );
 
         setCategories(normalizedCats);
         setProducts(normalizedProds);
       } catch (e: unknown) {
-  if (!alive) return;
-  const message = e instanceof Error ? e.message : "Something went wrong";
-  setErr(message);
-}
- finally {
+        if (!alive) return;
+        const message = e instanceof Error ? e.message : "Something went wrong";
+        setErr(message);
+      } finally {
         if (!alive) return;
         setLoading(false);
       }
@@ -178,22 +182,26 @@ const normalizedProds = rawProducts.map(normalizeProduct).filter((p) => p.id != 
     const map = new Map<number, Product[]>();
 
     for (const c of categories) map.set(c.id, []);
+
     for (const p of products) {
-  if (p.categoryId == null) continue;
-  const list = map.get(p.categoryId);
-  if (!list) continue;
-  list.push(p);
-}
+      if (p.categoryId == null) continue;
+      const list = map.get(p.categoryId);
+      if (!list) continue;
+      list.push(p);
+    }
+
     for (const [k, list] of map.entries()) {
       list.sort((a, b) => safeText(a.name).localeCompare(safeText(b.name)));
       map.set(k, list);
     }
+
     return map;
   }, [categories, products]);
 
-  const pages = useMemo(() => {
-    const built = [];
+  const pages = useMemo<Page[]>(() => {
+    const built: Page[] = [];
     built.push({ type: "cover" });
+
     for (const c of categories) {
       built.push({
         type: "category",
@@ -201,12 +209,15 @@ const normalizedProds = rawProducts.map(normalizeProduct).filter((p) => p.id != 
         items: productsByCategory.get(c.id) ?? [],
       });
     }
+
     built.push({ type: "last" });
     return built;
   }, [categories, productsByCategory]);
 
   useEffect(() => {
-    if (pageIndex > pages.length - 1) setPageIndex(Math.max(0, pages.length - 1));
+    if (pageIndex > pages.length - 1) {
+      setPageIndex(Math.max(0, pages.length - 1));
+    }
   }, [pages.length, pageIndex]);
 
   const canPrev = pageIndex > 0;
@@ -229,9 +240,11 @@ const normalizedProds = rawProducts.map(normalizeProduct).filter((p) => p.id != 
   // ✅ Close modal on ESC
   useEffect(() => {
     if (!selectedItem) return;
+
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setSelectedItem(null);
     };
+
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [selectedItem]);
@@ -273,14 +286,16 @@ const normalizedProds = rawProducts.map(normalizeProduct).filter((p) => p.id != 
                   ) : err ? (
                     <div className="flex min-h-[56vh] items-center justify-center">
                       <div className="max-w-md rounded-2xl border border-red-500/30 bg-red-500/10 px-6 py-5">
-                        <div className="font-semibold text-red-200">Couldn’t load menu</div>
+                        <div className="font-semibold text-red-200">
+                          Couldn’t load menu
+                        </div>
                         <div className="mt-2 text-sm text-red-100/80">{err}</div>
                       </div>
                     </div>
                   ) : (
                     <AnimatePresence mode="wait" custom={direction}>
                       <motion.div
-                        key={`${pageIndex}-${current?.type}-${current?.category?.id ?? ""}`}
+                        key={`${pageIndex}-${current?.type}-${(current as any)?.category?.id ?? ""}`}
                         custom={direction}
                         variants={slideVariants}
                         initial="enter"
@@ -294,7 +309,7 @@ const normalizedProds = rawProducts.map(normalizeProduct).filter((p) => p.id != 
                           <CategoryPage
                             category={current.category}
                             items={current.items}
-                            onItemClick={(item: Product) => setSelectedItem(item)} // ✅ open modal
+                            onItemClick={(item: Product) => setSelectedItem(item)}
                           />
                         )}
                         {current?.type === "last" && <LastPage />}
@@ -346,7 +361,9 @@ const normalizedProds = rawProducts.map(normalizeProduct).filter((p) => p.id != 
           <div className="lg:col-span-4 space-y-4 ">
             <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
               <div className="text-sm font-semibold text-black">Quick Jump</div>
-              <p className="mt-1 text-xs text-black/70">Products loaded: {products.length}</p>
+              <p className="mt-1 text-xs text-black/70">
+                Products loaded: {products.length}
+              </p>
 
               <div className="mt-4 py-5 space-y-3 max-h-[52vh] overflow-auto pr-1 bg-[#000000] rounded-2xl border border-white/10">
                 <button
@@ -413,10 +430,7 @@ const normalizedProds = rawProducts.map(normalizeProduct).filter((p) => p.id != 
       {/* ✅ Modal */}
       <AnimatePresence>
         {selectedItem && (
-          <MenuItemModal
-            item={selectedItem}
-            onClose={() => setSelectedItem(null)}
-          />
+          <MenuItemModal item={selectedItem} onClose={() => setSelectedItem(null)} />
         )}
       </AnimatePresence>
     </div>
@@ -425,7 +439,7 @@ const normalizedProds = rawProducts.map(normalizeProduct).filter((p) => p.id != 
 
 /* ---------------------- Pages ---------------------- */
 
-function CoverPage() {
+function CoverPage(): JSX.Element {
   return (
     <div className="relative overflow-hidden rounded-[22px] border border-white/10 bg-black/30">
       <div
@@ -441,17 +455,30 @@ function CoverPage() {
         <div className="inline-flex w-fit rounded-full border border-yellow-400/30 bg-yellow-400/10 px-4 py-1 text-xs text-yellow-100">
           Halal • Authentic Bengali Cuisine
         </div>
-        <h2 className="mt-3 text-3xl md:text-5xl font-bold tracking-tight">Dawat Menu Book</h2>
+        <h2 className="mt-3 text-3xl md:text-5xl font-bold tracking-tight">
+          Dawat Menu Book
+        </h2>
         <p className="mt-2 text-white/80 max-w-xl">
-          Tap <span className="text-yellow-100">Next page</span> to flip through categories.
+          Tap <span className="text-yellow-100">Next page</span> to flip through
+          categories.
         </p>
-        <p className="mt-3 text-sm text-white/70">Piazza dei Mirti 19, Rome, Italy, 00172</p>
+        <p className="mt-3 text-sm text-white/70">
+          Piazza dei Mirti 19, Rome, Italy, 00172
+        </p>
       </div>
     </div>
   );
 }
 
-function CategoryPage({ category, items, onItemClick }) {
+function CategoryPage({
+  category,
+  items,
+  onItemClick,
+}: {
+  category: Category;
+  items: Product[];
+  onItemClick?: (item: Product) => void;
+}): JSX.Element {
   return (
     <div className="relative">
       <div className="flex items-start justify-between gap-4">
@@ -462,7 +489,9 @@ function CategoryPage({ category, items, onItemClick }) {
           <h2 className="mt-2 text-2xl md:text-4xl font-bold tracking-tight">
             {safeText(category?.name, "Category")}
           </h2>
-          <p className="mt-2 text-sm text-white/70">Freshly prepared • Balanced spice • Authentic taste</p>
+          <p className="mt-2 text-sm text-white/70">
+            Freshly prepared • Balanced spice • Authentic taste
+          </p>
         </div>
 
         {category?.image ? (
@@ -479,11 +508,7 @@ function CategoryPage({ category, items, onItemClick }) {
       <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
         {items?.length ? (
           items.map((p) => (
-            <MenuCard
-              key={p.id}
-              item={p}
-              onClick={() => onItemClick?.(p)}
-            />
+            <MenuCard key={p.id} item={p} onClick={() => onItemClick?.(p)} />
           ))
         ) : (
           <div className="col-span-full rounded-2xl border border-white/10 bg-white/5 p-6 text-white/70">
@@ -495,7 +520,13 @@ function CategoryPage({ category, items, onItemClick }) {
   );
 }
 
-function MenuCard({ item, onClick }) {
+function MenuCard({
+  item,
+  onClick,
+}: {
+  item: Product;
+  onClick: () => void;
+}): JSX.Element {
   const price =
     item.price === null || item.price === undefined
       ? null
@@ -512,7 +543,11 @@ function MenuCard({ item, onClick }) {
       <div className="p-4 flex gap-4">
         <div className="h-16 w-16 rounded-xl overflow-hidden border border-white/10 bg-black/20 flex-shrink-0">
           {item.image ? (
-            <img src={item.image} alt={safeText(item.name)} className="h-full w-full object-cover" />
+            <img
+              src={item.image}
+              alt={safeText(item.name)}
+              className="h-full w-full object-cover"
+            />
           ) : (
             <div className="h-full w-full flex items-center justify-center text-[10px] text-white/40">
               No Image
@@ -523,16 +558,22 @@ function MenuCard({ item, onClick }) {
         <div className="min-w-0 flex-1">
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0">
-              <div className="font-semibold text-white truncate">{safeText(item.name)}</div>
+              <div className="font-semibold text-white truncate">
+                {safeText(item.name)}
+              </div>
               {item.description && item.description !== "." ? (
-                <div className="mt-1 text-xs text-white/70 line-clamp-2">{safeText(item.description)}</div>
+                <div className="mt-1 text-xs text-white/70 line-clamp-2">
+                  {safeText(item.description)}
+                </div>
               ) : (
                 <div className="mt-1 text-xs text-white/50">..</div>
               )}
             </div>
 
             {price ? (
-              <div className="text-sm font-semibold text-yellow-100 whitespace-nowrap">€{price}</div>
+              <div className="text-sm font-semibold text-yellow-100 whitespace-nowrap">
+                €{price}
+              </div>
             ) : null}
           </div>
         </div>
@@ -543,24 +584,35 @@ function MenuCard({ item, onClick }) {
 
 /* ---------------------- Modal ---------------------- */
 
-function MenuItemModal({ item, onClose }) {
-  const [isImageOpen, setIsImageOpen] = React.useState(false);
-  // ✅ Put it HERE (inside component, before return)
+function MenuItemModal({
+  item,
+  onClose,
+}: {
+  item: Product;
+  onClose: () => void;
+}): JSX.Element {
+  const [isImageOpen, setIsImageOpen] = React.useState<boolean>(false);
+
   React.useEffect(() => {
     if (!isImageOpen) return;
+
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setIsImageOpen(false);
     };
+
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [isImageOpen]);
+
   const price =
     item?.price === null || item?.price === undefined
       ? null
       : typeof item.price === "number"
       ? item.price.toFixed(2)
       : safeText(item.price);
+
   const hasImage = Boolean(item?.image);
+
   return (
     <motion.div
       className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
@@ -572,64 +624,63 @@ function MenuItemModal({ item, onClose }) {
       aria-modal="true"
       role="dialog"
     >
-      {/* Overlay (click to close) */}
-      <div
-        className="absolute inset-0 bg-black/70"
-        onClick={onClose}
-      />
+      <div className="absolute inset-0 bg-black/70" onClick={onClose} />
 
-      {/* Modal panel (stop propagation so inside click won't close) */}
       <motion.div
         variants={modalVariants}
         initial="modalOut"
         animate="modalIn"
         exit="modalOut"
         transition={{ duration: 0.2, ease: "easeOut" }}
-        onClick={(e) => e.stopPropagation()}
+        onClick={(e: React.MouseEvent) => e.stopPropagation()}
         className="relative w-full max-w-lg rounded-3xl border border-white/10 bg-[#0f0f14] text-white shadow-2xl overflow-hidden"
       >
-        {/* Close button */}
         <button
           type="button"
           onClick={onClose}
           aria-label="Close modal"
           className="absolute right-3 top-3 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 transition p-2"
         >
-          <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2">
+          <svg
+            viewBox="0 0 24 24"
+            className="h-5 w-5"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
             <path d="M18 6L6 18" />
             <path d="M6 6l12 12" />
           </svg>
         </button>
 
-        {/* Content */}
         <div className="p-5 md:p-6">
           <div className="flex gap-4">
-            {/* ✅ 2) Replace ONLY your image block with this (click-to-fullscreen) */}
-<div className="h-24 w-24 rounded-2xl overflow-hidden border border-white/10 bg-black/20 flex-shrink-0">
-  {hasImage ? (
-    <button
-      type="button"
-      onClick={() => setIsImageOpen(true)}
-      className="h-full w-full focus:outline-none"
-      aria-label="Open image full screen"
-    >
-      <img
-        src={item.image}
-        alt={safeText(item.name)}
-        className="h-full w-full object-cover hover:opacity-90 transition"
-      />
-    </button>
-  ) : (
-    <div className="h-full w-full flex items-center justify-center text-xs text-white/40">
-      No Image
-    </div>
-  )}
-</div>
-
+            <div className="h-24 w-24 rounded-2xl overflow-hidden border border-white/10 bg-black/20 flex-shrink-0">
+              {hasImage ? (
+                <button
+                  type="button"
+                  onClick={() => setIsImageOpen(true)}
+                  className="h-full w-full focus:outline-none"
+                  aria-label="Open image full screen"
+                >
+                  <img
+                    src={item.image as string}
+                    alt={safeText(item.name)}
+                    className="h-full w-full object-cover hover:opacity-90 transition"
+                  />
+                </button>
+              ) : (
+                <div className="h-full w-full flex items-center justify-center text-xs text-white/40">
+                  No Image
+                </div>
+              )}
+            </div>
 
             <div className="min-w-0 flex-1">
-              <div className="text-xl font-semibold ">{safeText(item?.name)}</div>
-              {price ? <div className="mt-1 text-yellow-100 font-semibold">€{price}</div> : null}
+              <div className="text-xl font-semibold">{safeText(item?.name)}</div>
+              {price ? (
+                <div className="mt-1 text-yellow-100 font-semibold">€{price}</div>
+              ) : null}
               <div className="mt-2 text-sm text-white/70">
                 {item?.description && item.description !== "."
                   ? safeText(item.description)
@@ -649,67 +700,63 @@ function MenuItemModal({ item, onClose }) {
           </div>
         </div>
       </motion.div>
-      {/* ✅ 3) Add this fullscreen image viewer INSIDE MenuItemModal, right before the closing </motion.div> of the modal panel */}
-<AnimatePresence>
-  {isImageOpen && hasImage && (
-    <motion.div
-      className="fixed inset-0 z-[10000] flex items-center justify-center p-4"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.18 }}
-      role="dialog"
-      aria-modal="true"
-    >
-      {/* overlay - click outside to close */}
-      <div
-        className="absolute inset-0 bg-black/90"
-        onClick={() => setIsImageOpen(false)}
-      />
 
-      {/* image container */}
-      <motion.div
-        initial={{ scale: 0.98, opacity: 0, y: 8 }}
-        animate={{ scale: 1, opacity: 1, y: 0 }}
-        exit={{ scale: 0.98, opacity: 0, y: 8 }}
-        transition={{ duration: 0.2, ease: "easeOut" }}
-        onClick={(e) => e.stopPropagation()}
-        className="relative w-full max-w-5xl"
-      >
-        {/* close icon */}
-        <button
-          type="button"
-          onClick={() => setIsImageOpen(false)}
-          aria-label="Close full screen image"
-          className="absolute -top-3 -right-3 md:top-2 md:right-2 rounded-full border border-white/15 bg-white/10 hover:bg-white/20 transition p-2 text-white"
-        >
-          <svg
-            viewBox="0 0 24 24"
-            className="h-5 w-5"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
+      <AnimatePresence>
+        {isImageOpen && hasImage && (
+          <motion.div
+            className="fixed inset-0 z-[10000] flex items-center justify-center p-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.18 }}
+            role="dialog"
+            aria-modal="true"
           >
-            <path d="M18 6L6 18" />
-            <path d="M6 6l12 12" />
-          </svg>
-        </button>
+            <div
+              className="absolute inset-0 bg-black/90"
+              onClick={() => setIsImageOpen(false)}
+            />
 
-        <img
-          src={item.image}
-          alt={safeText(item.name)}
-          className="w-full max-h-[85vh] object-contain rounded-2xl border border-white/10 bg-black"
-        />
-      </motion.div>
-    </motion.div>
-  )}
-</AnimatePresence>
+            <motion.div
+              initial={{ scale: 0.98, opacity: 0, y: 8 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.98, opacity: 0, y: 8 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
+              onClick={(e: React.MouseEvent) => e.stopPropagation()}
+              className="relative w-full max-w-5xl"
+            >
+              <button
+                type="button"
+                onClick={() => setIsImageOpen(false)}
+                aria-label="Close full screen image"
+                className="absolute -top-3 -right-3 md:top-2 md:right-2 rounded-full border border-white/15 bg-white/10 hover:bg-white/20 transition p-2 text-white"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  className="h-5 w-5"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <path d="M18 6L6 18" />
+                  <path d="M6 6l12 12" />
+                </svg>
+              </button>
 
+              <img
+                src={item.image as string}
+                alt={safeText(item.name)}
+                className="w-full max-h-[85vh] object-contain rounded-2xl border border-white/10 bg-black"
+              />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 }
 
-function LastPage() {
+function LastPage(): JSX.Element {
   return (
     <div className="relative overflow-hidden rounded-[22px] border border-white/10 bg-black/30">
       <div
@@ -725,7 +772,9 @@ function LastPage() {
         <div className="inline-flex w-fit rounded-full border border-yellow-400/30 bg-yellow-400/10 px-4 py-1 text-xs text-yellow-100">
           Thank you
         </div>
-        <h2 className="mt-3 text-3xl md:text-5xl font-bold tracking-tight">See you at Dawat!</h2>
+        <h2 className="mt-3 text-3xl md:text-5xl font-bold tracking-tight">
+          See you at Dawat!
+        </h2>
         <p className="mt-2 text-white/80 max-w-xl">
           We hope you enjoyed browsing our menu. Ask our team for recommendations—especially if it’s your first time.
         </p>
