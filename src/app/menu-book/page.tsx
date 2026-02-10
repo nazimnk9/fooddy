@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, type Variants } from "framer-motion";
+
 
 /**
  * ✅ Added feature:
@@ -13,19 +14,20 @@ const coverImage = "/menu-page-1.png";
 const menuBgImage = "/menu-page-2.png";
 const lastImage = "/menu-page-1.png";
 
-const slideVariants = {
-  enter: (direction) => ({
+const slideVariants: Variants = {
+  enter: (direction: number) => ({
     x: direction > 0 ? 90 : -90,
     opacity: 0,
     filter: "blur(2px)",
   }),
   center: { x: 0, opacity: 1, filter: "blur(0px)" },
-  exit: (direction) => ({
+  exit: (direction: number) => ({
     x: direction > 0 ? -90 : 90,
     opacity: 0,
     filter: "blur(2px)",
   }),
 };
+
 
 const modalVariants = {
   overlayIn: { opacity: 1 },
