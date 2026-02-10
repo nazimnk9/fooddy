@@ -181,7 +181,7 @@ export default function MenuBookPage() {
   // ✅ Close modal on ESC
   useEffect(() => {
     if (!selectedItem) return;
-    const onKey = (e) => {
+    const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setSelectedItem(null);
     };
     window.addEventListener("keydown", onKey);
@@ -500,7 +500,7 @@ function MenuItemModal({ item, onClose }) {
   // ✅ Put it HERE (inside component, before return)
   React.useEffect(() => {
     if (!isImageOpen) return;
-    const onKey = (e) => {
+    const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setIsImageOpen(false);
     };
     window.addEventListener("keydown", onKey);
