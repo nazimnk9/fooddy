@@ -143,12 +143,13 @@ const [selectedItem, setSelectedItem] = useState<Product | null>(null);
           cache: "no-store",
         });
         if (!catRes.ok) throw new Error("Failed to load categories");
-        const catJson = await catRes.json();
-        const catList = Array.isArray(catJson?.results) ? catJson.results : [];
-        const normalizedCats = catList.map(normalizeCategory).filter((c) => c.id != null);
+        const catJson: { results?: ApiCategory[] } = await catRes.json();
+const catList: ApiCategory[] = Array.isArray(catJson.results) ? catJson.results : [];
+const normalizedCats = catList.map(normalizeCategory).filter((c) => c.id != null);
 
-        const rawProducts = await fetchAllPages("http://apis.dawatsrls.com/api/v1/menu/products/");
-        const normalizedProds = rawProducts.map(normalizeProduct).filter((p) => p.id != null);
+const rawProducts: ApiProduct[] = await fetchAllPages("http://apis.dawatsrls.com/api/v1/menu/products/");
+const normalizedProds = rawProducts.map(normalizeProduct).filter((p) => p.id != null);
+
 
         if (!alive) return;
 
