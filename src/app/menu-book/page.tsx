@@ -98,21 +98,25 @@ async function fetchAllPages(url: string): Promise<ApiProduct[]> {
   let nextUrl: string | null = url;
   const all: ApiProduct[] = [];
 
+  const toHttps = (u: string) => u.replace(/^http:\/\//i, "https://");
+
   while (nextUrl) {
+    nextUrl = toHttps(nextUrl);
+
     const res: Response = await fetch(nextUrl, { cache: "no-store" });
     if (!res.ok) throw new Error(`Failed to fetch: ${nextUrl}`);
 
     const json: { results?: ApiProduct[]; next?: string | null } =
       await res.json();
 
-    const results: ApiProduct[] = Array.isArray(json.results) ? json.results : [];
-    all.push(...results);
+    all.push(...(Array.isArray(json.results) ? json.results : []));
 
-    nextUrl = json.next ?? null;
+    nextUrl = json.next ? toHttps(json.next) : null;
   }
 
   return all;
 }
+
 
 export default function MenuBookPage() {
   const [loading, setLoading] = useState<boolean>(true);
