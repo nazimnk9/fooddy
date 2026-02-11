@@ -454,18 +454,33 @@ function CoverPage() {
           backgroundPosition: "center",
         }}
       />
+
       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-black/30" />
+
+      {/* ✅ Center Logo */}
+      <div className="absolute inset-0 flex items-center justify-center">
+        <img
+          src="/logo_1.png"
+          alt="Dawat"
+          className="h-24 w-24 md:h-32 md:w-32 object-contain drop-shadow-[0_10px_30px_rgba(0,0,0,0.6)]"
+        />
+      </div>
+
+      {/* Bottom Content */}
       <div className="absolute inset-0 p-6 md:p-10 flex flex-col justify-end">
         <div className="inline-flex w-fit rounded-full border border-yellow-400/30 bg-yellow-400/10 px-4 py-1 text-xs text-yellow-100">
           Halal • Authentic Bengali Cuisine
         </div>
+
         <h2 className="mt-3 text-3xl md:text-5xl font-bold tracking-tight">
           Dawat Menu Book
         </h2>
+
         <p className="mt-2 text-white/80 max-w-xl">
           Tap <span className="text-yellow-100">Next page</span> to flip through
           categories.
         </p>
+
         <p className="mt-3 text-sm text-white/70">
           Piazza dei Mirti 19, Rome, Italy, 00172
         </p>
@@ -473,6 +488,7 @@ function CoverPage() {
     </div>
   );
 }
+
 
 function CategoryPage({
   category,
