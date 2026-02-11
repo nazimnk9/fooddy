@@ -382,7 +382,7 @@ export default function MenuBookPage() {
                       : "border-white/10 bg-black/20 hover:bg-white/5 text-white/80",
                   ].join(" ")}
                 >
-                  Cover
+                  Welcome
                 </button>
 
                 {categories.map((c, idx) => {
@@ -423,7 +423,7 @@ export default function MenuBookPage() {
                       : "border-white/10 bg-black/20 hover:bg-white/5 text-white/80",
                   ].join(" ")}
                 >
-                  Last page
+                  End
                 </button>
               </div>
             </div>
