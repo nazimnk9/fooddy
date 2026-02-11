@@ -451,7 +451,7 @@ function CoverPage() {
         style={{
           backgroundImage: `url(${coverImage})`,
           backgroundSize: "cover",
-          backgroundPosition: "center",
+          backgroundPosition: "top",
         }}
       />
 
