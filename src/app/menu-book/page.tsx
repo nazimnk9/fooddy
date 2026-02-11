@@ -266,7 +266,7 @@ export default function MenuBookPage() {
           {/* Book */}
           <div className="lg:col-span-8">
             <div className="relative overflow-hidden rounded-[28px] border border-white/10 bg-[#121217] shadow-2xl">
-              <div className="absolute left-0 top-0 h-full w-8 bg-gradient-to-b from-[#1a1a22] to-[#0d0d12] border-r border-white/10" />
+              <div className="absolute left-0 top-0 h-full w-8 bg-gradient-to-b from-[#1a1a22] to-[#0d0d12] " />
               <div className="absolute inset-0 pointer-events-none ring-1 ring-white/5 rounded-[28px]" />
 
               <div className="relative min-h-[68vh] md:min-h-[72vh]">
