@@ -313,9 +313,14 @@ export default function CheckoutPage() {
                 }
                 window.location.href = "/order-success";
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error("Error placing order:", error);
-            alert("Failed to place order. Please try again.");
+            const errorMsg = error.message || "Failed to place order. Please try again.";
+            setAlertConfig({
+                open: true,
+                title: "Order Failed",
+                message: errorMsg
+            });
         } finally {
             setPlacingOrder(false);
         }

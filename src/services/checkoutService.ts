@@ -26,6 +26,23 @@ const getHeaders = () => {
     return headers;
 };
 
+const handleResponseError = async (response: Response, defaultMessage: string) => {
+    let errorMessage = defaultMessage;
+    try {
+        const data = await response.json();
+        if (data.detail) {
+            errorMessage = data.detail;
+        } else if (Array.isArray(data) && data.length > 0) {
+            errorMessage = data[0];
+        }
+    } catch (e) {
+        // Fallback if JSON parsing fails
+    }
+    const error = new Error(errorMessage);
+    (error as any).status = response.status;
+    throw error;
+};
+
 export const checkoutOnline = async (payload: CheckoutPayload): Promise<CheckoutResponse> => {
     const response = await fetch(`${BASE_URL}/payment/checkout/`, {
         method: "POST",
@@ -34,9 +51,7 @@ export const checkoutOnline = async (payload: CheckoutPayload): Promise<Checkout
     });
 
     if (!response.ok) {
-        const error = new Error("Failed to initiate online checkout");
-        (error as any).status = response.status;
-        throw error;
+        await handleResponseError(response, "Failed to initiate online checkout");
     }
 
     return response.json();
@@ -50,9 +65,7 @@ export const placeOrderCOD = async (payload: CheckoutPayload) => {
     });
 
     if (!response.ok) {
-        const error = new Error("Failed to place COD order");
-        (error as any).status = response.status;
-        throw error;
+        await handleResponseError(response, "Failed to place COD order");
     }
 
     return response.json();
