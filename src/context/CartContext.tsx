@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import { getCookie } from "@/utils/cookieUtils";
+import { getCookie, deleteCookie } from "@/utils/cookieUtils";
 import { getCart, addToCart as apiAddToCart, removeFromCart as apiRemoveFromCart, updateCartItem as apiUpdateCartItem, CartItem } from "@/services/cartService";
 import { Product } from "@/services/menuService";
 
@@ -81,8 +81,13 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
                     const apiCart = await getCart();
                     setCartItems(apiCart.results);
 
-                } catch (error) {
+                } catch (error: any) {
                     console.error("Error loading cart from API:", error);
+                    if (error.status === 401 || error.status === 403) {
+                        deleteCookie("access_token");
+                        deleteCookie("refresh_token");
+                        window.location.href = "/";
+                    }
                 }
             } else {
                 // Guest user: load from local storage

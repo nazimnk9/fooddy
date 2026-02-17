@@ -82,9 +82,15 @@ export default function ProfilePage() {
 
             // Update Redux state
             dispatch(setProfile(profile));
-        } catch (error) {
+        } catch (error: any) {
             console.error("Error fetching user profile:", error);
-            toast.error("Failed to load profile details");
+            if (error.status === 401 || error.status === 403) {
+                deleteCookie("access_token");
+                deleteCookie("refresh_token");
+                window.location.href = "/";
+            } else {
+                toast.error("Failed to load profile details");
+            }
         } finally {
             setLoading(false);
         }
@@ -98,9 +104,15 @@ export default function ProfilePage() {
         try {
             const data = await getUserOrders(token);
             setOrders(data.results || []);
-        } catch (error) {
+        } catch (error: any) {
             console.error("Error fetching orders:", error);
-            toast.error("Failed to load order history");
+            if (error.status === 401 || error.status === 403) {
+                deleteCookie("access_token");
+                deleteCookie("refresh_token");
+                window.location.href = "/";
+            } else {
+                toast.error("Failed to load order history");
+            }
         } finally {
             setLoadingOrders(false);
         }

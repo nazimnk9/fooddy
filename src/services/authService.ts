@@ -72,7 +72,9 @@ export const getUserProfile = async (token: string) => {
         });
 
         if (!response.ok) {
-            throw new Error(`Failed to fetch profile: ${response.statusText}`);
+            const error = new Error(`Failed to fetch profile: ${response.statusText}`);
+            (error as any).status = response.status;
+            throw error;
         }
 
         return await response.json();

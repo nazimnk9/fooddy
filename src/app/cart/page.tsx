@@ -238,12 +238,7 @@ export default function CartPage() {
                                 </div>
                             </div>
 
-                            <Link href="/checkout" className="w-full" onClick={(e) => {
-                                if (!isLoggedIn) {
-                                    e.preventDefault();
-                                    setIsAuthModalOpen(true);
-                                }
-                            }}>
+                            <Link href="/checkout" className="w-full">
                                 <Button className="w-full h-14 mt-6 rounded-full font-bold text-lg uppercase tracking-wide shadow-lg hover:shadow-xl transition-shadow">
                                     Proceed to Checkout
                                 </Button>

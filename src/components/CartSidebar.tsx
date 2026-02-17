@@ -101,14 +101,7 @@ export function CartSheetContent({ onAuthRequired }: { onAuthRequired?: () => vo
                     <div className="flex flex-col gap-3">
                         <Link href="/checkout"
                             className="w-full"
-                            onClick={(e) => {
-                                if (!isLoggedIn) {
-                                    e.preventDefault();
-                                    onAuthRequired?.();
-                                } else {
-                                    closeCart();
-                                }
-                            }}
+                            onClick={closeCart}
                         >
                             <Button className="w-full h-12 bg-primary text-primary-foreground hover:bg-primary/90 font-bold text-base rounded-xl shadow-lg shadow-primary/20 transition-all active:scale-95">
                                 CHECKOUT NOW

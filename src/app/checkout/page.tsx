@@ -35,7 +35,7 @@ import {
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { AlertCircle } from "lucide-react";
-import { getCookie, setCookie } from "@/utils/cookieUtils";
+import { getCookie, setCookie, deleteCookie } from "@/utils/cookieUtils";
 import { BASE_URL, loginUser } from "@/services/authService";
 import { getAddresses, createAddress, updateAddress, deleteAddress, Address } from "@/services/addressService";
 import { getCart, CartItem } from "@/services/cartService";
@@ -104,8 +104,13 @@ export default function CheckoutPage() {
         try {
             const data = await getAddresses();
             setAddresses(data);
-        } catch (error) {
+        } catch (error: any) {
             console.error("Error fetching addresses:", error);
+            if (error.status === 401 || error.status === 403) {
+                deleteCookie("access_token");
+                deleteCookie("refresh_token");
+                window.location.href = "/";
+            }
         }
     };
 
@@ -113,21 +118,31 @@ export default function CheckoutPage() {
         try {
             const data = await getCart();
             setCartItems(data.results || []);
-        } catch (error) {
+        } catch (error: any) {
             console.error("Error fetching cart:", error);
+            if (error.status === 401 || error.status === 403) {
+                deleteCookie("access_token");
+                deleteCookie("refresh_token");
+                window.location.href = "/";
+            }
         }
     };
 
     useEffect(() => {
         const loadInitialData = async () => {
             const token = getCookie("access_token");
-            if (!token) {
-                router.push("/");
-                return;
-            }
-            setIsLoggedIn(true);
             setLoading(true);
-            await Promise.all([fetchAddresses(), fetchCartData()]);
+            if (token) {
+                setIsLoggedIn(true);
+                await Promise.all([fetchAddresses(), fetchCartData()]);
+            } else {
+                setIsLoggedIn(false);
+                // Load cart from local storage for guest
+                const localCartJson = localStorage.getItem("fooddy_cart");
+                if (localCartJson) {
+                    setCartItems(JSON.parse(localCartJson));
+                }
+            }
             setLoading(false);
         };
         loadInitialData();
@@ -628,9 +643,9 @@ export default function CheckoutPage() {
                                 </div> */}
 
                                     <div className="space-y-2">
-                                        <Label htmlFor="state">State 
+                                        <Label htmlFor="state">State
                                             {/* <span className="text-destructive">*</span> */}
-                                            </Label>
+                                        </Label>
                                         <Input
                                             id="state"
                                             type="text"
@@ -830,9 +845,9 @@ export default function CheckoutPage() {
                                 />
                             </div>
                             <div className="space-y-2">
-                                <Label htmlFor="update-state">State 
+                                <Label htmlFor="update-state">State
                                     {/* <span className="text-destructive">*</span> */}
-                                    </Label>
+                                </Label>
                                 <Input
                                     id="update-state"
                                     className="bg-muted/30 rounded-full"

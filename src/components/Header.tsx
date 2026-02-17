@@ -54,8 +54,13 @@ export const Header = () => {
       try {
         const profile = await getUserProfile(token);
         dispatch(setProfile(profile));
-      } catch (error) {
+      } catch (error: any) {
         console.error("Error fetching initial profile:", error);
+        if (error.status === 401 || error.status === 403) {
+          deleteCookie("access_token");
+          deleteCookie("refresh_token");
+          window.location.href = "/";
+        }
       }
     };
     fetchProfile();

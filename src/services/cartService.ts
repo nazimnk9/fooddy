@@ -43,7 +43,9 @@ export const getCart = async (): Promise<CartResponse> => {
     });
 
     if (!response.ok) {
-        throw new Error("Failed to fetch cart");
+        const error = new Error("Failed to fetch cart");
+        (error as any).status = response.status;
+        throw error;
     }
 
     return response.json();

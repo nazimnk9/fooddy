@@ -26,7 +26,9 @@ export const checkoutOnline = async (payload: CheckoutPayload): Promise<Checkout
     });
 
     if (!response.ok) {
-        throw new Error("Failed to initiate online checkout");
+        const error = new Error("Failed to initiate online checkout");
+        (error as any).status = response.status;
+        throw error;
     }
 
     return response.json();
@@ -40,7 +42,9 @@ export const placeOrderCOD = async (payload: CheckoutPayload) => {
     });
 
     if (!response.ok) {
-        throw new Error("Failed to place COD order");
+        const error = new Error("Failed to place COD order");
+        (error as any).status = response.status;
+        throw error;
     }
 
     return response.json();
