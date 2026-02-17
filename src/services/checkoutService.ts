@@ -4,6 +4,11 @@ import { getCookie } from "@/utils/cookieUtils";
 export interface CheckoutPayload {
     address_id: number;
     payment_type: "online" | "cod";
+    cart_item_ids?: number[];
+    first_name?: string;
+    last_name?: string;
+    email?: string;
+    phone?: string;
 }
 
 export interface CheckoutResponse {
@@ -12,10 +17,13 @@ export interface CheckoutResponse {
 
 const getHeaders = () => {
     const token = getCookie("access_token");
-    return {
+    const headers: Record<string, string> = {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`,
     };
+    if (token) {
+        headers["Authorization"] = `Bearer ${token}`;
+    }
+    return headers;
 };
 
 export const checkoutOnline = async (payload: CheckoutPayload): Promise<CheckoutResponse> => {

@@ -37,14 +37,18 @@ export const getAddresses = async () => {
 
 export const createAddress = async (addressData: CreateAddressData) => {
     const token = getCookie("access_token");
-    if (!token) throw new Error("No access token found");
+
+    const headers: Record<string, string> = {
+        "Content-Type": "application/json",
+    };
+
+    if (token) {
+        headers["Authorization"] = `Bearer ${token}`;
+    }
 
     const response = await fetch(`${BASE_URL}/orders/address/`, {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
-        },
+        headers: headers,
         body: JSON.stringify(addressData),
     });
 

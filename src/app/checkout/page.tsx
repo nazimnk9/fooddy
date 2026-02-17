@@ -66,6 +66,7 @@ export default function CheckoutPage() {
     const [loading, setLoading] = useState(true);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [saving, setSaving] = useState(false);
+    const [savingInfo, setSavingInfo] = useState(false);
     const [placingOrder, setPlacingOrder] = useState(false);
     const [selectedAddressId, setSelectedAddressId] = useState<number | null>(null);
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
@@ -88,6 +89,12 @@ export default function CheckoutPage() {
     // Login state
     const [loginEmail, setLoginEmail] = useState("");
     const [loginPassword, setLoginPassword] = useState("");
+
+    // Guest Billing State
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [email, setEmail] = useState("");
+    const [phone, setPhone] = useState("");
 
     // Alert Dialog State
     const [alertConfig, setAlertConfig] = useState<{
@@ -142,31 +149,80 @@ export default function CheckoutPage() {
                 if (localCartJson) {
                     setCartItems(JSON.parse(localCartJson));
                 }
+                // Load guest billing info if exists
+                const guestBillingJson = localStorage.getItem("fooddy_guest_billing");
+                if (guestBillingJson) {
+                    const guestBilling = JSON.parse(guestBillingJson);
+                    setFirstName(guestBilling.first_name || "");
+                    setLastName(guestBilling.last_name || "");
+                    setEmail(guestBilling.email || "");
+                    setPhone(guestBilling.phone || "");
+                    setSelectedAddressId(guestBilling.address_id || null);
+                }
+                // For guest, show the address creation form by default
+                setShipDifferent(true);
             }
             setLoading(false);
         };
         loadInitialData();
     }, [router]);
 
+    const handleSaveGuestInformation = (e: React.MouseEvent) => {
+        e.preventDefault();
+        const guestBillingJson = localStorage.getItem("fooddy_guest_billing");
+        const guestBilling = guestBillingJson ? JSON.parse(guestBillingJson) : {};
+
+        const updatedBilling = {
+            ...guestBilling,
+            first_name: firstName,
+            last_name: lastName,
+            email,
+            phone
+        };
+        localStorage.setItem("fooddy_guest_billing", JSON.stringify(updatedBilling));
+        alert("Personal information saved successfully!");
+
+        // Clear input fields after saving
+        setFirstName("");
+        setLastName("");
+        setEmail("");
+        setPhone("");
+    };
+
     const handleSaveAddress = async (e: React.MouseEvent) => {
         e.preventDefault();
         setSaving(true);
         try {
-            await createAddress({
+            const addrResponse = await createAddress({
                 street,
                 city,
                 state,
                 zip_code: zipCode
             });
-            // Clear form and reload addresses
-            setStreet("");
-            setCity("");
-            setState("");
-            setZipCode("");
-            setShipDifferent(false);
-            await fetchAddresses();
+
+            const addressId = addrResponse.id;
+
+            if (!isLoggedIn) {
+                // Update only address_id in guest billing info in local storage
+                const guestBillingJson = localStorage.getItem("fooddy_guest_billing");
+                const guestBilling = guestBillingJson ? JSON.parse(guestBillingJson) : {};
+
+                guestBilling.address_id = addressId;
+                localStorage.setItem("fooddy_guest_billing", JSON.stringify(guestBilling));
+                setSelectedAddressId(addressId);
+                alert("Address saved successfully!");
+            } else {
+                // Clear form and reload addresses for logged in user
+                setStreet("");
+                setCity("");
+                setState("");
+                setZipCode("");
+                setShipDifferent(false);
+                await fetchAddresses();
+            }
         } catch (error) {
             console.error("Error saving address:", error);
+            alert("Failed to save address details. Please try again.");
         } finally {
             setSaving(false);
         }
@@ -204,28 +260,57 @@ export default function CheckoutPage() {
     };
 
     const handlePlaceOrder = async () => {
-        if (!selectedAddressId) {
-            alert("Please select an address first");
-            return;
+        let payload: any;
+
+        if (isLoggedIn) {
+            if (!selectedAddressId) {
+                alert("Please select an address first");
+                return;
+            }
+            payload = {
+                address_id: selectedAddressId,
+                payment_type: paymentMethod === "check" ? "online" : "cod"
+            };
+        } else {
+            // Guest mode: get data from local state/storage
+            const localCartJson = localStorage.getItem("fooddy_cart");
+            const localCart = localCartJson ? JSON.parse(localCartJson) : [];
+            const cart_item_ids = localCart.map((item: any) => item.id);
+
+            const guestBillingJson = localStorage.getItem("fooddy_guest_billing");
+            if (!guestBillingJson || !selectedAddressId) {
+                alert("Please fill and save your billing and address details first.");
+                return;
+            }
+            const guestBilling = JSON.parse(guestBillingJson);
+
+            payload = {
+                cart_item_ids,
+                ...guestBilling,
+                address_id: selectedAddressId,
+                payment_type: paymentMethod === "check" ? "online" : "cod"
+            };
         }
 
         setPlacingOrder(true);
         try {
-            if (paymentMethod === "check") {
+            if (payload.payment_type === "online") {
                 // Online Payment
-                const response = await checkoutOnline({
-                    address_id: selectedAddressId,
-                    payment_type: "online"
-                });
+                const response = await checkoutOnline(payload);
                 if (response.checkout_url) {
+                    if (!isLoggedIn) {
+                        localStorage.removeItem("fooddy_cart");
+                        localStorage.removeItem("fooddy_guest_billing");
+                    }
                     window.location.href = response.checkout_url;
                 }
             } else {
                 // Cash on Delivery
-                await placeOrderCOD({
-                    address_id: selectedAddressId,
-                    payment_type: "cod"
-                });
+                await placeOrderCOD(payload);
+                if (!isLoggedIn) {
+                    localStorage.removeItem("fooddy_cart");
+                    localStorage.removeItem("fooddy_guest_billing");
+                }
                 window.location.href = "/order-success";
             }
         } catch (error) {
@@ -416,84 +501,144 @@ export default function CheckoutPage() {
                         )}
                     </div>
 
+                    {!isLoggedIn && (
+                        <div className="mb-px mt-px p-6 border border-border rounded-sm animate-fade-in bg-muted/5">
+                            <h3 className="text-xl font-display font-semibold mb-6">Guest Billing Information</h3>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                <div className="space-y-2">
+                                    <Label htmlFor="firstName">First name <span className="text-destructive">*</span></Label>
+                                    <Input
+                                        id="firstName"
+                                        className="bg-white rounded-full"
+                                        value={firstName}
+                                        onChange={(e) => setFirstName(e.target.value)}
+                                        required
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="lastName">Last name <span className="text-destructive">*</span></Label>
+                                    <Input
+                                        id="lastName"
+                                        className="bg-white rounded-full"
+                                        value={lastName}
+                                        onChange={(e) => setLastName(e.target.value)}
+                                        required
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="email">Email address <span className="text-destructive">*</span></Label>
+                                    <Input
+                                        id="email"
+                                        type="email"
+                                        className="bg-white rounded-full"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        required
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="phone">Phone <span className="text-destructive">*</span></Label>
+                                    <Input
+                                        id="phone"
+                                        className="bg-white rounded-full"
+                                        value={phone}
+                                        onChange={(e) => setPhone(e.target.value)}
+                                        required
+                                    />
+                                </div>
+                            </div>
+                            <Button
+                                type="button"
+                                onClick={handleSaveGuestInformation}
+                                className="rounded-full px-8 font-bold uppercase"
+                            >
+                                {savingInfo ? "Saving..." : "Save Information"}
+                            </Button>
+                        </div>
+                    )}
+
                     <form className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                         {/* Left Column - Billing Details */}
                         <div>
-                            <h2 className="text-2xl font-display font-semibold mb-6">Billing details</h2>
+                            {isLoggedIn && (
+                                <>
+                                    <h2 className="text-2xl font-display font-semibold mb-6">Billing details</h2>
 
-                            <div className="space-y-6">
-                                {loading ? (
-                                    <div className="grid gap-4">
-                                        {[1, 2, 3].map((i) => (
-                                            <div key={i} className="p-4 rounded-xl border border-border bg-white flex justify-between items-center group">
-                                                <div className="flex items-center gap-4 flex-1">
-                                                    <Skeleton className="w-5 h-5 rounded-full" />
-                                                    <div className="space-y-2 flex-1">
-                                                        <Skeleton className="h-5 w-1/3" />
-                                                        <Skeleton className="h-4 w-1/2" />
+                                    <div className="space-y-6">
+                                        {loading ? (
+                                            <div className="grid gap-4">
+                                                {[1, 2, 3].map((i) => (
+                                                    <div key={i} className="p-4 rounded-xl border border-border bg-white flex justify-between items-center group">
+                                                        <div className="flex items-center gap-4 flex-1">
+                                                            <Skeleton className="w-5 h-5 rounded-full" />
+                                                            <div className="space-y-2 flex-1">
+                                                                <Skeleton className="h-5 w-1/3" />
+                                                                <Skeleton className="h-4 w-1/2" />
+                                                            </div>
+                                                        </div>
+                                                        <div className="flex items-center gap-2">
+                                                            <Skeleton className="h-8 w-8 rounded-md" />
+                                                            <Skeleton className="h-8 w-8 rounded-md" />
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div className="flex items-center gap-2">
-                                                    <Skeleton className="h-8 w-8 rounded-md" />
-                                                    <Skeleton className="h-8 w-8 rounded-md" />
-                                                </div>
+                                                ))}
                                             </div>
-                                        ))}
-                                    </div>
-                                ) : addresses.length === 0 ? (
-                                    <p className="text-muted-foreground italic text-center py-4 bg-muted/5 rounded-xl border border-dashed border-border">No address found</p>
-                                ) : (
-                                    <div className="grid gap-4">
-                                        {addresses.map((address) => (
-                                            <div
-                                                key={address.id}
-                                                className={`p-4 rounded-xl border transition-colors flex justify-between items-center group cursor-pointer ${selectedAddressId === address.id
-                                                    ? "border-primary bg-primary/5 ring-1 ring-primary"
-                                                    : "border-border bg-white hover:border-primary/50"
-                                                    }`}
-                                                onClick={() => setSelectedAddressId(address.id)}
-                                            >
-                                                <div className="flex items-center gap-4">
-                                                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${selectedAddressId === address.id ? "border-primary bg-primary" : "border-muted-foreground/30"
-                                                        }`}>
-                                                        {selectedAddressId === address.id && <Check className="w-3 h-3 text-white" />}
-                                                    </div>
-                                                    <div>
-                                                        <p className="font-medium text-foreground">{address.street}</p>
-                                                        <p className="text-sm text-muted-foreground">{address.city}, {address.state} {address.zip_code}</p>
-                                                    </div>
-                                                </div>
-                                                <div className="flex items-center gap-2 opacity-100 group-hover:opacity-100 transition-opacity">
-                                                    <Button
-                                                        type="button"
-                                                        variant="ghost"
-                                                        size="icon"
-                                                        className="h-8 w-8 text-muted-foreground hover:text-secondary"
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
-                                                            openUpdateModal(address);
-                                                        }}
+                                        ) : addresses.length === 0 ? (
+                                            <p className="text-muted-foreground italic text-center py-4 bg-muted/5 rounded-xl border border-dashed border-border">No address found</p>
+                                        ) : (
+                                            <div className="grid gap-4">
+                                                {addresses.map((address) => (
+                                                    <div
+                                                        key={address.id}
+                                                        className={`p-4 rounded-xl border transition-colors flex justify-between items-center group cursor-pointer ${selectedAddressId === address.id
+                                                            ? "border-primary bg-primary/5 ring-1 ring-primary"
+                                                            : "border-border bg-white hover:border-primary/50"
+                                                            }`}
+                                                        onClick={() => setSelectedAddressId(address.id)}
                                                     >
-                                                        <Pencil className="h-4 w-4" />
-                                                    </Button>
-                                                    <Button
-                                                        type="button"
-                                                        variant="ghost"
-                                                        size="icon"
-                                                        className="h-8 w-8 text-muted-foreground hover:text-destructive"
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
-                                                            openDeleteModal(address);
-                                                        }}
-                                                    >
-                                                        <Trash2 className="h-4 w-4" />
-                                                    </Button>
-                                                </div>
+                                                        <div className="flex items-center gap-4">
+                                                            <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${selectedAddressId === address.id ? "border-primary bg-primary" : "border-muted-foreground/30"
+                                                                }`}>
+                                                                {selectedAddressId === address.id && <Check className="w-3 h-3 text-white" />}
+                                                            </div>
+                                                            <div>
+                                                                <p className="font-medium text-foreground">{address.street}</p>
+                                                                <p className="text-sm text-muted-foreground">{address.city}, {address.state} {address.zip_code}</p>
+                                                            </div>
+                                                        </div>
+                                                        <div className="flex items-center gap-2 opacity-100 group-hover:opacity-100 transition-opacity">
+                                                            <Button
+                                                                type="button"
+                                                                variant="ghost"
+                                                                size="icon"
+                                                                className="h-8 w-8 text-muted-foreground hover:text-secondary"
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    openUpdateModal(address);
+                                                                }}
+                                                            >
+                                                                <Pencil className="h-4 w-4" />
+                                                            </Button>
+                                                            <Button
+                                                                type="button"
+                                                                variant="ghost"
+                                                                size="icon"
+                                                                className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    openDeleteModal(address);
+                                                                }}
+                                                            >
+                                                                <Trash2 className="h-4 w-4" />
+                                                            </Button>
+                                                        </div>
+                                                    </div>
+                                                ))}
                                             </div>
-                                        ))}
+                                        )}
                                     </div>
-                                )}
-                            </div>
+                                </>
+                            )}
                         </div>
 
                         {/* Right Column - Order Summary */}

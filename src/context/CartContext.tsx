@@ -105,31 +105,28 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     }, []);
 
     const updateQuantity = async (itemId: number, newQuantity: number) => {
-        if (newQuantity < 1) return; // Prevent quantity less than 1 (or implement remove if 0, but usually separate)
+        if (newQuantity < 1) return;
 
         setIsLoading(true);
-        if (isLoggedIn) {
-            try {
-                // User requirement: "patch data in patch api ... then show updated data"
-                await apiUpdateCartItem(itemId, newQuantity);
+        try {
+            // Hit the PATCH API for both logged-in and guest users
+            const updatedItem = await apiUpdateCartItem(itemId, newQuantity);
+
+            if (isLoggedIn) {
                 const updatedCart = await getCart();
                 setCartItems(updatedCart.results);
-            } catch (error) {
-                console.error("Failed to update cart item (API):", error);
+            } else {
+                // Guest: Update local storage with the API response
+                const currentCart = [...cartItems] as CartItem[];
+                const itemIndex = currentCart.findIndex(item => item.id === itemId);
+                if (itemIndex > -1) {
+                    currentCart[itemIndex] = updatedItem;
+                    setCartItems(currentCart);
+                    localStorage.setItem("fooddy_cart", JSON.stringify(currentCart));
+                }
             }
-        } else {
-            // Local Storage Logic
-            const currentCart = [...cartItems] as LocalCartItem[];
-            // For local, itemId IS the product id
-            const itemIndex = currentCart.findIndex(item => item.id === itemId);
-
-            if (itemIndex > -1) {
-                currentCart[itemIndex].quantity = newQuantity;
-                const price = parseFloat(currentCart[itemIndex].product.price);
-                currentCart[itemIndex].total_price = (price * newQuantity).toFixed(2);
-                setCartItems(currentCart);
-                localStorage.setItem("fooddy_cart", JSON.stringify(currentCart));
-            }
+        } catch (error) {
+            console.error("Failed to update cart item:", error);
         }
         setIsLoading(false);
     };
@@ -138,91 +135,85 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         if (updates.length === 0) return;
 
         setIsLoading(true);
-        if (isLoggedIn) {
-            try {
-                // User requirement: "patch data in patch api ... then show updated data"
-                // We perform individual patches and then one refetch for efficiency
-                await Promise.all(updates.map(u => apiUpdateCartItem(u.itemId, u.quantity)));
+        try {
+            // Hit the PATCH API for each update (works for both states)
+            const responses = await Promise.all(updates.map(u => apiUpdateCartItem(u.itemId, u.quantity)));
+
+            if (isLoggedIn) {
                 const updatedCart = await getCart();
                 setCartItems(updatedCart.results);
-            } catch (error) {
-                console.error("Failed to update multiple quantities (API):", error);
+            } else {
+                // Guest: Update local storage
+                const currentCart = [...cartItems] as CartItem[];
+                responses.forEach(updatedItem => {
+                    const itemIndex = currentCart.findIndex(item => item.id === updatedItem.id);
+                    if (itemIndex > -1) {
+                        currentCart[itemIndex] = updatedItem;
+                    }
+                });
+                setCartItems(currentCart);
+                localStorage.setItem("fooddy_cart", JSON.stringify(currentCart));
             }
-        } else {
-            // Local Storage Logic
-            const currentCart = [...cartItems] as LocalCartItem[];
-            updates.forEach(update => {
-                const itemIndex = currentCart.findIndex(item => item.id === update.itemId);
-                if (itemIndex > -1) {
-                    currentCart[itemIndex].quantity = update.quantity;
-                    const price = parseFloat(currentCart[itemIndex].product.price);
-                    currentCart[itemIndex].total_price = (price * update.quantity).toFixed(2);
-                }
-            });
-            setCartItems(currentCart);
-            localStorage.setItem("fooddy_cart", JSON.stringify(currentCart));
+        } catch (error) {
+            console.error("Failed to update multiple quantities:", error);
         }
         setIsLoading(false);
     };
 
     const addToCart = async (product: Product, quantity: number = 1) => {
         setIsLoading(true);
-        if (isLoggedIn) {
-            try {
-                // User requirement: "product data post in post api ... then show updated data show from get api"
-                await apiAddToCart(product.id, quantity);
+        try {
+            // Check if item exists for guest to decide between POST and PATCH
+            const existingItem = !isLoggedIn ? cartItems.find(item => item.product.id === product.id) : null;
+            let responseItem: CartItem;
+
+            if (existingItem) {
+                // Guest item exists, update via PATCH as requested
+                responseItem = await apiUpdateCartItem(existingItem.id, existingItem.quantity + quantity);
+            } else {
+                // New item (Logged in or Guest brand new), update via POST
+                responseItem = await apiAddToCart(product.id, quantity);
+            }
+
+            if (isLoggedIn) {
                 const updatedCart = await getCart();
                 setCartItems(updatedCart.results);
-                setIsCartOpen(true);
-            } catch (error) {
-                console.error("Failed to add to cart (API):", error);
-            }
-        } else {
-            // Local Storage Logic
-            const currentCart = [...cartItems] as LocalCartItem[];
-            const existingItemIndex = currentCart.findIndex(item => item.product.id === product.id);
-
-            if (existingItemIndex > -1) {
-                // Update quantity
-                currentCart[existingItemIndex].quantity += quantity;
-                // Update total price 
-                const price = parseFloat(product.price);
-                currentCart[existingItemIndex].total_price = (price * currentCart[existingItemIndex].quantity).toFixed(2);
             } else {
-                // Add new item
-                const newItem: LocalCartItem = {
-                    id: product.id,
-                    product: product,
-                    quantity: quantity,
-                    total_price: (parseFloat(product.price) * quantity).toFixed(2),
-                    isLocal: true
-                };
-                currentCart.push(newItem);
+                // Guest: Update local storage with full API response
+                const currentCart = [...cartItems] as CartItem[];
+                if (existingItem) {
+                    const idx = currentCart.findIndex(i => i.id === existingItem.id);
+                    currentCart[idx] = responseItem;
+                } else {
+                    currentCart.push(responseItem);
+                }
+                setCartItems(currentCart);
+                localStorage.setItem("fooddy_cart", JSON.stringify(currentCart));
             }
-
-            setCartItems(currentCart);
-            localStorage.setItem("fooddy_cart", JSON.stringify(currentCart));
             setIsCartOpen(true);
+        } catch (error) {
+            console.error("Failed to add to cart:", error);
         }
         setIsLoading(false);
     };
 
     const removeFromCart = async (itemId: number) => {
         setIsLoading(true);
-        if (isLoggedIn) {
-            try {
-                await apiRemoveFromCart(itemId);
+        try {
+            // Hit the DELETE API for both states
+            await apiRemoveFromCart(itemId);
+
+            if (isLoggedIn) {
                 const updatedCart = await getCart();
                 setCartItems(updatedCart.results);
-            } catch (error) {
-                console.error("Failed to remove from cart (API):", error);
+            } else {
+                // Guest: update local storage
+                const currentCart = cartItems.filter(item => item.id !== itemId);
+                setCartItems(currentCart);
+                localStorage.setItem("fooddy_cart", JSON.stringify(currentCart));
             }
-        } else {
-            // Local Storage Logic
-            // For local items, id is the product id
-            const currentCart = cartItems.filter(item => item.id !== itemId);
-            setCartItems(currentCart);
-            localStorage.setItem("fooddy_cart", JSON.stringify(currentCart));
+        } catch (error) {
+            console.error("Failed to remove from cart:", error);
         }
         setIsLoading(false);
     };
