@@ -54,7 +54,7 @@ export function CartSheetContent({ onAuthRequired }: { onAuthRequired?: () => vo
                                     </div>
 
                                     <div className="flex-1 min-w-0 pr-2">
-                                        <h4 className="font-bold text-foreground text-sm leading-tight mb-1 line-clamp-2">{item.product.title}</h4>
+                                        <h4 className="font-semibold text-foreground text-sm leading-tight mb-1 line-clamp-2">{item.product.title}</h4>
                                         <div className="flex items-center justify-between">
                                             <span className="font-extrabold text-primary">${parseFloat(item.product.price).toFixed(2)}</span>
                                         </div>
@@ -68,7 +68,7 @@ export function CartSheetContent({ onAuthRequired }: { onAuthRequired?: () => vo
                                         >
                                             <Plus className="w-3.5 h-3.5" />
                                         </button>
-                                        <span className="text-xs font-bold w-4 text-center">{item.quantity}</span>
+                                        <span className="text-xs font-semibold w-4 text-center">{item.quantity}</span>
                                         <button
                                             onClick={() => updateQuantity(item.id, item.quantity - 1)}
                                             disabled={isLoading || item.quantity <= 1}
@@ -94,7 +94,7 @@ export function CartSheetContent({ onAuthRequired }: { onAuthRequired?: () => vo
                     {/* Total */}
                     <div className="flex items-center justify-between">
                         <span className="text-muted-foreground font-medium">Subtotal</span>
-                        <span className="text-2xl font-bold text-foreground">${subtotal.toFixed(2)}</span>
+                        <span className="text-2xl font-semibold text-foreground">${subtotal.toFixed(2)}</span>
                     </div>
 
                     {/* Buttons */}
@@ -103,21 +103,21 @@ export function CartSheetContent({ onAuthRequired }: { onAuthRequired?: () => vo
                             className="w-full"
                             onClick={closeCart}
                         >
-                            <Button className="w-full h-12 bg-primary text-primary-foreground hover:bg-primary/90 font-bold text-base rounded-xl shadow-lg shadow-primary/20 transition-all active:scale-95">
+                            <Button className="w-full h-12 bg-primary text-primary-foreground hover:bg-primary/90 font-semibold text-base rounded-xl shadow-lg shadow-primary/20 transition-all active:scale-95">
                                 CHECKOUT NOW
                             </Button>
                         </Link>
 
                         <div className="grid grid-cols-2 gap-3">
                             <Link href="/cart" className="w-full" onClick={closeCart}>
-                                <Button variant="outline" className="w-full h-11 border-primary/20 text-primary hover:bg-primary font-bold rounded-xl">
+                                <Button variant="outline" className="w-full h-11 border-primary/20 text-primary hover:bg-primary font-semibold rounded-xl">
                                     VIEW CART
                                 </Button>
                             </Link>
                             <Button
                                 variant="ghost"
                                 onClick={closeCart}
-                                className="w-full h-11 text-muted-foreground hover:text-primary hover:bg-primary/50 font-bold rounded-xl text-xs uppercase tracking-widest"
+                                className="w-full h-11 text-muted-foreground hover:text-primary hover:bg-primary/50 font-semibold rounded-xl text-xs uppercase tracking-widest"
                             >
                                 CLOSE
                             </Button>

@@ -70,7 +70,7 @@ const Footer = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.1 }}
           >
-            <h3 className="font-heading text-lg font-bold mb-6">Quick Links</h3>
+            <h3 className="font-heading text-md font-semibold mb-6">Quick Links</h3>
             <ul className="space-y-3">
               {quickLinks.map((link) => (
                 <li key={link.name}>
@@ -92,7 +92,7 @@ const Footer = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            <h3 className="font-heading text-lg font-bold mb-6">Opening Hours</h3>
+            <h3 className="font-heading text-lg font-semibold mb-6">Opening Hours</h3>
             <ul className="space-y-3">
               <li className="flex items-start gap-3">
                 <Clock className="w-5 h-5 mt-0.5 text-accent" />
@@ -118,7 +118,7 @@ const Footer = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.3 }}
           >
-            <h3 className="font-heading text-lg font-bold mb-6">Contact Us</h3>
+            <h3 className="font-heading text-md font-semibold mb-6">Contact Us</h3>
             <ul className="space-y-4">
               <li className="flex items-start gap-3">
                 <MapPin className="w-5 h-5 mt-0.5 text-accent flex-shrink-0" />

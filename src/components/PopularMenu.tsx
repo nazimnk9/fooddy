@@ -99,7 +99,7 @@ const PopularMenu = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-12"
         >
-          <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
+          <h2 className="font-heading text-2xl font-semibold text-foreground mb-4">
             Popular Right Now
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
@@ -161,7 +161,7 @@ const PopularMenu = () => {
                 {/* Content */}
                 <div className="p-6">
                   <div className="flex items-start justify-between mb-3">
-                    <h3 className="font-heading text-xl font-bold text-foreground line-clamp-1">
+                    <h3 className="font-heading text-xl font-semibold text-foreground line-clamp-1">
                       {item.name}
                     </h3>
                     <div className="flex items-center gap-1 text-rating">
@@ -173,7 +173,7 @@ const PopularMenu = () => {
                     {item.description}
                   </p>
                   <div className="flex items-center justify-between">
-                    <span className="font-heading text-2xl font-bold text-foreground">
+                    <span className="font-heading text-2xl font-semibold text-foreground">
                       €{item.price.toFixed(2)}
                     </span>
                     <Button

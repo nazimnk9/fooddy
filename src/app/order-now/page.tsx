@@ -90,7 +90,7 @@ const MenuContent = () => {
                     {/* Section Header with Search */}
                     <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-12">
                         <div>
-                            <h2 className="section-title mb-2">Our Menu Items</h2>
+                            <h4 className="text-2xl font-semibold mb-2">Our Menu Items</h4>
                         </div>
                         <div className="flex items-center gap-2">
                             <Button type="submit" variant="outline" className="h-11 px-6" onClick={() => {

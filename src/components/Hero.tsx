@@ -95,7 +95,7 @@ const Hero = () => {
               <Button
                 variant="outline"
                 size="lg"
-                onClick={() => router.push('/menu')}
+                onClick={() => router.push('/order-now')}
                 className="font-bold border-2 border-white text-white bg-transparent hover:bg-white/10 min-w-[140px] rounded-md transition-all duration-300"
               >
                 Order Now

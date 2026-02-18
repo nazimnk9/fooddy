@@ -58,9 +58,9 @@ const HowToOrder = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-12"
         >
-          <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
+          <h4 className="font-heading text-2xl font-semibold text-foreground mb-4">
             How to Order
-          </h2>
+          </h4>
           <p className="text-muted-foreground max-w-2xl mx-auto">
             Getting your favorite Italian dishes delivered is easy. Just follow these simple steps.
           </p>
@@ -81,7 +81,7 @@ const HowToOrder = () => {
             >
               <div className="bg-card border border-border rounded-2xl p-6 h-full card-hover relative overflow-hidden">
                 {/* Step Number Background */}
-                <div className="absolute -right-4 -top-4 text-8xl font-heading font-bold text-secondary opacity-50">
+                <div className="absolute -right-4 -top-4 text-8xl font-heading font-semibold text-secondary opacity-50">
                   {step.step}
                 </div>
                 
@@ -94,7 +94,7 @@ const HowToOrder = () => {
 
                 {/* Content */}
                 <div className="relative">
-                  <h3 className="font-heading text-xl font-bold text-foreground mb-2">
+                  <h3 className="font-heading text-lg font-semibold text-foreground mb-2">
                     {step.title}
                   </h3>
                   <p className="text-muted-foreground text-sm">

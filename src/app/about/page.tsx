@@ -125,16 +125,16 @@ export default function AboutPage() {
     return (
         <div className="bg-[#fff] text-white min-h-screen font-serif selection:bg-[#c5a059]/30 overflow-x-hidden">
             {/* Hero Section - Matching Image 0 & 3 */}
-            <section className="relative pt-24 md:pt-40 pb-12 md:pb-24 px-4 flex flex-col items-center justify-center overflow-hidden">
+            <section className="relative pt-10  pb-12 px-4 flex flex-col items-center justify-center overflow-hidden">
                 <div className="relative z-10 text-center">
                     <div className="relative inline-block">
                         {/* Decorative Circle - Centered on "About" */}
-                        <div className="absolute left-1/2 top-[100%] -translate-x-1/2 -translate-y-1/2 border-[0.5px] border-[#c5a059]/40 rounded-full w-[150px] h-[150px] md:w-[300px] md:h-[300px] pointer-events-none" />
-                        <h1 className="text-[#c5a059] text-4xl md:text-5xl lg:text-6xl font-light italic relative z-10">
+                        
+                        <h1 className="text-[#c5a059] text-3xl font-light italic relative z-10">
                             About
                         </h1>
                     </div>
-                    <p className="text-3xl md:text-5xl lg:text-6xl font-normal leading-tight mt-2 md:mt-4 relative z-10 text-black">
+                    <p className="text-3xl font-normal leading-tight mt-2 md:mt-4 relative z-10 text-black">
                         Dawat
                     </p>
                     <p className="text-muted-foreground mt-2 font-normal ">Restaurant & Grill</p>
@@ -142,7 +142,7 @@ export default function AboutPage() {
             </section>
 
             {/* Main Content Section - Stacked on Mobile, Side-by-side on Desktop */}
-            <section ref={sectionRef} className="container mx-auto px-4 py-8 md:py-20">
+            <section ref={sectionRef} className="container mx-auto px-4 py-8 md:py-10">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-start">
 
                     {/* Left/Top: Large Image Container */}
@@ -172,7 +172,7 @@ export default function AboutPage() {
                         </div>
 
                         <div className="space-y-6 md:space-y-8 max-w-2xl mx-auto lg:mx-0">
-                            <h2 className="text-3xl md:text-5xl lg:text-6xl font-normal leading-[1.05] text-black">
+                            <h2 className="text-2xl font-normal leading-[1.05] text-black">
                                 Around the world, one plate at a time
                             </h2>
 
@@ -238,7 +238,7 @@ export default function AboutPage() {
             </section>
 
             {/* Branch Slider Section - Enhanced Shadows and Mobile Scaling */}
-            <section className="py-20 md:py-32 relative overflow-hidden">
+            <section className="py-10 md:py-10 relative overflow-hidden">
                 {/* Premium Lateral Shadows - Visible on larger screens */}
                 {/* <div className="absolute top-0 left-0 bottom-0 w-32 md:w-80 bg-gradient-to-r from-[#0b241e] via-[#0b241e]/80 to-transparent z-20 pointer-events-none hidden md:block" />
                 <div className="absolute top-0 right-0 bottom-0 w-32 md:w-80 bg-gradient-to-l from-[#0b241e] via-[#0b241e]/80 to-transparent z-20 pointer-events-none hidden md:block" /> */}
@@ -284,7 +284,7 @@ export default function AboutPage() {
                             >
                                 <div className="mb-6 md:mb-10 space-y-2">
                                     {/* <span className="text-[#c5a059] text-sm md:text-lg font-medium tracking-[0.3em]">{item.year}</span> */}
-                                    <h3 className="text-xl md:text-4xl lg:text-5xl font-normal mt-1 group-hover:text-[#c5a059] transition-all duration-700 ease-out text-black">{item.title}</h3>
+                                    <h3 className="text-2xl font-normal mt-1 group-hover:text-[#c5a059] transition-all duration-700 ease-out text-black">{item.title}</h3>
                                 </div>
                                 <div className="relative aspect-[16/10] md:aspect-[4/3] rounded-md overflow-hidden bg-black/40">
                                     <Image

@@ -64,7 +64,7 @@ const WhyChooseUs = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-soft-white mb-6 leading-tight">
+            <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-semibold text-soft-white mb-6 leading-tight">
               Why People Choose <span className="text-[#C5A059]">Dawat</span>
             </h2>
             <p className="text-soft-white/80 text-lg mb-8 leading-relaxed">
@@ -74,17 +74,17 @@ const WhyChooseUs = () => {
             </p>
             {/* <div className="flex items-center gap-8">
               <div className="text-center">
-                <span className="block font-heading text-4xl font-bold text-accent">10+</span>
+                <span className="block font-heading text-4xl font-semibold text-accent">10+</span>
                 <span className="text-soft-white/70 text-sm">Years Experience</span>
               </div>
               <div className="w-px h-12 bg-soft-white/20" />
               <div className="text-center">
-                <span className="block font-heading text-4xl font-bold text-accent">50k+</span>
+                <span className="block font-heading text-4xl font-semibold text-accent">50k+</span>
                 <span className="text-soft-white/70 text-sm">Happy Customers</span>
               </div>
               <div className="w-px h-12 bg-soft-white/20" />
               <div className="text-center">
-                <span className="block font-heading text-4xl font-bold text-accent">100+</span>
+                <span className="block font-heading text-4xl font-semibold text-accent">100+</span>
                 <span className="text-soft-white/70 text-sm">Menu Items</span>
               </div>
             </div> */}
@@ -107,7 +107,7 @@ const WhyChooseUs = () => {
                 <div className="w-12 h-12 rounded-lg bg-[#C5A059]/20 flex items-center justify-center mb-4">
                   <feature.icon className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="font-heading text-lg font-bold text-soft-white mb-2">
+                <h3 className="font-heading text-lg font-semibold text-soft-white mb-2">
                   {feature.title}
                 </h3>
                 <p className="text-soft-white/70 text-sm">

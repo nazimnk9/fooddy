@@ -30,7 +30,7 @@ const TasteOfBengalInItaly = () => {
                 <span className="inline-block px-4 py-1.5 bg-primary text-primary-foreground text-sm font-semibold rounded-full mb-4">
                   Culture & Cuisine
                 </span>
-                <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-soft-white mb-4 max-w-4xl">
+                <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-semibold text-soft-white mb-4 max-w-4xl">
                   A Taste of Bengal in Italy: How Bengali Cuisine Fits the Italian Palate
                 </h1>
                 <div className="flex flex-wrap items-center gap-4 md:gap-6 text-soft-white/80 text-sm md:text-base">
@@ -71,7 +71,7 @@ const TasteOfBengalInItaly = () => {
                     warm, balanced, and made for sharing.
                   </p>
 
-                  <h2 className="font-heading text-2xl md:text-3xl font-bold text-foreground mt-12 mb-6">
+                  <h2 className="font-heading text-2xl md:text-3xl font-semibold text-foreground mt-12 mb-6">
                     Two Cultures, One Love: Food That Brings People Together
                   </h2>
                   <p className="text-muted-foreground leading-relaxed mb-6">
@@ -84,7 +84,7 @@ const TasteOfBengalInItaly = () => {
                     fragrant spices, tangy mustard, seasonal vegetables, and slow-simmered sauces that build deep flavor over time.
                   </p>
 
-                  <h2 className="font-heading text-2xl md:text-3xl font-bold text-foreground mt-12 mb-6">
+                  <h2 className="font-heading text-2xl md:text-3xl font-semibold text-foreground mt-12 mb-6">
                     Why Bengali Flavors Work for Italian Taste Buds
                   </h2>
                   <p className="text-muted-foreground leading-relaxed mb-6">
@@ -94,7 +94,7 @@ const TasteOfBengalInItaly = () => {
                   </p>
 
                   <div className="bg-secondary/50 rounded-2xl p-6 md:p-8 my-8">
-                    <h3 className="font-heading text-xl font-bold text-foreground mb-4">
+                    <h3 className="font-heading text-xl font-semibold text-foreground mb-4">
                       What Italians Often Love About Bengali Cuisine:
                     </h3>
                     <ul className="space-y-3 text-muted-foreground">
@@ -117,7 +117,7 @@ const TasteOfBengalInItaly = () => {
                     </ul>
                   </div>
 
-                  <h2 className="font-heading text-2xl md:text-3xl font-bold text-foreground mt-12 mb-6">
+                  <h2 className="font-heading text-2xl md:text-3xl font-semibold text-foreground mt-12 mb-6">
                     Familiar Textures: From Risotto to Khichuri
                   </h2>
                   <p className="text-muted-foreground leading-relaxed mb-6">
@@ -131,7 +131,7 @@ const TasteOfBengalInItaly = () => {
                     depth, and honest ingredients.
                   </p>
 
-                  <h2 className="font-heading text-2xl md:text-3xl font-bold text-foreground mt-12 mb-6">
+                  <h2 className="font-heading text-2xl md:text-3xl font-semibold text-foreground mt-12 mb-6">
                     Mustard: Bengal’s Answer to Italian Olive Oil
                   </h2>
                   <p className="text-muted-foreground leading-relaxed mb-6">
@@ -144,7 +144,7 @@ const TasteOfBengalInItaly = () => {
                     approachable for diners experiencing Bengali cuisine for the first time.
                   </p>
 
-                  <h2 className="font-heading text-2xl md:text-3xl font-bold text-foreground mt-12 mb-6">
+                  <h2 className="font-heading text-2xl md:text-3xl font-semibold text-foreground mt-12 mb-6">
                     Pairing Ideas Italians Enjoy
                   </h2>
                   <p className="text-muted-foreground leading-relaxed mb-6">
@@ -161,7 +161,7 @@ const TasteOfBengalInItaly = () => {
                     <p className="text-accent font-semibold mt-4">— Team Dawat</p>
                   </div>
 
-                  <h2 className="font-heading text-2xl md:text-3xl font-bold text-foreground mt-12 mb-6">
+                  <h2 className="font-heading text-2xl md:text-3xl font-semibold text-foreground mt-12 mb-6">
                     Come Experience Bengal—Right Here in Italy
                   </h2>
                   <p className="text-muted-foreground leading-relaxed mb-6">
@@ -195,7 +195,7 @@ const TasteOfBengalInItaly = () => {
                 <div className="lg:sticky lg:top-28 space-y-8">
                   {/* Share Section */}
                   {/* <div className="bg-card rounded-2xl p-6 shadow-card">
-                    <h3 className="font-heading text-lg font-bold text-foreground mb-4 flex items-center gap-2">
+                    <h3 className="font-heading text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
                       <Share2 className="w-5 h-5" />
                       Share this article
                     </h3>
@@ -203,7 +203,7 @@ const TasteOfBengalInItaly = () => {
 
                   {/* Author Profile */}
                   <div className="bg-card rounded-2xl p-6 shadow-card">
-                    <h3 className="font-heading text-lg font-bold text-foreground mb-4">
+                    <h3 className="font-heading text-lg font-semibold text-foreground mb-4">
                       About the Author
                     </h3>
                     <div className="flex items-center gap-4 mb-4">
@@ -223,7 +223,7 @@ const TasteOfBengalInItaly = () => {
 
                   {/* CTA */}
                   <div className="bg-charcoal rounded-2xl p-6 text-center">
-                    <h3 className="font-heading text-xl font-bold text-soft-white mb-3">
+                    <h3 className="font-heading text-xl font-semibold text-soft-white mb-3">
                       Curious about Bengali flavors?
                     </h3>
                     <p className="text-soft-white/70 text-sm mb-4">

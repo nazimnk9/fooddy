@@ -256,7 +256,7 @@ export default function MenuBookPage() {
   return (
     <div className="min-h-screen bg-white text-white">
       <div className="mx-auto max-w-6xl px-4 pt-10 pb-4 text-black">
-        <h3 className="text-xl md:text-2xl font-semibold tracking-tight">
+        <h3 className="text-2xl font-semibold tracking-tight">
           Dawat Restaurant & Grill — Menu Book
         </h3>
       </div>

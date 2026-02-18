@@ -155,7 +155,7 @@ export const Header = () => {
                 </SheetTrigger>
                 <SheetContent side="left" className="w-full sm:w-[400px] border-none shadow-xl bg-white flex flex-col">
                   <SheetHeader className="px-1 border-b pb-4 mb-4">
-                    <SheetTitle className="text-left text-foreground font-bold text-2xl">Shopping Cart</SheetTitle>
+                    <SheetTitle className="text-left text-foreground font-semibold text-2xl">Shopping Cart</SheetTitle>
                   </SheetHeader>
                   <CartSheetContent onAuthRequired={() => setAuthModalOpen(true)} />
                 </SheetContent>
@@ -169,7 +169,7 @@ export const Header = () => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-[240px] p-0 rounded-2xl overflow-hidden border-none shadow-[0_2px_20px_rgba(0,0,0,0.15)]">
                   <div className="p-4 flex flex-col gap-4">
-                    <h3 className="font-bold text-[#1a2b4b] text-xl px-2">{isLoggedIn && userProfile ? userProfile.first_name + " " + userProfile.last_name : "Profile"}</h3>
+                    <h3 className="font-semibold text-[#1a2b4b] text-xl px-2">{isLoggedIn && userProfile ? userProfile.first_name + " " + userProfile.last_name : "Profile"}</h3>
 
                     <Link href="/contact">
                       <DropdownMenuItem className="flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer focus:bg-transparent hover:text-primary transition-colors hover:bg-accent/10 focus:bg-accent/10">
@@ -186,7 +186,7 @@ export const Header = () => {
                         onClick={() => setAuthModalOpen(true)}
                       >
                         <LogIn className="w-6 h-6 text-[#1a2b4b]" />
-                        <span className="text-[#1a2b4b] font-bold text-base">Log in or sign up</span>
+                        <span className="text-[#1a2b4b] font-semibold text-base">Log in or sign up</span>
                       </DropdownMenuItem>
                     </div>
                   ) : (
@@ -194,7 +194,7 @@ export const Header = () => {
                       <Link href="/profile">
                         <DropdownMenuItem className="flex items-center gap-3 px-4 py-3 cursor-pointer rounded-xl hover:bg-accent/10 focus:bg-accent/10">
                           <User className="w-6 h-6 text-[#1a2b4b]" />
-                          <span className="text-[#1a2b4b] font-bold text-base">Profile</span>
+                          <span className="text-[#1a2b4b] font-semibold text-base">Profile</span>
                         </DropdownMenuItem>
                       </Link>
                       <DropdownMenuItem
@@ -206,7 +206,7 @@ export const Header = () => {
                         }}
                       >
                         <LogOut className="w-6 h-6" />
-                        <span className="font-bold text-base">Logout</span>
+                        <span className="font-semibold text-base">Logout</span>
                       </DropdownMenuItem>
                     </div>
                   )}

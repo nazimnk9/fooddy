@@ -69,9 +69,9 @@ const MenuCategories = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-12"
         >
-          <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
+          <h4 className="font-heading text-2xl font-semibold text-foreground mb-4">
             Explore Our Menu
-          </h2>
+          </h4>
           <p className="text-muted-foreground max-w-2xl mx-auto">
             Discover the finest Italian dishes crafted with passion and the freshest ingredients
           </p>
@@ -104,7 +104,7 @@ const MenuCategories = () => {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-charcoal/80 via-charcoal/40 to-transparent" />
                   <div className="absolute inset-0 flex flex-col items-center justify-end p-6">
-                    <h3 className="font-heading text-lg md:text-xl lg:text-2xl font-bold text-white mb-1">
+                    <h3 className="font-heading text-lg md:text-xl lg:text-2xl font-semibold text-white mb-1">
                       {category.name}
                     </h3>
                     <p className="text-white/80 text-xs md:text-sm">
