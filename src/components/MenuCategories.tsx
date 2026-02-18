@@ -92,7 +92,7 @@ const MenuCategories = () => {
             className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6"
           >
             {categories.map((category) => (
-              <Link href={`/menu/${category.id}`} key={category.id}>
+              <Link href={`/order-now/${category.id}`} key={category.id}>
                 <motion.div
                   variants={itemVariants}
                   className="group relative overflow-hidden rounded-xl aspect-square cursor-pointer card-hover"
