@@ -68,9 +68,7 @@ const WhyChooseUs = () => {
               Why People Choose <span className="text-[#C5A059]">Dawat</span>
             </h2>
             <p className="text-soft-white/80 text-lg mb-8 leading-relaxed">
-              For over a decade, we've been serving the finest Italian cuisine in the heart of Italy. 
-              Our passion for food, commitment to quality, and dedication to customer satisfaction 
-              make us the preferred choice for food lovers.
+              At Dawat, we proudly share the authentic taste of Bengal with Italy. Our dedication to tradition, fresh ingredients, and genuine hospitality makes every visit a memorable feast.
             </p>
             {/* <div className="flex items-center gap-8">
               <div className="text-center">

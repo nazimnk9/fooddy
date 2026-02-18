@@ -162,7 +162,7 @@ export default function AboutPage() {
                     {/* Right/Bottom: Content Area */}
                     <div className="flex flex-col items-center lg:items-start text-center lg:text-left space-y-10 md:space-y-16">
                         {/* Floral Icon - Matching Image 1/4 */}
-                        <div className="opacity-90 scale-125 md:scale-150 relative w-20 h-20">
+                        <div className="opacity-90 scale-125 md:scale-150 relative w-24 h-20">
                             <Image
                                 src="/halal-removebg-preview.png"
                                 alt="Halal Certified"
@@ -171,7 +171,7 @@ export default function AboutPage() {
                             />
                         </div>
 
-                        <div className="space-y-6 md:space-y-8 max-w-2xl mx-auto lg:mx-0">
+                        <div className="space-y-2 max-w-2xl mx-auto lg:mx-0">
                             <h2 className="text-2xl font-normal leading-[1.05] text-black">
                                 A taste of Bengal in the heart of Italy
                             </h2>
@@ -179,7 +179,7 @@ export default function AboutPage() {
                             <div className="w-20 h-[1px] bg-[#c5a059]/40 mx-auto lg:mx-0 md:hidden" />
 
                             <p className="text-gray-400 text-base md:text-xl leading-relaxed font-light">
-                                Welcome to <span className="text-black font-bold italic">Dawat</span>, where rich flavors, timeless recipes, and heartfelt hospitality come together in every plate.
+                                Welcome to <span className="text-black font-semibold ">Dawat</span>, where rich flavors, timeless recipes, and heartfelt hospitality come together in every plate.
                             </p>
                         </div>
 
