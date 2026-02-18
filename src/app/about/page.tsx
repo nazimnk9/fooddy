@@ -173,13 +173,13 @@ export default function AboutPage() {
 
                         <div className="space-y-6 md:space-y-8 max-w-2xl mx-auto lg:mx-0">
                             <h2 className="text-2xl font-normal leading-[1.05] text-black">
-                                Around the world, one plate at a time
+                                A taste of Bengal in the heart of Italy
                             </h2>
 
                             <div className="w-20 h-[1px] bg-[#c5a059]/40 mx-auto lg:mx-0 md:hidden" />
 
                             <p className="text-gray-400 text-base md:text-xl leading-relaxed font-light">
-                                Welcome to <span className="text-black font-bold italic">La.Revi</span>, one of the best restaurants in the country. This is the place where food meets passion and where the world\'s finest chefs are creating the culinary masterpieces.
+                                Welcome to <span className="text-black font-bold italic">Dawat</span>, where rich flavors, timeless recipes, and heartfelt hospitality come together in every plate.
                             </p>
                         </div>
 
