@@ -65,13 +65,13 @@ const Contact = () => {
 
             <main className="pt-10">
                 {/* Hero Section */}
-                <section className="text-black py-6 md:py-6">
+                <section className="text-black py-4 md:py-4">
                     <div className="container-custom text-center">
                         <motion.h1
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.6 }}
-                            className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold mb-4"
+                            className="font-heading text-2xl font-semibold mb-4"
                         >
                             Visit Our Restaurant
                         </motion.h1>
@@ -100,7 +100,7 @@ const Contact = () => {
                                     transition={{ duration: 0.5 }}
                                     className="space-y-4"
                                 >
-                                    <h2 className="font-heading text-2xl md:text-3xl font-bold text-foreground mb-6">
+                                    <h2 className="font-heading text-lg font-semibold text-foreground mb-6">
                                         Contact Information
                                     </h2>
 
@@ -163,7 +163,7 @@ const Contact = () => {
                                     viewport={{ once: true }}
                                     transition={{ duration: 0.5, delay: 0.3 }}
                                 >
-                                    <h3 className="font-heading text-xl font-semibold text-foreground mb-4">
+                                    <h3 className="font-heading text-lg font-semibold text-foreground mb-4">
                                         Follow Us
                                     </h3>
                                     <div className="flex gap-4">
@@ -325,7 +325,7 @@ const Contact = () => {
                                 transition={{ duration: 0.5 }}
                                 className="space-y-6"
                             >
-                                <h2 className="font-heading text-2xl md:text-3xl font-bold text-foreground">
+                                <h2 className="font-heading text-lg font-semibold text-foreground">
                                     Find Us
                                 </h2>
                                 <div className="rounded-xl overflow-hidden shadow-lg h-[400px] md:h-[500px] lg:h-[414px]">

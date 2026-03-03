@@ -30,7 +30,7 @@ const BengaliVsIndianCuisine = () => {
                 <span className="inline-block px-4 py-1.5 bg-primary text-primary-foreground text-sm font-semibold rounded-full mb-4">
                   Food Culture
                 </span>
-                <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-soft-white mb-4 max-w-4xl">
+                <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-semibold text-soft-white mb-4 max-w-4xl">
                   Bengali vs Indian Cuisine: What’s the Difference?
                 </h1>
                 <div className="flex flex-wrap items-center gap-4 md:gap-6 text-soft-white/80 text-sm md:text-base">
@@ -72,7 +72,7 @@ const BengaliVsIndianCuisine = () => {
                     <strong> Authentic Bengali Cuisine</strong>—not generic Indian dishes.
                   </p>
 
-                  <h2 className="font-heading text-2xl md:text-3xl font-bold text-foreground mt-12 mb-6">
+                  <h2 className="font-heading text-2xl md:text-3xl font-semibold text-foreground mt-12 mb-6">
                     Indian Cuisine Is Not One Cuisine
                   </h2>
                   <p className="text-muted-foreground leading-relaxed mb-6">
@@ -85,7 +85,7 @@ const BengaliVsIndianCuisine = () => {
                     The focus is on balance, natural flavors, and letting ingredients speak for themselves.
                   </p>
 
-                  <h2 className="font-heading text-2xl md:text-3xl font-bold text-foreground mt-12 mb-6">
+                  <h2 className="font-heading text-2xl md:text-3xl font-semibold text-foreground mt-12 mb-6">
                     Key Differences at a Glance
                   </h2>
 
@@ -114,7 +114,7 @@ const BengaliVsIndianCuisine = () => {
                     </ul>
                   </div>
 
-                  <h2 className="font-heading text-2xl md:text-3xl font-bold text-foreground mt-12 mb-6">
+                  <h2 className="font-heading text-2xl md:text-3xl font-semibold text-foreground mt-12 mb-6">
                     Mustard Oil vs Butter & Cream
                   </h2>
                   <p className="text-muted-foreground leading-relaxed mb-6">
@@ -126,7 +126,7 @@ const BengaliVsIndianCuisine = () => {
                     Think of it like olive oil in Italian cooking: bold, expressive, and essential to authenticity.
                   </p>
 
-                  <h2 className="font-heading text-2xl md:text-3xl font-bold text-foreground mt-12 mb-6">
+                  <h2 className="font-heading text-2xl md:text-3xl font-semibold text-foreground mt-12 mb-6">
                     Familiar Comfort for Italian Diners
                   </h2>
                   <p className="text-muted-foreground leading-relaxed mb-6">
@@ -147,7 +147,7 @@ const BengaliVsIndianCuisine = () => {
                     <p className="text-accent font-semibold mt-4">— Team Dawat</p>
                   </div>
 
-                  <h2 className="font-heading text-2xl md:text-3xl font-bold text-foreground mt-12 mb-6">
+                  <h2 className="font-heading text-2xl md:text-3xl font-semibold text-foreground mt-12 mb-6">
                     Experience the Difference in Rome
                   </h2>
                   <p className="text-muted-foreground leading-relaxed mb-6">
@@ -183,7 +183,7 @@ const BengaliVsIndianCuisine = () => {
                 <div className="lg:sticky lg:top-28 space-y-8">
                   {/* Share Section */}
                   {/* <div className="bg-card rounded-2xl p-6 shadow-card">
-                    <h3 className="font-heading text-lg font-bold text-foreground mb-4 flex items-center gap-2">
+                    <h3 className="font-heading text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
                       <Share2 className="w-5 h-5" />
                       Share this article
                     </h3>
@@ -191,7 +191,7 @@ const BengaliVsIndianCuisine = () => {
 
                   {/* Author Profile */}
                   <div className="bg-card rounded-2xl p-6 shadow-card">
-                    <h3 className="font-heading text-lg font-bold text-foreground mb-4">
+                    <h3 className="font-heading text-lg font-semibold text-foreground mb-4">
                       About the Author
                     </h3>
                     <div className="flex items-center gap-4 mb-4">
@@ -211,7 +211,7 @@ const BengaliVsIndianCuisine = () => {
 
                   {/* CTA */}
                   <div className="bg-charcoal rounded-2xl p-6 text-center">
-                    <h3 className="font-heading text-xl font-bold text-soft-white mb-3">
+                    <h3 className="font-heading text-xl font-semibold text-soft-white mb-3">
                       Curious about Bengali flavors?
                     </h3>
                     <p className="text-soft-white/70 text-sm mb-4">

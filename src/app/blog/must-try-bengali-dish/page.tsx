@@ -31,7 +31,7 @@ const MustTryBengaliDishes = () => {
                 <span className="inline-block px-4 py-1.5 bg-primary text-primary-foreground text-sm font-semibold rounded-full mb-4">
                   Food Guide
                 </span>
-                <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-soft-white mb-4 max-w-4xl">
+                <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-semibold text-soft-white mb-4 max-w-4xl">
                   Must-Try Bengali Dishes for First-Time Guests in Our Restaurant
                 </h1>
                 <div className="flex flex-wrap items-center gap-4 md:gap-6 text-soft-white/80 text-sm md:text-base">
@@ -72,7 +72,7 @@ const MustTryBengaliDishes = () => {
                     most beloved dishes that define authentic Bengali cooking.
                   </p>
 
-                  <h2 className="font-heading text-2xl md:text-3xl font-bold text-foreground mt-12 mb-6">
+                  <h2 className="font-heading text-2xl md:text-3xl font-semibold text-foreground mt-12 mb-6">
                     Start with the Classics
                   </h2>
                   <p className="text-muted-foreground leading-relaxed mb-6">
@@ -82,7 +82,7 @@ const MustTryBengaliDishes = () => {
                   </p>
 
                   <div className="bg-secondary/50 rounded-2xl p-6 md:p-8 my-8">
-                    <h3 className="font-heading text-xl font-bold text-foreground mb-4">
+                    <h3 className="font-heading text-xl font-semibold text-foreground mb-4">
                       Must-Try Dishes for First-Time Guests:
                     </h3>
                     <ul className="space-y-4 text-muted-foreground">
@@ -114,7 +114,7 @@ const MustTryBengaliDishes = () => {
                     </ul>
                   </div>
 
-                  <h2 className="font-heading text-2xl md:text-3xl font-bold text-foreground mt-12 mb-6">
+                  <h2 className="font-heading text-2xl md:text-3xl font-semibold text-foreground mt-12 mb-6">
                     Spice Levels Made Comfortable
                   </h2>
                   <p className="text-muted-foreground leading-relaxed mb-6">
@@ -123,7 +123,7 @@ const MustTryBengaliDishes = () => {
                     At our restaurant, spice levels can always be adjusted—so you can enjoy the flavors comfortably.
                   </p>
 
-                  <h2 className="font-heading text-2xl md:text-3xl font-bold text-foreground mt-12 mb-6">
+                  <h2 className="font-heading text-2xl md:text-3xl font-semibold text-foreground mt-12 mb-6">
                     Don’t Skip Dessert
                   </h2>
                   <p className="text-muted-foreground leading-relaxed mb-6">
@@ -139,7 +139,7 @@ const MustTryBengaliDishes = () => {
                     <p className="text-accent font-semibold mt-4">— Team Dawat</p>
                   </div>
 
-                  <h2 className="font-heading text-2xl md:text-3xl font-bold text-foreground mt-12 mb-6">
+                  <h2 className="font-heading text-2xl md:text-3xl font-semibold text-foreground mt-12 mb-6">
                     Visit Us in Rome
                   </h2>
                   <p className="text-muted-foreground leading-relaxed mb-6">
@@ -175,7 +175,7 @@ const MustTryBengaliDishes = () => {
                 <div className="lg:sticky lg:top-28 space-y-8">
                   {/* Share Section */}
                   {/* <div className="bg-card rounded-2xl p-6 shadow-card">
-                    <h3 className="font-heading text-lg font-bold text-foreground mb-4 flex items-center gap-2">
+                    <h3 className="font-heading text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
                       <Share2 className="w-5 h-5" />
                       Share this article
                     </h3>
@@ -183,7 +183,7 @@ const MustTryBengaliDishes = () => {
 
                   {/* Author Profile */}
                   <div className="bg-card rounded-2xl p-6 shadow-card">
-                    <h3 className="font-heading text-lg font-bold text-foreground mb-4">
+                    <h3 className="font-heading text-lg font-semibold text-foreground mb-4">
                       About the Author
                     </h3>
                     <div className="flex items-center gap-4 mb-4">
@@ -203,7 +203,7 @@ const MustTryBengaliDishes = () => {
 
                   {/* CTA */}
                   <div className="bg-charcoal rounded-2xl p-6 text-center">
-                    <h3 className="font-heading text-xl font-bold text-soft-white mb-3">
+                    <h3 className="font-heading text-xl font-semibold text-soft-white mb-3">
                       Curious about Bengali flavors?
                     </h3>
                     <p className="text-soft-white/70 text-sm mb-4">

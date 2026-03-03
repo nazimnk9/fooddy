@@ -922,10 +922,10 @@ export default function CheckoutPage() {
                                     className="mt-[7px] accent-primary"
                                 />
                                 <div>
-                                    <Label htmlFor="payment-check" className="font-bold text-foreground cursor-pointer">Check payments</Label>
+                                    <Label htmlFor="payment-check" className="font-bold text-foreground cursor-pointer">Online Payment</Label>
                                     {paymentMethod === "check" && (
                                         <div className="mt-2 p-4 bg-muted/20 text-muted-foreground text-sm animate-fade-in relative before:absolute before:top-[-8px] before:left-2 before:w-0 before:h-0 before:border-l-[8px] before:border-l-transparent before:border-r-[8px] before:border-r-transparent before:border-b-[8px] before:border-b-muted/20">
-                                            Please send a check to Store Name, Store Street, Store Town, Store State / County, Store Postcode.
+                                            Make the Payment via VISA / MASTERCARD
                                         </div>
                                     )}
                                 </div>

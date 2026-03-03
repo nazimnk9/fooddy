@@ -66,7 +66,7 @@ const BlogSection = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-12"
         >
-          <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
+          <h2 className="font-heading text-2xl font-semibold text-foreground mb-4">
             From Our Blog
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
@@ -107,7 +107,7 @@ const BlogSection = () => {
                   <Calendar className="w-4 h-4" />
                   <span>{blog.date}</span>
                 </div>
-                <h3 className="font-heading text-xl font-bold text-foreground mb-3 group-hover:text-accent transition-colors duration-300">
+                <h3 className="font-heading text-lg font-semibold text-foreground mb-3 group-hover:text-accent transition-colors duration-300">
                   {blog.title}
                 </h3>
                 <p className="text-muted-foreground text-sm mb-4 line-clamp-2">

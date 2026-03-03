@@ -71,7 +71,7 @@ const BlogIndex = () => {
             className="text-center"
           >
             
-            <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-4">
+            <h1 className="font-heading text-2xl font-semibold text-foreground mb-4">
               Our Blog
             </h1>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
@@ -116,7 +116,7 @@ const BlogIndex = () => {
                     <Calendar className="w-4 h-4" />
                     <span>{blog.date}</span>
                   </div>
-                  <h3 className="font-heading text-xl font-bold text-foreground mb-3 group-hover:text-accent transition-colors duration-300">
+                  <h3 className="font-heading text-lg font-semibold text-foreground mb-3 group-hover:text-accent transition-colors duration-300">
                     {blog.title}
                   </h3>
                   <p className="text-muted-foreground text-sm mb-4 line-clamp-3">
