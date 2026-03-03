@@ -38,8 +38,26 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
         // Google Translate cookie logic
         const googtrans = GT_COOKIE_MAP[lang] ?? "/en/en"
-        document.cookie = `googtrans=${googtrans}; path=/`
-        // document.cookie = `googtrans=${googtrans}; path=/; domain=.asse.devtunnels.ms` // Handle potential tunnel domain
+
+        // Set cookie for current domain and all subdomains for robustness
+        document.cookie = `googtrans=${googtrans}; path=/;`
+
+        // Also try to set it for the base domain to ensure it works across subdomains (like dev tunnels)
+        try {
+            const hostname = window.location.hostname;
+            const parts = hostname.split('.');
+            if (parts.length >= 2) {
+                const baseDomain = parts.slice(-2).join('.');
+                document.cookie = `googtrans=${googtrans}; path=/; domain=.${baseDomain}`;
+            }
+
+            // Specifically handle dev tunnels if detected
+            if (hostname.includes('devtunnels.ms')) {
+                document.cookie = `googtrans=${googtrans}; path=/; domain=.devtunnels.ms`;
+            }
+        } catch (e) {
+            console.error("Error setting cookie:", e);
+        }
 
         // Reload to apply translation
         window.location.reload()
