@@ -10,6 +10,8 @@ export const metadata: Metadata = {
 
 import { Header } from "@/components/Header";
 import Footer from "@/components/Footer";
+import { LanguageProvider } from "@/components/LanguageProvider";
+import GoogleTranslate from "@/components/GoogleTranslate";
 
 export default function RootLayout({
     children,
@@ -19,15 +21,18 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body className="flex flex-col min-h-screen">
-                <Providers>
-                    <CartProvider>
-                        <Header />
-                        <main className="flex-1 mt-[80px]">
-                            {children}
-                        </main>
-                        <Footer />
-                    </CartProvider>
-                </Providers>
+                <LanguageProvider>
+                    <Providers>
+                        <CartProvider>
+                            <Header />
+                            <main className="flex-1 mt-[80px]">
+                                {children}
+                            </main>
+                            <Footer />
+                        </CartProvider>
+                    </Providers>
+                    <GoogleTranslate />
+                </LanguageProvider>
             </body>
         </html>
     );

@@ -1,9 +1,9 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { HelpCircle, LogIn, LogOut, Menu, X, ShoppingCart, Search, User, Phone } from "lucide-react";
+import { HelpCircle, LogIn, LogOut, Menu, X, ShoppingCart, Search, User, Phone, Globe, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -24,6 +24,7 @@ import { AuthModal } from "./AuthModal";
 import { getCookie, deleteCookie } from "@/utils/cookieUtils";
 import { useCart } from "@/context/CartContext";
 import { getUserProfile } from "@/services/authService";
+import { useLanguage } from "@/components/LanguageProvider";
 
 import Link from "next/link";
 
@@ -46,6 +47,22 @@ export const Header = () => {
   const { isLoggedIn, userProfile } = useAppSelector((state) => state.auth);
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const dispatch = useAppDispatch();
+
+  // Language state
+  const { language, setLanguage } = useLanguage();
+  const [isLanguageOpen, setIsLanguageOpen] = useState(false);
+  const languageRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdown on click outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (languageRef.current && !languageRef.current.contains(event.target as Node)) {
+        setIsLanguageOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -141,6 +158,88 @@ export const Header = () => {
               {/* <button className="p-2 text-muted-foreground hover:text-primary transition-colors">
               <Search className="w-5 h-5" />
             </button> */}
+              <div className="relative group z-50" ref={languageRef}>
+                <button
+                  onClick={() => setIsLanguageOpen(!isLanguageOpen)}
+                  className="relative group flex flex-col items-center gap-1 text-gray-600 hover:text-gray-900 cursor-pointer"
+                >
+                  <Globe size={20} />
+                  <span className="text-xs font-medium uppercase">
+                    {language?.toUpperCase()}
+                  </span>
+                  <span className="absolute -bottom-2 left-0 w-0 h-[2px] bg-orange-500 transition-all duration-300 group-hover:w-full"></span>
+                </button>
+
+                {/* Language Dropdown */}
+                <div
+                  className={`absolute right-0 top-full pt-[10px] w-48 ${isLanguageOpen ? 'block' : 'hidden md:group-hover:block'
+                    } transition-all duration-200 z-[100]`}
+                >
+                  <div className="bg-white rounded-xl shadow-[0_2px_20px_rgba(0,0,0,0.15)] border border-gray-100 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+                    <div className="p-2">
+                      {/* English */}
+                      <button
+                        onClick={() => {
+                          setLanguage('en')
+                          setIsLanguageOpen(false)
+                        }}
+                        className="w-full flex items-center justify-between px-4 py-2.5 text-sm text-[#051036] hover:bg-gray-50 rounded-lg transition-colors"
+                      >
+                        <span className="font-medium">English</span>
+                        {language === 'en' && <Check size={16} className="text-orange-500" />}
+                      </button>
+
+                      {/* Italian */}
+                      <button
+                        onClick={() => {
+                          setLanguage('it')
+                          setIsLanguageOpen(false)
+                        }}
+                        className="w-full flex items-center justify-between px-4 py-2.5 text-sm text-[#051036] hover:bg-gray-50 rounded-lg transition-colors"
+                      >
+                        <span className="font-medium">Italiano</span>
+                        {language === 'it' && <Check size={16} className="text-orange-500" />}
+                      </button>
+
+                      {/* German */}
+                      <button
+                        onClick={() => {
+                          setLanguage('de')
+                          setIsLanguageOpen(false)
+                        }}
+                        className="w-full flex items-center justify-between px-4 py-2.5 text-sm text-[#051036] hover:bg-gray-50 rounded-lg transition-colors"
+                      >
+                        <span className="font-medium">Deutsch</span>
+                        {language === 'de' && <Check size={16} className="text-orange-500" />}
+                      </button>
+
+                      {/* Spanish */}
+                      <button
+                        onClick={() => {
+                          setLanguage('es')
+                          setIsLanguageOpen(false)
+                        }}
+                        className="w-full flex items-center justify-between px-4 py-2.5 text-sm text-[#051036] hover:bg-gray-50 rounded-lg transition-colors"
+                      >
+                        <span className="font-medium">Español</span>
+                        {language === 'es' && <Check size={16} className="text-orange-500" />}
+                      </button>
+
+                      {/* French */}
+                      <button
+                        onClick={() => {
+                          setLanguage('fr')
+                          setIsLanguageOpen(false)
+                        }}
+                        className="w-full flex items-center justify-between px-4 py-2.5 text-sm text-[#051036] hover:bg-gray-50 rounded-lg transition-colors"
+                      >
+                        <span className="font-medium">Français</span>
+                        {language === 'fr' && <Check size={16} className="text-orange-500" />}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
               <Sheet modal={false} open={isCartOpen} onOpenChange={isCartOpen ? closeCart : openCart}>
                 <SheetTrigger asChild>
                   <button
