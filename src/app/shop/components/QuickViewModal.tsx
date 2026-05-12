@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import { X, ShoppingCart, ChevronUp, ChevronDown } from "lucide-react";
 import { Dialog, DialogContent, DialogClose } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -45,11 +44,10 @@ export function QuickViewModal({ product, isOpen, onClose }: QuickViewModalProps
                     {/* Left Side: Product Image */}
                     <div className="relative w-full md:w-1/2 aspect-square md:aspect-auto bg-[#f9f9f9]">
                         {productImage && (
-                            <Image
+                            <img
                                 src={productImage}
                                 alt={product.title}
-                                fill
-                                className="object-fixed"
+                                className="w-full h-full object-fixed"
                             />
                         )}
                     </div>

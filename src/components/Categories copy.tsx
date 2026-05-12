@@ -2,7 +2,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { getCategories } from "@/services/menuService";
 import placeholderImg from "@/assets/sushi-category.jpg"; // Fallback image
@@ -91,12 +90,10 @@ export const Categories = () => {
                   transition={{ delay: index * 0.1 }}
                   className="category-card aspect-[4/5] hover-lift group cursor-pointer"
                 >
-                  <Image
-                    src={category.image}
+                  <img
+                    src={typeof category.image === 'string' ? category.image : (category.image as any).src}
                     alt={category.name}
-                    width={500}
-                    height={600}
-                    className="w-full h-full object-fixed transition-transform duration-500 group-hover:scale-110"
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                   />
                   <div className="category-card-overlay" />
                   <div className="absolute inset-0 p-6 flex flex-col justify-end">

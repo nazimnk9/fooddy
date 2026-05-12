@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Star, Eye, ShoppingCart } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -34,11 +33,10 @@ export function ProductCard({ product, viewMode }: ProductCardProps) {
                     viewMode === 'list' ? "w-full md:w-[300px] aspect-[4/3] rounded-lg" : "w-full aspect-[4/3]"
                 )}>
                     {productImage && (
-                        <Image
+                        <img
                             src={productImage}
                             alt={product.title}
-                            fill
-                            className="object-fixed transition-transform duration-500 group-hover:scale-110"
+                            className="w-full h-full object-fixed transition-transform duration-500 group-hover:scale-110"
                         />
                     )}
                     {/* Overlay Actions */}

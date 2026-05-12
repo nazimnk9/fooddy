@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import Image, { StaticImageData } from "next/image";
+import { StaticImageData } from "next/image";
 import Link from "next/link";
 import { Star, ShoppingCart, Eye, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -51,11 +51,10 @@ export const FoodCard = ({ item, index }: FoodCardProps) => {
         >
             {/* Image Section */}
             <div className="relative h-64 overflow-hidden">
-                <Image
-                    src={item.image}
+                <img
+                    src={typeof item.image === 'string' ? item.image : (item.image as any).src}
                     alt={item.name}
-                    fill
-                    className="object-fixed transition-transform duration-500 group-hover:scale-110"
+                    className="w-full h-full object-fixed transition-transform duration-500 group-hover:scale-110"
                 />
 
                 {/* Floating Tag */}

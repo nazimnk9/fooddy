@@ -1,7 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import Image from "next/image";
 import Link from "next/link";
 import { Star, Eye, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -107,11 +106,10 @@ export const PopularDishes = () => {
               >
                 {/* Image */}
                 <div className="relative overflow-hidden aspect-[4/3]">
-                  <Image
-                    src={product.image}
+                  <img
+                    src={typeof product.image === 'string' ? product.image : (product.image as any).src}
                     alt={product.name}
-                    fill
-                    className="object-fixed transition-transform duration-500 group-hover:scale-110"
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                   />
                   {/* Overlay Actions */}
                   <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
